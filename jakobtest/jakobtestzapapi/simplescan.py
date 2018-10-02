@@ -36,20 +36,26 @@ print 'scanners'
 for scanner in zap.ascan.scanners():
     print scanner
 
+
+print 'pscanners---'
+for scanner in zap.pscan.scanners:
+    print scanner
+print "---"
+
 print 'scans'
 for scan in  zap.ascan.scans:
     print scan
 
 print 'Spidering target %s' % target
 scanid = zap.spider.scan(target)
-# Give the Spider a chance to start
+Give the Spider a chance to start
 time.sleep(2)
 while (int(zap.spider.status(scanid)) < 100):
     print 'Spider progress %: ' + zap.spider.status(scanid)
-    time.sleep(2)
+time.sleep(2)
 
 print 'Spider completed'
-# Give the passive scanner a chance to finish
+Give the passive scanner a chance to finish
 time.sleep(5)
 
 print 'Scanning target %s' % target
@@ -118,4 +124,3 @@ pprint (zap.core.alert(2))
 print '4'
 pprint (zap.core.alert(4))
 """
-
