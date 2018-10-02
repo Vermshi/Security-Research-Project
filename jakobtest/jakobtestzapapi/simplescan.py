@@ -6,7 +6,7 @@ import time
 from pprint import pprint
 from zapv2 import ZAPv2
 
-target = 'http://127.0.0.1:8080/'
+target = 'http://127.0.0.1:8080'
 apikey = '123' # Change to match the API key set in ZAP, or use None if the API key is disabled
 # By default ZAP API client will connect to port 8080
 # zap = ZAPv2(apikey=apikey)
@@ -71,6 +71,9 @@ print 'Alerts: '
 #pprint (zap.core.alerts())
 
 print '---------------------------------------'
+
+sql = False
+xss = False
 
 for alert in zap.core.alerts():
     if alert["pluginId"] == '40018':
