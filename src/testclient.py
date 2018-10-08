@@ -9,7 +9,7 @@ from subprocess import Popen
 class testClient(object):
 
     os = ""
-    zapport = "7070"
+    zapPort = "7070"
     # TODO: Generate secure api key
     zapApiKey = "123"
 
@@ -18,7 +18,7 @@ class testClient(object):
         self.os = platform.system()
         self.startZap()
 
-# Start the Zed Attack Proxy attack engine
+    # Start the Zed Attack Proxy attack engine
     def zapStart(self):
 
         if self.os == 'Linux':
@@ -31,10 +31,17 @@ class testClient(object):
         else:
             print "unknown os" + self.os
 
+    # Configure Zed Attack Proxy
     def zapConfigure(self):
-        zap = ZAPv2(apikey=self.apikey, proxies={'http': 'http://127.0.0.1:' + self.zapport, 'https': 'http://127.0.0.1:' + self.port})
+        zap = ZAPv2(apikey=self.apikey, proxies={'http': 'http://127.0.0.1:' + self.zapPort, 'https': 'http://127.0.0.1:' + self.port})
 
-    def zapTest(self):
+    # Login to the target to test an authenticated session
+    def zapCreateSession(self):
+        # TODO: Use zap to start a session with the target
+        return
+
+    # Run all ZAP tests
+    def zapRunAllTests(self):
         # do stuff
         print 'Accessing target %s' % target
         # try have a unique enough session...
@@ -42,8 +49,14 @@ class testClient(object):
         # Give the sites tree a chance to get updated
         time.sleep(2)
 
+    # Run single test from ZAP
+    def zapRunSingleTest(self, testid):
+        return
+
+    # Set target to test
     def setTarget(target):
         self.target = target
 
-    def setPort(port):
-        self.zapport = port
+    # Set the port number for zap
+    def setZapPort(port):
+        self.zapPort = port
