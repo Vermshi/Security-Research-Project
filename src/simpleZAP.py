@@ -12,12 +12,12 @@ from testclient import Test, TestClient
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         self.mainWindow = mainWindow
-        self.testclient = TestClient()
-
+        
+        # Get the tests from the testclient
+        self.testclient = TestClient()        
         self.tester = []
         self.desc = []
         self.status = []
-        
         for test in self.testclient.tests:
             self.tester.append(test.name)
             self.desc.append(test.description)
@@ -51,7 +51,7 @@ class Ui_mainWindow(object):
         self.progressBar.setFont(font)
         self.progressBar.setProperty("value", 24)
         self.progressBar.setObjectName("progressBar")
-        heightinterval = 0
+        heightinterval = 100
         for i,test in enumerate(self.tester):
             font = QtGui.QFont()
             font.setPointSize(10)
@@ -105,9 +105,10 @@ class Ui_mainWindow(object):
         self.pictureLabel.setPixmap(pixmap)
 
     def dinfunksjon(self):
-        self.testclient.setZapPort(self.targetPort.text())
+        if len(self.targetPort.text()) == 4 and self.targetPort.text().isdigit():
+            self.testclient.setZapPort(self.targetPort.text())
         self.testclient.zapConfigure()
-        self.testclient.setTarget("http://0.0.0.0:80/")
+        self.testclient.setTarget("http://0.0.0.0:8080/")
         self.testclient.runAllTests()
         
         for i, test in enumerate(self.testclient.tests):

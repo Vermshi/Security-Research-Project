@@ -3,25 +3,26 @@
 import time
 import platform
 from zapv2 import ZAPv2
-from subprocess import Popen
+from subprocess import Popen, PIPE, STDOUT
 
 
 class TestClient(object):
 
-    def __init__(self, zapPort='7676'):
+    def __init__(self, zapPort='7577'):
         print("Initiate")
         self.os = platform.system()
         self.zapPort = zapPort
+        # TODO: Generate key
         self.zapApiKey = '123'
-        # self.zapStart()
-        # Give zap some time
-        # time.sleep(10)
+        self.zapStart()
         self.zapConfigure()
         self.tests = self.generateTestList()
 
     def runAllTests(self):
+        print("Running tests")
         # Reset ZAP alerts
-        self.zap.core.new_session()
+        if len(self.zap.core.alerts()) > 0:
+            self.zap.core.new_session()
         # Start by disabling all scanners and add them later
         self.zap.ascan.disable_all_scanners()
         self.zap.pscan.disable_all_scanners()
@@ -30,16 +31,22 @@ class TestClient(object):
             if test.engine == 'ZAP':
                 if test.mode == 'passive':
                     self.zap.pscan.enable_scanners(test.testid)
+                elif test.mode == 'active':
+                    self.zap.ascan.enable_scanners(test.testid)
 
         self.zapRunSpider()
 
-        for test in self.tests:
-            if test.engine == 'ZAP':
-                if self.zap.core.alert(test.testid) != 'Does Not Exist':
-                    test.passed = True
-
+        for alert in self.zap.core.alerts():
+            print("")
+            print("---ALERT---")
+            print(alert["description"])
+            print("")
+            print("---------------------------------------------------")
+        
+    # TODO: Come up with a better solution
     def generateTestList(self):
         tests = []
+        tests.append(Test('SQL Injection', 40018, 'SQL injection may be possible.', 'ZAP', 'active', False))
         tests.append(Test('X-Frame-Options Header Scanner', 10020, 'X-Frame-Options header is not included in the HTTP response to protect against \'ClickJacking\' attacks.', 'ZAP', 'passive', False))
         tests.append(Test('Cookie No HttpOnly Flag', '10010', 'A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.', 'ZAP', 'passive', False))
         tests.append(Test('Web Browser XSS Protection Not Enabled', 10016, 'Web Browser XSS Protection is not enabled, or is disabled by the configuration of the \'X-XSS-Protection\' HTTP response header on the web server', 'ZAP', 'passive', False))
@@ -49,9 +56,9 @@ class TestClient(object):
     # Start the Zed Attack Proxy attack engine
     def zapStart(self):
     
-
         if self.os == 'Linux':
-             Popen(["zap", "-daemon", "-port", self.zapPort, "-config", "api.key=", self.zapApiKey])
+             startZap = Popen(["zap", "-port", self.zapPort, "-config", ("api.key="+self.zapApiKey)] , stdout=PIPE, stderr=STDOUT)
+             # startZap.communicate()
              return
 
         elif self.os == 'Windows':
