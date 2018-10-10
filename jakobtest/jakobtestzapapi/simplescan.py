@@ -11,7 +11,7 @@ apikey = '123' # Change to match the API key set in ZAP, or use None if the API 
 # By default ZAP API client will connect to port 8080
 # zap = ZAPv2(apikey=apikey)
 # Use the line below if ZAP is not listening on port 8080, for example, if listening on port 8090
-zap = ZAPv2(apikey=apikey, proxies={'http': 'http://127.0.0.1:7070', 'https': 'http://127.0.0.1:7070'})
+zap = ZAPv2(apikey=apikey, proxies={'http': 'http://127.0.0.1:7171', 'https': 'http://127.0.0.1:7171'})
 
 # do stuff
 print 'Accessing target %s' % target
@@ -45,19 +45,28 @@ print "---"
 print 'scans'
 for scan in  zap.ascan.scans:
     print scan
+print '---'
+
+print 'spider'
+for scan in zap.spider.scans:
+    print scan
+print '---'
 
 print 'Spidering target %s' % target
 scanid = zap.spider.scan(target)
-Give the Spider a chance to start
+# Give the Spider a chance to start
 time.sleep(2)
 while (int(zap.spider.status(scanid)) < 100):
     print 'Spider progress %: ' + zap.spider.status(scanid)
 time.sleep(2)
 
 print 'Spider completed'
-Give the passive scanner a chance to finish
-time.sleep(5)
+# Give the passive scanner a chance to finish
+# time.sleep(5)
 
+pprint (zap.core.alerts())
+
+"""
 print 'Scanning target %s' % target
 scanid = zap.ascan.scan(target)
 while (int(zap.ascan.status(scanid)) < 100):
@@ -105,7 +114,6 @@ if xss == True:
 
 
 
-"""
 print '1'
 pprint (zap.core.alerts(1))
 

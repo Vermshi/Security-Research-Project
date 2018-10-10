@@ -6,10 +6,10 @@ from zapv2 import ZAPv2
 from subprocess import Popen
 
 
-class testClient(object):
+class TestClient(object):
 
     def __init__(self, zapPort='7676'):
-        print "Initiate"
+        print("Initiate")
         self.os = platform.system()
         self.zapPort = zapPort
         self.zapApiKey = '123'
@@ -43,6 +43,7 @@ class testClient(object):
         tests.append(Test('X-Frame-Options Header Scanner', 10020, 'X-Frame-Options header is not included in the HTTP response to protect against \'ClickJacking\' attacks.', 'ZAP', 'passive', False))
         tests.append(Test('Cookie No HttpOnly Flag', '10010', 'A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.', 'ZAP', 'passive', False))
         tests.append(Test('Web Browser XSS Protection Not Enabled', 10016, 'Web Browser XSS Protection is not enabled, or is disabled by the configuration of the \'X-XSS-Protection\' HTTP response header on the web server', 'ZAP', 'passive', False))
+        tests.append(Test('Application Error Disclosure', '90022', "DESCRIPTION", 'ZAP', 'passive', True))
         return tests
 
     # Start the Zed Attack Proxy attack engine
@@ -55,14 +56,14 @@ class testClient(object):
 
         elif self.os == 'Windows':
             # TODO:
-            print "Windows not implemented yet"
-            print "Start Zap proxy manually"
+            print("Windows not implemented yet")
+            print("Start Zap proxy manually")
         else:
-            print "OS not supported yet:" + self.os
+            print("OS not supported yet:" + self.os)
 
     # Configure Zed Attack Proxy
     def zapConfigure(self):
-        print "configure zap"
+        print("configure zap")
         self.zap = ZAPv2(apikey=self.zapApiKey, proxies={'http': 'http://127.0.0.1:' + self.zapPort, 'https': 'http://127.0.0.1:' + self.zapPort}) 
         # TODO: The second port should eventually be a https port
 
@@ -74,7 +75,7 @@ class testClient(object):
     # Run all ZAP tests
     def zapRunAllTests(self):
         # do stuff
-        print 'Accessing target %s' % target
+        print('Accessing target %s' % target)
         # try have a unique enough session...
         zap.urlopen(target)
         # Give the sites tree a chance to get updated
@@ -86,7 +87,7 @@ class testClient(object):
         # Give the Spider a chance to start
         time.sleep(2)
         while (int(self.zap.spider.status(scanid)) < 100):
-            print 'Spider progress %: ' + self.zap.spider.status(scanid)
+            print('Spider progress %: ' + self.zap.spider.status(scanid))
         
     # Run single test from ZAP
     def zapRunSingleTest(self, testid):
@@ -110,5 +111,5 @@ class Test(object):
         self. description = description
         self.engine = engine
         self.mode = mode
-        self.passsed = passed
+        self.passed = passed
 

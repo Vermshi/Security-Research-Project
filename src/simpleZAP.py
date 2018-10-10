@@ -7,17 +7,27 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from testclient import Test, TestClient
 
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
-        self.tester = ["SQL injection", "XSS","melk"]
-        self.desc = ["jdanfkjndakjfndakjfndkjadsn", "jkfdsnjkdfankjafs","dette er en ny test"]
-        self.status = [1,1,0]
+        self.mainWindow = mainWindow
+        self.testclient = TestClient()
+
+        self.tester = []
+        self.desc = []
+        self.status = []
+        
+        for test in self.testclient.tests:
+            self.tester.append(test.name)
+            self.desc.append(test.description)
+            self.status.append(test.passed)
+
         mainWindow.setObjectName("simpleZap attack engine")
         mainWindow.setWindowIcon(QtGui.QIcon("img/icon.png"))
         self.screen = QtWidgets.QDesktopWidget().screenGeometry()
         self.width = self.screen.width()*0.5
-        self.height = self.screen.height()*0.5
+        self.height = self.screen.height()*0.8
         mainWindow.resize(self.width, self.height)
 
         self.runButton = QtWidgets.QPushButton(mainWindow)
@@ -95,7 +105,14 @@ class Ui_mainWindow(object):
         self.pictureLabel.setPixmap(pixmap)
 
     def dinfunksjon(self):
-        print("hei")
+        self.testclient.setZapPort(self.targetPort.text())
+        self.testclient.zapConfigure()
+        self.testclient.setTarget("http://0.0.0.0:80/")
+        self.testclient.runAllTests()
+        
+        for i, test in enumerate(self.testclient.tests):
+            self.retranslateUi(self.mainWindow,i) 
+
 
 if __name__ == "__main__":
     import sys
