@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import platform
+import time
 
 class TestSuite(object):
     """This class is abstract. The required functions are:"""
@@ -12,7 +13,7 @@ class TestSuite(object):
         self.url = url
         self.http_port = http_port
         self.https_port = https_port
-        self.tests = self.generate_test_list()
+        self.tests = []
 
     def start(self):
         raise NotImplementedError( "Should have implemented a method to start the used engine" )

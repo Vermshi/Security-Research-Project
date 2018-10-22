@@ -11,7 +11,7 @@ apikey = '123' # Change to match the API key set in ZAP, or use None if the API 
 # By default ZAP API client will connect to port 8080
 # zap = ZAPv2(apikey=apikey)
 # Use the line below if ZAP is not listening on port 8080, for example, if listening on port 8090
-zap = ZAPv2(apikey=apikey, proxies={'http': 'http://127.0.0.1:7171', 'https': 'http://127.0.0.1:7171'})
+zap = ZAPv2(apikey=apikey, proxies={'http': 'http://127.0.0.1:7576', 'https': 'http://127.0.0.1:7576'})
 
 # do stuff
 print 'Accessing target %s' % target
