@@ -15,7 +15,7 @@ class ZapTestSuite(TestSuite):
         #self.api_key = 123
         self.api_key = os.urandom(16)
         if self.os == 'Linux':
-             Popen(["zap", "-port", self.http_port, "-config", ("api.key="+str(self.api_key))] )
+             Popen(["zap", "-port", self.http_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
 
         else:
             print("OS not supported yet:" + self.os)
