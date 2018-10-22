@@ -110,13 +110,4 @@ class TestClient(object):
 
 
 
-class Test(object):
-    
-    def __init__(self, name, testid, description, engine, mode, passed):
-        self.name = name
-        self.testid = testid
-        self. description = description
-        self.engine = engine
-        self.mode = mode
-        self.passed = passed
 
