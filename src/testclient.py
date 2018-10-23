@@ -62,7 +62,7 @@ class TestClient(object):
              return
 
         elif self.os == 'Windows':
-            # TODO:
+          # TODO:
             print("Windows not implemented yet")
             print("Start Zap proxy manually")
         else:
