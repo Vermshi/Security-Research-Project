@@ -7,7 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from testclient import Test, TestClient
+from testclient import TestClient
+from testsuite import Test
 
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):

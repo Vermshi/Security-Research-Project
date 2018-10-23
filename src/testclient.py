@@ -4,7 +4,7 @@ import time
 import platform
 from zapv2 import ZAPv2
 from subprocess import Popen, PIPE, STDOUT
-
+from testsuite import Test
 
 class TestClient(object):
 
@@ -46,11 +46,11 @@ class TestClient(object):
     # TODO: Come up with a better solution
     def generateTestList(self):
         tests = []
-        tests.append(Test('SQL Injection', 40018, 'SQL injection may be possible.', 'ZAP', 'active', False))
-        tests.append(Test('X-Frame-Options Header Scanner', 10020, 'X-Frame-Options header is not included in the HTTP response to protect against \'ClickJacking\' attacks.', 'ZAP', 'passive', False))
-        tests.append(Test('Cookie No HttpOnly Flag', '10010', 'A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.', 'ZAP', 'passive', False))
-        tests.append(Test('Web Browser XSS Protection Not Enabled', 10016, 'Web Browser XSS Protection is not enabled, or is disabled by the configuration of the \'X-XSS-Protection\' HTTP response header on the web server', 'ZAP', 'passive', False))
-        tests.append(Test('Application Error Disclosure', '90022', "DESCRIPTION", 'ZAP', 'passive', True))
+        tests.append(Test('SQL Injection', 40018, 'SQL injection may be possible.', 'ZAP', 'active', True, False))
+        tests.append(Test('X-Frame-Options Header Scanner', 10020, 'X-Frame-Options header is not included in the HTTP response to protect against \'ClickJacking\' attacks.', 'ZAP', 'passive', True, False))
+        tests.append(Test('Cookie No HttpOnly Flag', '10010', 'A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.', 'ZAP', 'passive', True, False))
+        tests.append(Test('Web Browser XSS Protection Not Enabled', 10016, 'Web Browser XSS Protection is not enabled, or is disabled by the configuration of the \'X-XSS-Protection\' HTTP response header on the web server', 'ZAP', 'passive', True, False))
+        tests.append(Test('Application Error Disclosure', '90022', "DESCRIPTION", 'ZAP', 'passive', True, True))
         return tests
 
     # Start the Zed Attack Proxy attack engine
