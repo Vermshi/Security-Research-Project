@@ -13,7 +13,7 @@ if __name__ == '__main__':
         test.start()
         # Delay further execution until engine is initiated
         # TODO: THIS IS NOT IDEAL
-        time.sleep(13)
+        time.sleep(25)
         test.configure()
         test.tests = test.generate_test_list()
         test.import_policy("path/to/policy", "Default Policy")

@@ -1,0 +1,2 @@
+PyQt5
+python-owasp-zap-v2.4
