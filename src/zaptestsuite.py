@@ -12,11 +12,12 @@ class ZapTestSuite(TestSuite):
     api_key = None
 
     def start(self):
-        #self.api_key = 123
+        #self.api_key = "dfhyjuklps"
         self.api_key = os.urandom(16)
         if self.os == 'Linux':
              Popen(["zap", "-port", self.http_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
-
+        elif self.os == 'Windows':
+             Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", '-port', self.http_port, '-config', ("api.key="+str(self.api_key))] , cwd=r"C:\Program Files\OWASP\Zed Attack Proxy")
         else:
             print("OS not supported yet:" + self.os)
             print("Start Zap proxy manually")
