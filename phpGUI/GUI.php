@@ -27,6 +27,6 @@ if (!is_resource($sk)) {
 ?>
 
 <h2>Start tests</h2>
-<form method="post" action="gui.php">
+<form method="post" action="GUI.php">
   <input type="submit" name="startTest" value="Start tests">  
 </form>
