@@ -13,7 +13,7 @@ if __name__ == '__main__':
         test.start()
         # Delay further execution until engine is initiated
         # TODO: THIS IS NOT IDEAL
-        time.sleep(25)
+        time.sleep(30)
         print("ZAP BETTER BE DONE LOADING")
         print('------------------------------------------')
         print('------------------------------------------')
@@ -42,4 +42,6 @@ if __name__ == '__main__':
     print("Test Results")
     for testres in testresults:
         print('------------------------------------------')
-        print(testres.name, testres.passed, testres.enabled)
+        #print(testres)
+        
+        print(testres.name, testres.testid, testres.engine, testres.vulnerability, testres.mode, testres.passed, testres.enabled)

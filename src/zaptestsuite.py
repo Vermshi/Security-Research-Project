@@ -57,13 +57,15 @@ class ZapTestSuite(TestSuite):
 
         # Store the test results back into the tests list
         for index in range(len(self.tests)):
+            self.tests[index].passed = None
             for alert in self.zap.core.alerts():
-                if self.tests[index].testid == int(alert['pluginId']):
+                if str(self.tests[index].testid) == str(alert['pluginId']):
                 #if self.tests[index].name == alert['name']:
                     self.tests[index].description = alert['description']
                     self.tests[index].passed = False
-                else:
-                    self.tests[index].passed = True
+                
+            if self.tests[index].passed != False and self.tests[index].enabled == True:
+                self.tests[index].passed = True
         print("results?", self.zap.core.alerts())
         print("")
         return self.tests
