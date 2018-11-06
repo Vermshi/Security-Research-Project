@@ -15,9 +15,15 @@ class ZapTestSuite(TestSuite):
         #self.api_key = "dfhyjuklps"
         self.api_key = os.urandom(16)
         if self.os == 'Linux':
-             Popen(["zap", "-port", self.http_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            p = Popen(["zap", "-port", self.http_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            while "Started callback server" not in str(p.stdout.readline()):
+                 print("ZAP is LOADING")
+            print("ZAP done LOADING")
+        
         elif self.os == 'Windows':
-             Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", '-port', self.http_port, '-config', ("api.key="+str(self.api_key))] , cwd=r"C:\Program Files\OWASP\Zed Attack Proxy")
+            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", '-port', self.http_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy")
+            # TODO: Write log to pipe and check if zap is done loading
+        
         else:
             print("OS not supported yet:" + self.os)
             print("Start Zap proxy manually")
