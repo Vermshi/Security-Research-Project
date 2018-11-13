@@ -5,6 +5,7 @@ from subprocess import Popen, PIPE, STDOUT
 import os
 from zapv2 import ZAPv2
 import time
+import platform
 
 class ZapTestSuite(TestSuite):
 
@@ -13,19 +14,21 @@ class ZapTestSuite(TestSuite):
 
     def start(self):
         #self.api_key = "dfhyjuklps"
+        osys = platform.system()
         self.api_key = os.urandom(16)
-        if self.os == 'Linux':
+
+        if osys == 'Linux':
             p = Popen(["zap", "-port", self.http_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             while "Started callback server" not in str(p.stdout.readline()):
                  print("ZAP is LOADING")
             print("ZAP done LOADING")
         
-        elif self.os == 'Windows':
+        elif osys == 'Windows':
             p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", '-port', self.http_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy")
             # TODO: Write log to pipe and check if zap is done loading
         
         else:
-            print("OS not supported yet:" + self.os)
+            print("OS not supported yet:" + osys)
             print("Start Zap proxy manually")
             print("Go to Tools -> Options -> API and change port to", self.http_port, "and API key to", self.api_key)
 
