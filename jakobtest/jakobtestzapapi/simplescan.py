@@ -6,12 +6,18 @@ import time
 from pprint import pprint
 from zapv2 import ZAPv2
 
-target = 'http://127.0.0.1:8080'
-apikey = '123' # Change to match the API key set in ZAP, or use None if the API key is disabled
+target = 'http://0.0.0.1:8080'
+apikey = 'eudq0kus3m0frtjm0plv9krbao' # Change to match the API key set in ZAP, or use None if the API key is disabled
 # By default ZAP API client will connect to port 8080
 # zap = ZAPv2(apikey=apikey)
 # Use the line below if ZAP is not listening on port 8080, for example, if listening on port 8090
-zap = ZAPv2(apikey=apikey, proxies={'http': 'http://127.0.0.1:7576', 'https': 'http://127.0.0.1:7576'})
+zap = ZAPv2(apikey=apikey, proxies={'http': '127.0.0.1:7576', 'https': '127.0.0.1:7576'})
+
+
+print zap.pscan.scanners
+print zap.ascan.scans
+print zap.ascan.policies()
+
 
 # do stuff
 print 'Accessing target %s' % target
@@ -19,9 +25,6 @@ print 'Accessing target %s' % target
 zap.urlopen(target)
 # Give the sites tree a chance to get updated
 time.sleep(2)
-
-#print zap.ascan.scans
-#print zap.ascan.scanPolicyNames()
 
 zap.ascan.disable_all_scanners()
 zap.ascan.remove_all_scans()

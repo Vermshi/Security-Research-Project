@@ -18,12 +18,8 @@ class TestSuite(object):
     within a session. However this is not part of the current implementation
     """
 
-    def __init__(self, engine_name='Custom Engine', url=None, http_port=None, https_port=None):
-        # Think about this
+    def __init__(self, engine_name='Custom Engine'):
         self.engine_name = engine_name
-        self.url = url
-        self.http_port = http_port
-        self.https_port = https_port
 
     def start(self):
         """"
@@ -78,6 +74,9 @@ class TestSuite(object):
         :rtype: Array[Test...]
         """
         raise NotImplementedError( "Should have implemented a method to run all the tests from the engine" )
+
+    def shutdown(self):
+        raise NotImplementedError( "Should have implemented a method to shut down the test enginge properly" )
 
 
 class Test(object):

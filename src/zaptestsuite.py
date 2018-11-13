@@ -9,23 +9,31 @@ import platform
 
 class ZapTestSuite(TestSuite):
 
+
     zap = None
     api_key = None
 
+    # Proxy default settings:
+    proxy_address = '127.0.0.1'
+    proxy_port = '7576'
+
     def start(self):
-        #self.api_key = "dfhyjuklps"
         osys = platform.system()
         self.api_key = os.urandom(16)
 
         if osys == 'Linux':
-            p = Popen(["zap", "-port", self.http_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            p = Popen(["zap", "-daemon", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            #p = Popen(["zap", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             while "Started callback server" not in str(p.stdout.readline()):
                  print("ZAP is LOADING")
             print("ZAP done LOADING")
         
         elif osys == 'Windows':
-            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", '-port', self.http_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy")
+            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", "-daemon", '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy")
             # TODO: Write log to pipe and check if zap is done loading
+            while "Started callback server" not in str(p.stdout.readline()):
+                 print("ZAP is LOADING")
+            print("ZAP done LOADING")
         
         else:
             print("OS not supported yet:" + osys)
@@ -33,8 +41,8 @@ class ZapTestSuite(TestSuite):
             print("Go to Tools -> Options -> API and change port to", self.http_port, "and API key to", self.api_key)
 
     def configure(self):
-        self.zap = ZAPv2(apikey=str(self.api_key), proxies={'http': self.url + ':' + self.http_port,
-                                                            'https': self.url + ':' + self.https_port})
+        self.zap = ZAPv2(apikey=str(self.api_key), proxies={'http': self.proxy_address + ':' + self.proxy_port,
+                                                            'https': self.proxy_address + ':' + self.proxy_port})
 
     # def createsession(self):
     #     It is recommended to implement sessions to the test suite

@@ -6,34 +6,12 @@ import time
 if __name__ == '__main__':
     testsuites = []
     testresults = []
-    testsuites.append(ZapTestSuite("ZAP", 'http://127.0.0.1', '7576', '7576'))
+    testsuites.append(ZapTestSuite("ZAP"))
 
     for test in testsuites:
         print("Running Test Suite", test.engine_name)
         test.start()
-        # Delay further execution until engine is initiated
-        # TODO: THIS IS NOT IDEAL
-        time.sleep(30)
-        print("ZAP BETTER BE DONE LOADING")
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
-        print('------------------------------------------')
+        time.sleep(3)
         test.configure()
         tests = test.generate_test_list()
         test.import_policy("path/to/policy", "Default Policy")
