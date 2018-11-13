@@ -1,4 +1,5 @@
 from main2 import *
+from json import *
 import sys
 
 from flask import Flask, render_template, request, redirect, Response
@@ -32,38 +33,55 @@ data = {"test1":{
 },
 
 }
+testsuites = []
+testsuites.append(ZapTestSuite("ZAP"))
+tests = []
+
+
+def suiteToDict(suits):
+    testDict = {}
+    for test in suits:
+        x = {}
+        x["name"] = test.name
+        x["description"] = test.description
+        x["passed"] = test.passed
+        x["enabled"] = test.enabled
+        testDict[x["name"]] = x
+    return testDict
+
 
 @app.route('/')
 def output():
-
+    for test in testsuites:
+        print("Siden lastes")
+        test.start()
+        time.sleep(3)
+        test.configure()
+        for t in test.generate_test_list():
+            tests.append(t)
+        testsDict = suiteToDict(tests)
+        for key, value in testsDict.items():
+            data[key] = value
     # serve index template
     return render_template('index.html', name='Joe', data = data)
 
 @app.route('/', methods=['POST'])
 def attack():
     address = request.form["attackAddress"]
-    print(address)
     runTest(address)
     return render_template('index.html', name='Joe', data=data)
 
 def runTest(address):
     #TODO sett inn logikk for å kjøre testene her
-    testsuites = []
+    global data
+    global tests
     testresults = []
-    testsuites.append(ZapTestSuite("ZAP"))
-
     for test in testsuites:
-        print("Running Test Suite", test.engine_name)
-        test.start()
-        time.sleep(3)
-        test.configure()
-        tests = test.generate_test_list()
-        #Do this before showing gui^
         # test.import_policy("path/to/policy", "Default Policy")
-        testresults.extend(test.run_tests(tests, 'http://127.0.0.1:8080')) #Run when attack, show loading bar and update after finnished.
+        testresults.extend(test.run_tests(tests, "http://"+address)) #Run when attack, show loading bar and update after finnished.
+    tests = suiteToDict(testresults)
+    data = tests
 
-    result = []
-    return result
 
 if __name__ == '__main__':
     # run!
