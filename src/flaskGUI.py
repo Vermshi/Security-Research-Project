@@ -1,4 +1,4 @@
-
+from main2 import *
 import sys
 
 from flask import Flask, render_template, request, redirect, Response
@@ -48,6 +48,20 @@ def attack():
 
 def runTest(address):
     #TODO sett inn logikk for å kjøre testene her
+    testsuites = []
+    testresults = []
+    testsuites.append(ZapTestSuite("ZAP"))
+
+    for test in testsuites:
+        print("Running Test Suite", test.engine_name)
+        test.start()
+        time.sleep(3)
+        test.configure()
+        tests = test.generate_test_list()
+        #Do this before showing gui^
+        # test.import_policy("path/to/policy", "Default Policy")
+        testresults.extend(test.run_tests(tests, 'http://127.0.0.1:8080')) #Run when attack, show loading bar and update after finnished.
+
     result = []
     return result
 
