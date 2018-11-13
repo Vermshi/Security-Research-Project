@@ -6,6 +6,8 @@ import os
 from zapv2 import ZAPv2
 import time
 import platform
+import freeport
+
 
 class ZapTestSuite(TestSuite):
 
@@ -29,10 +31,10 @@ class ZapTestSuite(TestSuite):
             print("ZAP done LOADING")
         
         elif osys == 'Windows':
-            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", "-daemon", '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy", stdout=PIPE, stderr=STDOUT)
+            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat",  '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy", stdout=PIPE, stderr=STDOUT)
             # TODO: Write log to pipe and check if zap is done loading
             while "Started callback server" not in str(p.stdout.readline()):
-                 print("ZAP is LOADING")
+                print("ZAP is LOADING")
             print("ZAP done LOADING")
         
         else:
