@@ -35,9 +35,9 @@ if __name__ == '__main__':
         print('------------------------------------------')
         print('------------------------------------------')
         test.configure()
-        test.tests = test.generate_test_list()
+        tests = test.generate_test_list()
         test.import_policy("path/to/policy", "Default Policy")
-        testresults.extend(test.run_tests('http://127.0.0.1:8080'))
+        testresults.extend(test.run_tests(tests, 'http://127.0.0.1:8080'))
 
     print("Test Results")
     for testres in testresults:

@@ -40,12 +40,12 @@ class ZapTestSuite(TestSuite):
     #     It is recommended to implement sessions to the test suite
     #
 
-    def run_tests(self, targetURL):
+    def run_tests(self, tests, targetURL):
         self.zap.urlopen(targetURL)
 
         self.zap.ascan.disable_all_scanners()
         self.zap.pscan.disable_all_scanners()
-        for test in self.tests:
+        for test in tests:
             if test.mode == 'passive' and test.enabled is True:
                 self.zap.pscan.enable_scanners(test.testid)
             elif test.mode == 'active' and test.enabled is True:
@@ -65,19 +65,19 @@ class ZapTestSuite(TestSuite):
             time.sleep(5)
 
         # Store the test results back into the tests list
-        for index in range(len(self.tests)):
-            self.tests[index].passed = None
+        for index in range(len(tests)):
+            tests[index].passed = None
             for alert in self.zap.core.alerts():
-                if str(self.tests[index].testid) == str(alert['pluginId']):
+                if str(tests[index].testid) == str(alert['pluginId']):
                 #if self.tests[index].name == alert['name']:
-                    self.tests[index].description = alert['description']
-                    self.tests[index].passed = False
+                    tests[index].description = alert['description']
+                    tests[index].passed = False
                 
-            if self.tests[index].passed != False and self.tests[index].enabled == True:
-                self.tests[index].passed = True
+            if tests[index].passed != False and self.tests[index].enabled == True:
+                tests[index].passed = True
         print("results?", self.zap.core.alerts())
         print("")
-        return self.tests
+        return tests
 
     def generate_test_list(self):
         tests = []

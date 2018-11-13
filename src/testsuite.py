@@ -19,12 +19,11 @@ class TestSuite(object):
     """
 
     def __init__(self, engine_name='Custom Engine', url=None, http_port=None, https_port=None):
-
+        # Think about this
         self.engine_name = engine_name
         self.url = url
         self.http_port = http_port
         self.https_port = https_port
-        self.tests = []
 
     def start(self):
         """"
@@ -48,16 +47,36 @@ class TestSuite(object):
         """
         This function must make a array of Test objects representing each of the tests that can be executed by the engine.
         The list must be compatible for the run_tests function
-        :return:
-        Array[Test...]
-            List of Test objects
+
+        :return: List of Test objects
+        :rtype: Array[Test...]
         """
         raise NotImplementedError( "Should have implemented a method to return a list of Test objects" )
 
     def import_policy(self, path, name):
+        """
+        Import testing policy from file. This makes the initial configuration of which tests that are enabled.
+        As well as other policies such as strength and sensitivity
+
+        :param path: File path to config file
+        :type path: str
+        :param name: Policy name, may be useful for the engine
+        :type name: str
+        """
         raise NotImplementedError( "Should have implemented a method to import the test policy from a file" )
 
-    def run_tests(self, targetURL):
+    def run_tests(self, tests, targetURL):
+        """
+        Run all enabled tests against the target url. The Test objects within the tests array describes each test.
+        The array should be changed according to how the outcome of the tests are and returned
+
+        :param tests: Array of Test objects
+        :type tests: Array[Test...]
+        :param targetURL: The target including address and port
+        :type targetURL: str
+        :return: Array of test objects
+        :rtype: Array[Test...]
+        """
         raise NotImplementedError( "Should have implemented a method to run all the tests from the engine" )
 
 

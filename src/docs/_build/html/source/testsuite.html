@@ -1,0 +1,182 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>testsuite module &#8212; testsuite 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-testsuite">
+<span id="testsuite-module"></span><h1>testsuite module<a class="headerlink" href="#module-testsuite" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="testsuite.Test">
+<em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">Test</code><span class="sig-paren">(</span><em>name</em>, <em>testid</em>, <em>description</em>, <em>engine</em>, <em>vulnerability</em>, <em>mode</em>, <em>passed</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="testsuite.TestSuite">
+<em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">TestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em>, <em>url=None</em>, <em>http_port=None</em>, <em>https_port=None</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is abstract and serves as an interface to implement testing tools to the testing application.
+The testing application is composed by this interface interacting between a GUI and all the implemented tools.
+Required Functions:
+- start
+- configure
+- import_policy
+- generate_test_list
+- run_tests</p>
+<p>The above functions should run in the same order when used by the application</p>
+<p>For the time being it is also recommended to include a function to log in such that the tests can be performed
+within a session. However this is not part of the current implementation</p>
+<dl class="method">
+<dt id="testsuite.TestSuite.configure">
+<code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all configurations necessary to perform a test against the target.
+This function is mean to set up proxies or perform other configurations to the engine.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="testsuite.TestSuite.generate_test_list">
+<code class="descname">generate_test_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.generate_test_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function must make a array of Test objects representing each of the tests that can be executed by the engine.
+The list must be compatible for the run_tests function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of Test objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Array[Test…]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="testsuite.TestSuite.import_policy">
+<code class="descname">import_policy</code><span class="sig-paren">(</span><em>path</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.import_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import testing policy from file. This makes the initial configuration of which tests that are enabled.
+As well as other policies such as strength and sensitivity</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – File path to config file</li>
+<li><strong>name</strong> (<em>str</em>) – Policy name, may be useful for the engine</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="testsuite.TestSuite.run_tests">
+<code class="descname">run_tests</code><span class="sig-paren">(</span><em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="testsuite.TestSuite.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>”
+Most testing tools needs to be started before they can be interacted with.
+Even if this is just a python module the class should be initiated here.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">testsuite</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, jakob & shivam.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/testsuite.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
