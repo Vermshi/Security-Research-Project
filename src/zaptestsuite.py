@@ -8,6 +8,7 @@ import time
 import platform
 from killport import kill_port
 
+
 class ZapTestSuite(TestSuite):
 
 
@@ -30,13 +31,15 @@ class ZapTestSuite(TestSuite):
             p = Popen(["zap", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
             while "Started callback server" not in str(readline):
+                readline = p.stdout.readline()
                 continue
             print("ZAP done LOADING")
         
         elif osys == 'Windows':
-            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", "-daemon", '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy", stdout=PIPE, stderr=STDOUT)
+            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat",  '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy", stdout=PIPE, stderr=STDOUT)
             # TODO: Write log to pipe and check if zap is done loading
             while "Started callback server" not in str(p.stdout.readline()):
+                readline = p.stdout.readline()
                 continue
             print("ZAP done LOADING")
         
