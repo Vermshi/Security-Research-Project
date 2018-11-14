@@ -29,15 +29,15 @@ class ZapTestSuite(TestSuite):
             p = Popen(["zap", "-daemon", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             #p = Popen(["zap", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
-            while "Started callback server" not in str(readline):
+            while "ZAP is now listening" not in str(readline):
                 readline = p.stdout.readline()
                 continue
-            print("ZAP done LOADING")
-        
+            print("ZAP is done loading")
+
         elif osys == 'Windows':
-            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat",  '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy", stdout=PIPE, stderr=STDOUT)
+            p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat", '-daemon', '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy", stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
-            while "Started callback server" not in str(readline):
+            while "ZAP is now listening" not in str(readline):
                 readline = p.stdout.readline()
                 continue
             print("ZAP done LOADING")
@@ -48,7 +48,7 @@ class ZapTestSuite(TestSuite):
             print("Go to Tools -> Options -> API and change port to", self.http_port, "and API key to", self.api_key)
 
         # Give ZAP the time it needs to avoid crash
-        time.sleep(1)
+        #time.sleep(1)
 
     def configure(self):
         self.zap = ZAPv2(apikey=str(self.api_key), proxies={'http': self.proxy_address + ':' + self.proxy_port,
