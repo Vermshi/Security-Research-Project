@@ -38,6 +38,24 @@
 <em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">Test</code><span class="sig-paren">(</span><em>name</em>, <em>testid</em>, <em>description</em>, <em>engine</em>, <em>vulnerability</em>, <em>mode</em>, <em>passed</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.Test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The Test object represent an individual test that can be executed by a test engine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) – The name of the test</li>
+<li><strong>testid</strong> (<em>int</em>) – An id field which may be required by the engine to determine a test</li>
+<li><strong>description</strong> (<em>str</em>) – Description of the test, to be displayed as an explanation to the user</li>
+<li><strong>engine</strong> (<em>str</em>) – The name of the engine running the test</li>
+<li><strong>vulnerability</strong> (<em>str</em>) – Describes which vulnerability the test reveals</li>
+<li><strong>mode</strong> (<em>str</em>) – This field for metadata can be used by the engine to separate different categories</li>
+<li><strong>passed</strong> (<em>bool</em>) – Determines whether the test was passed</li>
+<li><strong>enabled</strong> (<em>bool</em>) – Define if the test should be run or not</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -55,6 +73,14 @@ Required Functions:
 <p>The above functions should run in the same order when used by the application</p>
 <p>For the time being it is also recommended to include a function to log in such that the tests can be performed
 within a session. However this is not part of the current implementation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>engine_name</strong> (<em>str</em>) – Name of the test engine</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="testsuite.TestSuite.configure">
 <code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.configure" title="Permalink to this definition">¶</a></dt>

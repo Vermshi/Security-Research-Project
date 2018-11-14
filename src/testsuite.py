@@ -16,15 +16,12 @@ class TestSuite(object):
 
     For the time being it is also recommended to include a function to log in such that the tests can be performed
     within a session. However this is not part of the current implementation
+
+    :param engine_name: Name of the test engine
+    :type engine_name: str
     """
 
     def __init__(self, engine_name='Custom Engine'):
-        """
-        Initiate the test suite by specifying a name
-
-        :param engine_name:
-        :type engine_name: str
-        """
         self.engine_name = engine_name
 
     def start(self):
@@ -87,30 +84,26 @@ class TestSuite(object):
 class Test(object):
     """
     The Test object represent an individual test that can be executed by a test engine.
+
+    :param name: The name of the test
+    :type name: str
+    :param testid: An id field which may be required by the engine to determine a test
+    :type testid: int
+    :param description: Description of the test, to be displayed as an explanation to the user
+    :type description: str
+    :param engine: The name of the engine running the test
+    :type engine: str
+    :param vulnerability: Describes which vulnerability the test reveals
+    :type vulnerability: str
+    :param mode: This field for metadata can be used by the engine to separate different categories
+    :type mode: str
+    :param passed: Determines whether the test was passed
+    :type passed: bool
+    :param enabled: Define if the test should be run or not
+    :type enabled: bool
     """
 
     def __init__(self, name, testid, description, engine, vulnerability, mode, passed, enabled=True):
-        """
-        Initiate a test object by providing all necessary data
-
-        :param name: The name of the test
-        :type name: str
-        :param testid: An id field which may be required by the engine to determine a test
-        :type testid: int
-        :param description: Description of the test, to be displayed as an explanation to the user
-        :type description: str
-        :param engine: The name of the engine running the test
-        :type engine: str
-        :param vulnerability: Describes which vulnerability the test reveals
-        :type vulnerability: str
-        :param mode: This field for metadata can be used by the engine to separate different categories
-        :type mode: str
-        :param passed: Determines whether the test was passed
-        :type passed: bool
-        :param enabled: Define if the test should be run or not
-        :type enabled: bool
-        """
-
         self.name = name
         self.testid = testid
         self.description = description
