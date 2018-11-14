@@ -19,6 +19,12 @@ class TestSuite(object):
     """
 
     def __init__(self, engine_name='Custom Engine'):
+        """
+        Initiate the test suite by specifying a name
+
+        :param engine_name:
+        :type engine_name: str
+        """
         self.engine_name = engine_name
 
     def start(self):
@@ -34,10 +40,6 @@ class TestSuite(object):
         This function is mean to set up proxies or perform other configurations to the engine.
         """
         raise NotImplementedError( "Should have implemented a method to configure the engine" )
-
-    # def createsession(self):
-    #     It is recommended to implement sessions to the test suite
-    #
 
     def generate_test_list(self):
         """
@@ -76,20 +78,45 @@ class TestSuite(object):
         raise NotImplementedError( "Should have implemented a method to run all the tests from the engine" )
 
     def shutdown(self):
-        raise NotImplementedError( "Should have implemented a method to shut down the test enginge properly" )
+        """
+        Some external engines needs to be properly shut down before closing the python program
+        """
+        raise NotImplementedError('May need to implemented method to shut down the engine properly')
 
 
 class Test(object):
+    """
+    The Test object represent an individual test that can be executed by a test engine.
+    """
 
     def __init__(self, name, testid, description, engine, vulnerability, mode, passed, enabled=True):
+        """
+        Initiate a test object by providing all necessary data
+
+        :param name: The name of the test
+        :type name: str
+        :param testid: An id field which may be required by the engine to determine a test
+        :type testid: int
+        :param description: Description of the test, to be displayed as an explanation to the user
+        :type description: str
+        :param engine: The name of the engine running the test
+        :type engine: str
+        :param vulnerability: Describes which vulnerability the test reveals
+        :type vulnerability: str
+        :param mode: This field for metadata can be used by the engine to separate different categories
+        :type mode: str
+        :param passed: Determines whether the test was passed
+        :type passed: bool
+        :param enabled: Define if the test should be run or not
+        :type enabled: bool
+        """
+
         self.name = name
         self.testid = testid
         self.description = description
         self.engine = engine
         self.vulnerability = vulnerability
-        # Extra field for metadata
         self.mode = mode
-        # If true the test successfully executed an exploit
         self.passed = passed
         self.enabled = enabled
 

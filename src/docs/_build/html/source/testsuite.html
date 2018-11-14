@@ -37,11 +37,12 @@
 <dt id="testsuite.Test">
 <em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">Test</code><span class="sig-paren">(</span><em>name</em>, <em>testid</em>, <em>description</em>, <em>engine</em>, <em>vulnerability</em>, <em>mode</em>, <em>passed</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.Test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The Test object represent an individual test that can be executed by a test engine.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="testsuite.TestSuite">
-<em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">TestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em>, <em>url=None</em>, <em>http_port=None</em>, <em>https_port=None</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">TestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class is abstract and serves as an interface to implement testing tools to the testing application.
 The testing application is composed by this interface interacting between a GUI and all the implemented tools.
@@ -99,8 +100,34 @@ As well as other policies such as strength and sensitivity</p>
 
 <dl class="method">
 <dt id="testsuite.TestSuite.run_tests">
-<code class="descname">run_tests</code><span class="sig-paren">(</span><em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">run_tests</code><span class="sig-paren">(</span><em>tests</em>, <em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all enabled tests against the target url. The Test objects within the tests array describes each test.
+The array should be changed according to how the outcome of the tests are and returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tests</strong> (<em>Array</em><em>[</em><em>Test...</em><em>]</em>) – Array of Test objects</li>
+<li><strong>targetURL</strong> (<em>str</em>) – The target including address and port</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array of test objects</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Array[Test…]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="testsuite.TestSuite.shutdown">
+<code class="descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Some external engines needs to be properly shut down before closing the python program</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="testsuite.TestSuite.start">

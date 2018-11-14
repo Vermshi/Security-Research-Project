@@ -10,6 +10,9 @@ from killport import kill_port
 
 
 class ZapTestSuite(TestSuite):
+    """
+    Module to automate use of ZAP and its API
+    """
 
     zap = None
     api_key = None
@@ -19,6 +22,10 @@ class ZapTestSuite(TestSuite):
     proxy_port = '7576'
 
     def start(self):
+        """
+        Start the ZAP engine in the background
+        """
+
         osys = platform.system()
         self.api_key = os.urandom(16)
 
@@ -47,18 +54,57 @@ class ZapTestSuite(TestSuite):
             print("Start Zap proxy manually")
             print("Go to Tools -> Options -> API and change port to", self.http_port, "and API key to", self.api_key)
 
-        # Give ZAP the time it needs to avoid crash
-        #time.sleep(1)
-
     def configure(self):
+        """
+        Connect python to the ZAP proxy
+        """
         self.zap = ZAPv2(apikey=str(self.api_key), proxies={'http': self.proxy_address + ':' + self.proxy_port,
                                                             'https': self.proxy_address + ':' + self.proxy_port})
 
-    # def createsession(self):
-    #     It is recommended to implement sessions to the test suite
-    #
+    def generate_test_list(self):
+        """
+        This function must make a array of Test objects representing each of the tests that can be executed by the engine.
+        The list must be compatible for the run_tests function
+
+        :return: List of Test objects
+        :rtype: Array[Test...]
+        """
+
+        tests = []
+        for scan in self.zap.pscan.scanners:
+            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "passive", None, True))
+
+        for scan in self.zap.ascan.scanners():
+            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "active", None, True))
+
+        return tests
+
+    def import_policy(self, path, name):
+        """
+        Import testing policy from file. This makes the initial configuration of which tests that are enabled.
+        As well as other policies such as strength and sensitivity
+
+        :param path: File path to config file
+        :type path: str
+        :param name: Policy name, may be useful for the engine
+        :type name: str
+        """
+
+        print("need to support importing policy from path")
 
     def run_tests(self, tests, targetURL):
+        """
+        Run all enabled tests against the target url. The Test objects within the tests array describes each test.
+        The array should be changed according to how the outcome of the tests are and returned
+
+        :param tests: Array of Test objects
+        :type tests: Array[Test...]
+        :param targetURL: The target including address and port
+        :type targetURL: str
+        :return: Array of test objects
+        :rtype: Array[Test...]
+        """
+
         self.zap.urlopen(targetURL)
 
         self.zap.ascan.disable_all_scanners()
@@ -87,25 +133,12 @@ class ZapTestSuite(TestSuite):
             tests[index].passed = None
             for alert in self.zap.core.alerts():
                 if str(tests[index].testid) == str(alert['pluginId']):
-                #if self.tests[index].name == alert['name']:
                     tests[index].description = alert['description']
                     tests[index].passed = False
                 
             if tests[index].passed != False and tests[index].enabled == True:
                 tests[index].passed = True
-        print("results?", self.zap.core.alerts())
-        print("")
         return tests
 
-    def generate_test_list(self):
-        tests = []
-        for scan in self.zap.pscan.scanners:
-            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "passive", None, True))
 
-        for scan in self.zap.ascan.scanners():
-            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "active", None, True))
 
-        return tests
-
-    def import_policy(self, path, name):
-        print("need to support importing policy from path")

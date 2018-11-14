@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-
 from zaptestsuite import ZapTestSuite
-import time
+
+"""
+This code demonstrates use of all functions in the available test suites
+"""
 
 if __name__ == '__main__':
     testsuites = []
@@ -19,6 +21,5 @@ if __name__ == '__main__':
     print("Test Results")
     for testres in testresults:
         print('------------------------------------------')
-        #print(testres)
-        
+
         print(testres.name, testres.testid, testres.engine, testres.vulnerability, testres.mode, testres.passed, testres.enabled)

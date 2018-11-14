@@ -35,8 +35,9 @@
 <span id="zaptestsuite-module"></span><h1>zaptestsuite module<a class="headerlink" href="#module-zaptestsuite" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="zaptestsuite.ZapTestSuite">
-<em class="property">class </em><code class="descclassname">zaptestsuite.</code><code class="descname">ZapTestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em>, <em>url=None</em>, <em>http_port=None</em>, <em>https_port=None</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">zaptestsuite.</code><code class="descname">ZapTestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="testsuite.html#testsuite.TestSuite" title="testsuite.TestSuite"><code class="xref py py-class docutils literal notranslate"><span class="pre">testsuite.TestSuite</span></code></a></p>
+<p>Module to automate use of ZAP and its API</p>
 <dl class="attribute">
 <dt id="zaptestsuite.ZapTestSuite.api_key">
 <code class="descname">api_key</code><em class="property"> = None</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.api_key" title="Permalink to this definition">¶</a></dt>
@@ -45,8 +46,7 @@
 <dl class="method">
 <dt id="zaptestsuite.ZapTestSuite.configure">
 <code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.configure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run all configurations necessary to perform a test against the target.
-This function is mean to set up proxies or perform other configurations to the engine.</p>
+<dd><p>Connect python to the ZAP proxy</p>
 </dd></dl>
 
 <dl class="method">
@@ -85,17 +85,45 @@ As well as other policies such as strength and sensitivity</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="zaptestsuite.ZapTestSuite.proxy_address">
+<code class="descname">proxy_address</code><em class="property"> = '127.0.0.1'</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.proxy_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="zaptestsuite.ZapTestSuite.proxy_port">
+<code class="descname">proxy_port</code><em class="property"> = '7576'</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.proxy_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="zaptestsuite.ZapTestSuite.run_tests">
-<code class="descname">run_tests</code><span class="sig-paren">(</span><em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">run_tests</code><span class="sig-paren">(</span><em>tests</em>, <em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all enabled tests against the target url. The Test objects within the tests array describes each test.
+The array should be changed according to how the outcome of the tests are and returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tests</strong> (<em>Array</em><em>[</em><em>Test...</em><em>]</em>) – Array of Test objects</li>
+<li><strong>targetURL</strong> (<em>str</em>) – The target including address and port</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array of test objects</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Array[Test…]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="zaptestsuite.ZapTestSuite.start">
 <code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>”
-Most testing tools needs to be started before they can be interacted with.
-Even if this is just a python module the class should be initiated here.</p>
+<dd><p>Start the ZAP engine in the background</p>
 </dd></dl>
 
 <dl class="attribute">

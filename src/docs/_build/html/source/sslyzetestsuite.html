@@ -35,7 +35,7 @@
 <span id="sslyzetestsuite-module"></span><h1>sslyzetestsuite module<a class="headerlink" href="#module-sslyzetestsuite" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="sslyzetestsuite.SSLyzeTestSuite">
-<em class="property">class </em><code class="descclassname">sslyzetestsuite.</code><code class="descname">SSLyzeTestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em>, <em>url=None</em>, <em>http_port=None</em>, <em>https_port=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">sslyzetestsuite.</code><code class="descname">SSLyzeTestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="testsuite.html#testsuite.TestSuite" title="testsuite.TestSuite"><code class="xref py py-class docutils literal notranslate"><span class="pre">testsuite.TestSuite</span></code></a></p>
 <dl class="method">
 <dt id="sslyzetestsuite.SSLyzeTestSuite.configure">
@@ -83,7 +83,27 @@ As well as other policies such as strength and sensitivity</p>
 <dl class="method">
 <dt id="sslyzetestsuite.SSLyzeTestSuite.run_tests">
 <code class="descname">run_tests</code><span class="sig-paren">(</span><em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Run all enabled tests against the target url. The Test objects within the tests array describes each test.
+The array should be changed according to how the outcome of the tests are and returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tests</strong> (<em>Array</em><em>[</em><em>Test...</em><em>]</em>) – Array of Test objects</li>
+<li><strong>targetURL</strong> (<em>str</em>) – The target including address and port</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array of test objects</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Array[Test…]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="sslyzetestsuite.SSLyzeTestSuite.start">
