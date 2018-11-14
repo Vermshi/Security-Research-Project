@@ -16,7 +16,7 @@ Python dependencies: requirements.txt
 
 ### Documentation
 
-Detailed documentation of the code is located in src/docs/_build/html/index.html
+Pull the project to read the detailed documentation of the code located in src/docs/_build/html/index.html
 
 ### Demo run
 
