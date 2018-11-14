@@ -33,7 +33,7 @@ class ZapTestSuite(TestSuite):
         kill_port(int(self.proxy_port))
 
         if osys == 'Linux':
-            p = Popen(["zap", "-daemon", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            p = Popen(["zap", "-dir", ".", "-daemon", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             #p = Popen(["zap", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
             while "ZAP is now listening" not in str(readline):
@@ -72,14 +72,14 @@ class ZapTestSuite(TestSuite):
 
         tests = []
         for scan in self.zap.pscan.scanners:
-            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "passive", None, True))
+            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "passive", None, (scan['enabled'] == 'true')))
 
         for scan in self.zap.ascan.scanners():
-            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "active", None, True))
+            tests.append(Test(scan['name'], scan['id'], None, self.engine_name, "UNKNOWN", "active", None, (scan['enabled'] == 'true')))
 
         return tests
 
-    def import_policy(self, path, name):
+    def import_policy(self, file="testpolicy.xml", name="testpolicy"):
         """
         Import testing policy from file. This makes the initial configuration of which tests that are enabled.
         As well as other policies such as strength and sensitivity
@@ -90,7 +90,16 @@ class ZapTestSuite(TestSuite):
         :type name: str
         """
 
-        print("need to support importing policy from path")
+        # Find the absolute path as required by ZAP
+        path = os.path.abspath(file)
+
+        # Import and set a new attack scan policy
+        self.zap.ascan.import_scan_policy(path)
+        self.zap.ascan.set_option_attack_policy(name)
+        self.zap.ascan.set_option_default_policy(name)
+
+        # TODO: Changes in the a scan policy will not be made once they have been set. How to fix that? ZAP does not support deletion of policies
+        # TODO: Return the new test list
 
     def run_tests(self, tests, targetURL):
         """
