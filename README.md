@@ -26,3 +26,8 @@ As superuser:
  
 To automatically  run the test engine and execute all tests against the target defined in main2.py ('http://127.0.0.1:8080'). If the tests successfully runs against the locally running target it will print the test results achieved. The GUI for the new code is not available yet. But a preview can be seen by running simpleZAP.py.
 
+
+### Tests
+
+Review all running tests and corresponding vulnerabilities in the testsrunning.pdf file
+
