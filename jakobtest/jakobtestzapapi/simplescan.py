@@ -37,12 +37,13 @@ for policy in  zap.ascan.policies():
 
 print 'scanners'
 for scanner in zap.ascan.scanners():
-    print scanner
+    print scanner["name"]
 
 
 print 'pscanners---'
 for scanner in zap.pscan.scanners:
-    print scanner
+    print scanner["name"]
+
 print "---"
 
 print 'scans'
