@@ -11,7 +11,6 @@ from killport import kill_port
 
 class ZapTestSuite(TestSuite):
 
-
     zap = None
     api_key = None
 
@@ -24,11 +23,11 @@ class ZapTestSuite(TestSuite):
         self.api_key = os.urandom(16)
 
         # Kill the proxy in case
-        kill_port(self.proxy_port)
+        kill_port(int(self.proxy_port))
 
         if osys == 'Linux':
-            #p = Popen(["zap", "-daemon", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
-            p = Popen(["zap", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            p = Popen(["zap", "-daemon", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            #p = Popen(["zap", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
             while "Started callback server" not in str(readline):
                 readline = p.stdout.readline()
@@ -37,8 +36,8 @@ class ZapTestSuite(TestSuite):
         
         elif osys == 'Windows':
             p = Popen([r"C:\Program Files\OWASP\Zed Attack Proxy\zap.bat",  '-port', self.proxy_port, '-config', ("api.key="+str(self.api_key))], cwd=r"C:\Program Files\OWASP\Zed Attack Proxy", stdout=PIPE, stderr=STDOUT)
-            # TODO: Write log to pipe and check if zap is done loading
-            while "Started callback server" not in str(p.stdout.readline()):
+            readline = p.stdout.readline()
+            while "Started callback server" not in str(readline):
                 readline = p.stdout.readline()
                 continue
             print("ZAP done LOADING")
@@ -47,6 +46,9 @@ class ZapTestSuite(TestSuite):
             print("OS not supported yet:" + osys)
             print("Start Zap proxy manually")
             print("Go to Tools -> Options -> API and change port to", self.http_port, "and API key to", self.api_key)
+
+        # Give ZAP the time it needs to avoid crash
+        time.sleep(1)
 
     def configure(self):
         self.zap = ZAPv2(apikey=str(self.api_key), proxies={'http': self.proxy_address + ':' + self.proxy_port,
@@ -89,7 +91,7 @@ class ZapTestSuite(TestSuite):
                     tests[index].description = alert['description']
                     tests[index].passed = False
                 
-            if tests[index].passed != False and self.tests[index].enabled == True:
+            if tests[index].passed != False and tests[index].enabled == True:
                 tests[index].passed = True
         print("results?", self.zap.core.alerts())
         print("")
