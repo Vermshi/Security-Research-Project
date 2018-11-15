@@ -49,7 +49,7 @@ def suiteToDict(suits):
         testDict[x["name"]] = x
     return testDict
 
-
+#change to displayTests
 @app.route('/')
 def output():
     for test in testsuites:
@@ -59,12 +59,13 @@ def output():
         test.configure()
         for t in test.generate_test_list():
             tests.append(t)
-        testsDict = suiteToDict(tests)
-        for key, value in testsDict.items():
-            data[key] = value
+    testsDict = suiteToDict(tests)
+    for key, value in testsDict.items():
+        data[key] = value
     # serve index template
     return render_template('index.html', name='Joe', data = data)
 
+#change to runTests
 @app.route('/', methods=['POST'])
 def attack():
     address = request.form["attackAddress"]
@@ -79,8 +80,8 @@ def runTest(address):
     for test in testsuites:
         # test.import_policy("path/to/policy", "Default Policy")
         testresults.extend(test.run_tests(tests, "http://"+address)) #Run when attack, show loading bar and update after finnished.
-    tests = suiteToDict(testresults)
-    data = tests
+    res = suiteToDict(testresults)
+    data = res
 
 
 if __name__ == '__main__':
