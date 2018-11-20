@@ -52,15 +52,15 @@ def suiteToDict(suits):
 #change to displayTests
 @app.route('/')
 def output():
-    # for test in testsuites:
-    #     print("Siden lastes")
-    #     test.start()
-    #     time.sleep(3)
-    #     for t in test.generate_test_list():
-    #         tests.append(t)
-    # testsDict = suiteToDict(tests)
-    # for key, value in testsDict.items():
-    #     data[key] = value
+    for test in testsuites:
+        print("Siden lastes")
+        test.start()
+        time.sleep(3)
+        for t in test.generate_test_list():
+            tests.append(t)
+    testsDict = suiteToDict(tests)
+    for key, value in testsDict.items():
+        data[key] = value
     # serve index template
     return render_template('index.html', name='Joe', data = data)
 
@@ -69,7 +69,7 @@ def output():
 def attack():
     address = request.form["attackAddress"]
     print(address)
-    runTest(address)
+    Success = runTest(address)
     return render_template('index.html', name='Joe', data=data)
 
 def runTest(address):
@@ -78,10 +78,11 @@ def runTest(address):
     global tests
     testresults = []
     for test in testsuites:
-        # test.configure(address)
-
+        if(test.connect(address)):
+            testresults.extend(test.run_tests(tests, "http://"+address)) #Run when attack, show loading bar and update after finnished.
+        else:
+            return False
         # test.import_policy("path/to/policy", "Default Policy")
-        testresults.extend(test.run_tests(tests, "http://"+address)) #Run when attack, show loading bar and update after finnished.
     res = suiteToDict(testresults)
     data = res
 
