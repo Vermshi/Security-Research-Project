@@ -21,6 +21,8 @@ class TestSuite(object):
     :type engine_name: str
     """
 
+    targetURL = ""
+
     def __init__(self, engine_name='Custom Engine'):
         self.engine_name = engine_name
 
@@ -31,8 +33,9 @@ class TestSuite(object):
         """
         raise NotImplementedError( "Should have implemented a method to start the chosen engine" )
 
-    def configure(self):
+    def connect(self, targetURL):
         """
+        TODO: Return
         Run all configurations necessary to perform a test against the target.
         This function is mean to set up proxies or perform other configurations to the engine.
         """
@@ -60,7 +63,7 @@ class TestSuite(object):
         """
         raise NotImplementedError( "Should have implemented a method to import the test policy from a file" )
 
-    def run_tests(self, tests, targetURL):
+    def run_tests(self, tests):
         """
         Run all enabled tests against the target url. The Test objects within the tests array describes each test.
         The array should be changed according to how the outcome of the tests are and returned
