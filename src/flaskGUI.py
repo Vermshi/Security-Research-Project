@@ -29,7 +29,7 @@ data = {"test1":{
     "vulnerability": "SQl injection",
     "mode": 2,
     "passed": False,
-    "enabled": True
+    "enabled": False
 },
 
 }
@@ -56,7 +56,6 @@ def output():
         print("Siden lastes")
         test.start()
         time.sleep(3)
-        test.configure()
         for t in test.generate_test_list():
             tests.append(t)
     testsDict = suiteToDict(tests)
@@ -66,10 +65,11 @@ def output():
     return render_template('index.html', name='Joe', data = data)
 
 #change to runTests
-@app.route('/', methods=['POST'])
+@app.route('/atc', methods=['POST'])
 def attack():
     address = request.form["attackAddress"]
-    runTest(address)
+    print(address)
+    Success = runTest(address)
     return render_template('index.html', name='Joe', data=data)
 
 def runTest(address):
@@ -78,10 +78,20 @@ def runTest(address):
     global tests
     testresults = []
     for test in testsuites:
+        if(test.connect(address)):
+            testresults.extend(test.run_tests(tests, "http://"+address)) #Run when attack, show loading bar and update after finnished.
+        else:
+            return False
         # test.import_policy("path/to/policy", "Default Policy")
-        testresults.extend(test.run_tests(tests, "http://"+address)) #Run when attack, show loading bar and update after finnished.
     res = suiteToDict(testresults)
     data = res
+
+@app.route('/checkChange', methods=['POST'])
+def checkChange():
+    check = request.form["check"]
+    print(check)
+
+    return render_template('index.html', name='Joe', data=data)
 
 
 if __name__ == '__main__':
