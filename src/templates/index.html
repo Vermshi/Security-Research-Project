@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */
     .navbar {
@@ -78,6 +79,10 @@
   top: 50%;
   left:50%;
   transform: translate(-50%,-50%);
+    }
+
+    #loaderElement{
+    display: none;
     }
         .loader {
     border: 16px solid #f3f3f3; /* Light grey */
@@ -162,12 +167,20 @@ input:checked + .slider:before {
 <nav class="navbar navbar-inverse text-center">
 <h4>Attack Engine</h4>
 </nav>
+{% if error %}
+<div class="alert alert-danger">
+  {{error}}
+</div>
+{% endif %}
 
 <div class="container-fluid text-center">
   <div class="row content">
     <div class="col-sm-2 sidenav">
 
     </div>
+
+
+
     <div class="col-sm-8 text-left middleContainer" >
 
 
@@ -178,7 +191,7 @@ input:checked + .slider:before {
     <div class="input-group">
       <input type="text" class="form-control" placeholder="localhost:63342" name="attackAddress">
       <div class="input-group-btn">
-            <button type="sumbit" class="btn btn-success">
+            <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
       <span class="glyphicon glyphicon-education "></span> Attack!
     </button>
       </div>
@@ -187,7 +200,7 @@ input:checked + .slider:before {
           </div>
         </div>
 
-                     <div class=" col-md-2 " >
+                     <div class=" col-md-2 " id = "loaderElement">
         <div class="well">
     <div class="loader"></div>
           </div>
@@ -200,7 +213,7 @@ input:checked + .slider:before {
 
                      <div class=" col-md-12">
 
-          <div class="well">
+          <div class="well" >
               <div class="row">
     <div class="col-md-8"><h4>{{ key }}</h4>
             <p>{{ value["description"] }}</p></div>
@@ -211,6 +224,7 @@ input:checked + .slider:before {
     <div class="notPassed pull-right " ><span class="glyphicon glyphicon-remove gly"></span> </div>
 {% endif %}
         <div class="well">
+            Enabled:
        <label class="switch">
            {% if value["enabled"] %}
   <input type="checkbox" onchange="document.getElementById('enabledForm').submit()" name="check" value="{{ key }}" checked>
@@ -282,4 +296,9 @@ input:checked + .slider:before {
 </footer>
 
 </body>
+   <script>function displayLoader(){
+    loader = document.getElementById("loaderElement");
+    loader.style.display = "block";
+    console.log("hei");
+    } </script>
 </html>
