@@ -11,26 +11,27 @@ app = Flask(__name__)
 test1 = ["SQL injextion", "00:25", "SQL injection test bla bla vulnerabaility bla bla bla", "zap", "SQl injection", 2, False, True]
 test2 = ["XSS attack", "00:32", "XSS injection can be done by bla bla bla", "XSS", 0, True,True]
 
-data = {"test1":{
-  "name": "Sql injection",
-  "testid": "00:25",
-  "description":"SQL injection test bla bla vulnerabaility bla bla bla" ,
-   "engine": "zap",
-    "vulnerability": "SQl injection",
-    "mode": 2,
-    "passed": True,
-    "enabled": True
-},
-"test2":{
-  "name": "XSS",
-  "testid": "00:32",
-  "description":"XSSS test bla bla vulnerabaility bla bla bla" ,
-   "engine": "zap",
-    "vulnerability": "SQl injection",
-    "mode": 2,
-    "passed": False,
-    "enabled": False
-},
+data = {
+#     "test1":{
+#   "name": "Sql injection",
+#   "testid": "00:25",
+#   "description":"SQL injection test bla bla vulnerabaility bla bla bla" ,
+#    "engine": "zap",
+#     "vulnerability": "SQl injection",
+#     "mode": 2,
+#     "passed": True,
+#     "enabled": True
+# },
+# "test2":{
+#   "name": "XSS",
+#   "testid": "00:32",
+#   "description":"XSSS test bla bla vulnerabaility bla bla bla" ,
+#    "engine": "zap",
+#     "vulnerability": "SQl injection",
+#     "mode": 2,
+#     "passed": False,
+#     "enabled": False
+# },
 
 }
 testsuites = []
@@ -68,9 +69,17 @@ def output():
 @app.route('/atc', methods=['POST'])
 def attack():
     address = request.form["attackAddress"]
-    print(address)
+    if(len(address) == 0):
+        return render_template('index.html', name='Joe', data=data,
+                               error="The attack address cannot be empty.")
+
     Success = runTest(address)
-    return render_template('index.html', name='Joe', data=data)
+    if(Success):
+        return render_template('index.html', name='Joe', data=data)
+    else:
+        return render_template('index.html', name='Joe', data=data, error= "The engine could not connect to that address")
+
+
 
 def runTest(address):
     #TODO sett inn logikk for å kjøre testene her
@@ -88,8 +97,15 @@ def runTest(address):
 
 @app.route('/checkChange', methods=['POST'])
 def checkChange():
-    check = request.form["check"]
-    print(check)
+    check = request.form.getlist('check')
+    for key, value in enumerate(data):
+        if(value in check):
+            data[value]["enabled"] = True
+        else:
+            data[value]["enabled"] = False
+    # for t in tests:
+    #     t.enabled = data[t.name]["enabled"]
+
 
     return render_template('index.html', name='Joe', data=data)
 
