@@ -81,7 +81,7 @@
   transform: translate(-50%,-50%);
     }
 
-    #loaderElement{
+    #loaderElement, #loadingMsg{
     display: none;
     }
         .loader {
@@ -167,6 +167,11 @@ input:checked + .slider:before {
 <nav class="navbar navbar-inverse text-center">
 <h4>Attack Engine</h4>
 </nav>
+
+<div class="alert alert-success" id="loadingMsg">
+  The tests are running, this might take a while. In the meantime you could check the python console for progress or watch this:
+    https://youtu.be/SZQz9tkEHIg
+</div>
 {% if error %}
 <div class="alert alert-danger">
   {{error}}
@@ -298,7 +303,8 @@ input:checked + .slider:before {
 </body>
    <script>function displayLoader(){
     loader = document.getElementById("loaderElement");
+    loadingMsg = document.getElementById("loadingMsg");
     loader.style.display = "block";
-    console.log("hei");
+    loadingMsg.style.display = "block";
     } </script>
 </html>
