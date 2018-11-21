@@ -57,19 +57,22 @@ class ZapTestSuite(TestSuite):
                                                             'https': proxy_address + ':' + proxy_port})
         return True
 
-    def connect(self, targetURL):
+    def connect(self, address, http_port=None, https_port=None):
         """
         Connect to the targetURL
         """
-        self.targetURL = targetURL
+        if(http_port):
+            self.targetURL = "http://" + address + ":" + http_port
+        elif(https_port):
+            self.targetURL = "https://" + address + ":" + http_port
         try:
-            print(targetURL)
-            self.zap.urlopen("http://" + targetURL)
+            print(self.targetURL)
+            self.zap.urlopen(self.targetURL)
             return True
         except:
-            print('Could not connect to', targetURL)
+            print('Could not connect to', self.targetURL)
             print('Specified URL must be on the format <address>:<port>')
-            print("The URL was", targetURL)
+            print("The URL was", self.targetURL)
 
             return False
 

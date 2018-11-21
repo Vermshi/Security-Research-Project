@@ -27,17 +27,16 @@ class SSLyzeTestSuite(TestSuite):
     def start(self):
         print("SSLyze does not require to start since it is a python module")
 
-    def connect(self, targetURL):
+    def connect(self, address, http_port=None, https_port=None):
         """
 
         :param targetURL:
         :return:
         """
-        self.targetURL = targetURL
 
         # Connect SSLyze to the specified target
-        host = targetURL.split(":")[0]
-        port = int(targetURL.split(":")[1])
+        host = address
+        port = https_port
         try:
             server_tester = ServerConnectivityTester(
                 hostname=host,
