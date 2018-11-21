@@ -63,10 +63,14 @@ class ZapTestSuite(TestSuite):
         """
         self.targetURL = targetURL
         try:
-            self.zap.urlopen(targetURL)
+            print(targetURL)
+            self.zap.urlopen("http://" + targetURL)
             return True
         except:
             print('Could not connect to', targetURL)
+            print('Specified URL must be on the format <address>:<port>')
+            print("The URL was", targetURL)
+
             return False
 
     def generate_test_list(self):
