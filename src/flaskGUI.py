@@ -54,7 +54,7 @@ def suiteToDict(suits):
 @app.route('/')
 def output():
     for test in testsuites:
-        print("Siden lastes")
+        print("The tests are loading ...")
         test.start()
         time.sleep(3)
         for t in test.generate_test_list():
@@ -68,12 +68,17 @@ def output():
 #change to runTests
 @app.route('/atc', methods=['POST'])
 def attack():
-    address = request.form["attackAddress"]
-    if(len(address) == 0):
+    fullAddress = request.form["attackAddress"]
+    if(len(fullAddress) == 0):
         return render_template('index.html', name='Joe', data=data,
                                error="The attack address cannot be empty.")
+    try:
+        address, port = fullAddress.split(":")
+    except:
+        return render_template('index.html', name='Joe', data=data,
+                               error="The given address was not in the right format")
 
-    Success = runTest(address)
+    Success = runTest(address,port)
     if(Success):
         return render_template('index.html', name='Joe', data=data)
     else:
@@ -81,14 +86,14 @@ def attack():
 
 
 
-def runTest(address):
+def runTest(address,port):
     #TODO sett inn logikk for å kjøre testene her
     global data
     global tests
     testresults = []
     for test in testsuites:
-        if(test.connect(address)):
-            testresults.extend(test.run_tests(tests, "http://"+address)) #Run when attack, show loading bar and update after finnished.
+        if(test.connect(address,port)):
+            testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
         else:
             return False
         # test.import_policy("path/to/policy", "Default Policy")
