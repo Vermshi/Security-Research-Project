@@ -32,7 +32,7 @@ class ZapTestSuite(TestSuite):
 
         if osys == 'Linux':
             p = Popen(["zap", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
-            #p = Popen(["zap", "-port", self.proxy_port, "-config", ("api.key="+str(self.api_key))], stdout=PIPE, stderr=STDOUT)
+            #p = Popen(["zap", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
             while "ZAP is now listening" not in str(readline):
                 readline = p.stdout.readline()
@@ -63,11 +63,12 @@ class ZapTestSuite(TestSuite):
         """
         if(http_port):
             self.targetURL = "http://" + address + ":" + http_port
-        elif(https_port):
-            self.targetURL = "https://" + address + ":" + http_port
+        # ZAP active scanner may not be able to run on https
+        #elif(https_port):
+        #    self.targetURL = address + ":" + http_port
         try:
             print(self.targetURL)
-            self.zap.urlopen(self.targetURL)
+            self.zap.urlopen('http://' + self.targetURL)
             return True
         except:
             print('Could not connect to', self.targetURL)
@@ -130,7 +131,6 @@ class ZapTestSuite(TestSuite):
         :return: Array of test objects
         :rtype: Array[Test...]
         """
-
         self.zap.ascan.disable_all_scanners()
         self.zap.pscan.disable_all_scanners()
         for test in tests:
@@ -140,13 +140,14 @@ class ZapTestSuite(TestSuite):
                 self.zap.ascan.enable_scanners(test.testid)
 
         # RUN PASSIVE TESTS
+        print("Run Spider")
         scanid = self.zap.spider.scan(self.targetURL)
-        time.sleep(2)
         while (int(self.zap.spider.status(scanid)) < 100):
             print('Spider progress %: ' + self.zap.spider.status(scanid))
-        time.sleep(2)
+            time.sleep(0.1)
 
         # Run ACTIVE TESTS
+        print("Run active scan")
         scanid = self.zap.ascan.scan(self.targetURL)
         while int(self.zap.ascan.status(scanid)) < 100:
             print('Scan progress %: ' + self.zap.ascan.status(scanid))
