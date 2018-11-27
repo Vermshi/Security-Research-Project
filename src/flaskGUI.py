@@ -1,7 +1,11 @@
-from main2 import *
+# from main2 import *
+from zaptestsuite import ZapTestSuite
+from sslyzetestsuite import SSLyzeTestSuite
+
 from json import *
 import sys
 
+import time
 from flask import Flask, render_template, request, redirect, Response
 import random, json
 
@@ -35,6 +39,7 @@ data = {
 
 }
 testsuites = []
+testsuites.append(SSLyzeTestSuite("SSLyze"))
 testsuites.append(ZapTestSuite("ZAP"))
 tests = []
 
@@ -69,34 +74,48 @@ def output():
 @app.route('/atc', methods=['POST'])
 def attack():
     fullAddress = request.form["attackAddress"]
+
+    # TODO: Handle format
+    https_port = request.form["httpsport"]
+
     if(len(fullAddress) == 0):
         return render_template('index.html', name='Joe', data=data,
                                error="The attack address cannot be empty.")
     try:
-        address, port = fullAddress.split(":")
+        address, http_port = fullAddress.split(":")
     except:
         return render_template('index.html', name='Joe', data=data,
                                error="The given address was not in the right format")
 
-    Success = runTest(address,port)
+    Success = runTest(address, http_port, https_port)
     if(Success):
         return render_template('index.html', name='Joe', data=data)
     else:
         return render_template('index.html', name='Joe', data=data, error= "The engine could not connect to that address")
 
 
-
-def runTest(address,port):
+def runTest(address, http_port, https_port):
     #TODO sett inn logikk for å kjøre testene her
     global data
     global tests
     testresults = []
     for test in testsuites:
-        if(test.connect(address,port)):
-            testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
-        else:
-            return False
-        # test.import_policy("path/to/policy", "Default Policy")
+        http_test = False
+        https_test = False,
+
+
+        if(test.connect(address, http_port=http_port)):
+            http_test = testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
+
+        # Run tests for https port
+        # TODO: The result must somehow be merged
+        if(test.connect(address, https_port=https_port)):
+            https_test = testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
+
+        # TODO: The break condition must be different because a test engine may only work on one kind of port
+        # If none of the connection was a success
+        # else:
+        #    return False
     res = suiteToDict(testresults)
     data = res
 

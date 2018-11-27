@@ -66,9 +66,14 @@ class ZapTestSuite(TestSuite):
         # ZAP active scanner may not be able to run on https
         #elif(https_port):
         #    self.targetURL = address + ":" + http_port
+        elif(https_port):
+            # TODO
+            print("HTTPS not supported yet")
+            return False
+
         try:
             print(self.targetURL)
-            self.zap.urlopen('http://' + self.targetURL)
+            self.zap.urlopen(self.targetURL)
             return True
         except:
             print('Could not connect to', self.targetURL)
@@ -146,7 +151,7 @@ class ZapTestSuite(TestSuite):
             print('Spider progress %: ' + self.zap.spider.status(scanid))
             time.sleep(0.1)
         # Give the passive scanner a chance to finish (IMPORTANT)
-        time.sleep(3)
+        time.sleep(5)
 
         # Run ACTIVE TESTS
         print("Run active scan")

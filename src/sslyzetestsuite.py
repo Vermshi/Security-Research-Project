@@ -33,10 +33,12 @@ class SSLyzeTestSuite(TestSuite):
         :param targetURL:
         :return:
         """
-
+        if https_port == None:
+            print("SSLyze only runs on https")
+            return False
         # Connect SSLyze to the specified target
         host = address
-        port = https_port
+        port = int(https_port)
         try:
             server_tester = ServerConnectivityTester(
                 hostname=host,
