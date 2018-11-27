@@ -145,6 +145,8 @@ class ZapTestSuite(TestSuite):
         while (int(self.zap.spider.status(scanid)) < 100):
             print('Spider progress %: ' + self.zap.spider.status(scanid))
             time.sleep(0.1)
+        # Give the passive scanner a chance to finish (IMPORTANT)
+        time.sleep(3)
 
         # Run ACTIVE TESTS
         print("Run active scan")
