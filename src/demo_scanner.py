@@ -9,7 +9,7 @@ from sslyze.plugins.certificate_info_plugin import CertificateInfoPlugin
 
 class DemoScan(object):
 
-    def demo_synchronous_scanner():
+    def demo_synchronous_scanner(self):
         # Run one scan command to list the server's TLS 1.0 cipher suites
         try:
             server_tester = ServerConnectivityTester(

@@ -18,6 +18,8 @@ Python dependencies: requirements.txt
 
 Pull the project to read the detailed documentation of the code located in src/docs/_build/html/index.html
 
+A model for the programflow is available in currentprogramflow.svg
+
 ### Demo run
 
 As superuser:
@@ -30,4 +32,10 @@ To automatically  run the test engine and execute all tests against the target d
 ### Tests
 
 Review all running tests and corresponding vulnerabilities in the testsrunning.pdf file
+
+### TODO:
+
+- ON/OFF Switch
+- Installation guide
+- Login to session
 

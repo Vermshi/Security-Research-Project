@@ -7,7 +7,7 @@ class TestSuite(object):
     The testing application is composed by this interface interacting between a GUI and all the implemented tools.
     Required Functions:
     - start
-    - configure
+    - connect
     - import_policy
     - generate_test_list
     - run_tests
@@ -33,7 +33,7 @@ class TestSuite(object):
         """
         raise NotImplementedError( "Should have implemented a method to start the chosen engine" )
 
-    def connect(self, targetURL):
+    def connect(self, address, http_port=None, https_port=None):
         """
         TODO: Return
         Run all configurations necessary to perform a test against the target.
