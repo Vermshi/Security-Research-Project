@@ -1,12 +1,8 @@
 from main2 import *
-from json import *
-import sys
-
 from flask import Flask, render_template, request, redirect, Response
-import random, json
 
 app = Flask(__name__)
-#TestObjekt:
+
 # name, testid, description, engine, vulnerability, mode, passed, enabled
 test1 = ["SQL injextion", "00:25", "SQL injection test bla bla vulnerabaility bla bla bla", "zap", "SQl injection", 2, False, True]
 test2 = ["XSS attack", "00:32", "XSS injection can be done by bla bla bla", "XSS", 0, True,True]
@@ -50,9 +46,14 @@ def suiteToDict(suits):
         testDict[x["name"]] = x
     return testDict
 
-#change to displayTests
+@app.route('/atc')
+@app.route('/check-change')
+@app.route('/auto-enable')
+def reDirect():
+    return render_template('index.html', data=data)
+
 @app.route('/')
-def output():
+def displayTests():
     for test in testsuites:
         print("The tests are loading ...")
         test.start()
@@ -62,32 +63,30 @@ def output():
     testsDict = suiteToDict(tests)
     for key, value in testsDict.items():
         data[key] = value
-    # serve index template
-    return render_template('index.html', name='Joe', data = data)
+    return render_template('index.html', data = data)
 
 #change to runTests
 @app.route('/atc', methods=['POST'])
 def attack():
     fullAddress = request.form["attackAddress"]
     if(len(fullAddress) == 0):
-        return render_template('index.html', name='Joe', data=data,
+        return render_template('index.html', data=data,
                                error="The attack address cannot be empty.")
     try:
         address, port = fullAddress.split(":")
     except:
-        return render_template('index.html', name='Joe', data=data,
+        return render_template('index.html', data=data,
                                error="The given address was not in the right format")
 
     Success = runTest(address,port)
     if(Success):
-        return render_template('index.html', name='Joe', data=data)
+        return render_template('index.html', data=data)
     else:
-        return render_template('index.html', name='Joe', data=data, error= "The engine could not connect to that address")
+        return render_template('index.html', data=data, error= "The attack engine could not connect to that address")
 
 
 
 def runTest(address,port):
-    #TODO sett inn logikk for å kjøre testene her
     global data
     global tests
     testresults = []
@@ -100,7 +99,7 @@ def runTest(address,port):
     res = suiteToDict(testresults)
     data = res
 
-@app.route('/checkChange', methods=['POST'])
+@app.route('/check-change', methods=['POST'])
 def checkChange():
     check = request.form.getlist('check')
     for key, value in enumerate(data):
@@ -108,13 +107,33 @@ def checkChange():
             data[value]["enabled"] = True
         else:
             data[value]["enabled"] = False
-    # for t in tests:
-    #     t.enabled = data[t.name]["enabled"]
+    for t in tests:
+         t.enabled = data[t.name]["enabled"]
 
+    return render_template('index.html', data=data)
 
-    return render_template('index.html', name='Joe', data=data)
+@app.route('/auto-enable', methods=['POST'])
+def enableDisableAll():
+    val = request.form["sortAll"]
+    if(val == "1"):
+        for key, value in enumerate(data):
+            data[value]["enabled"] = True
+
+    elif(val == "2"):
+        for key, value in enumerate(data):
+            data[value]["enabled"] = False
+    elif(val == "3"):
+        for key, value in enumerate(data):
+            if(data[value]["passed"]):
+                data[value]["enabled"] = False
+    else:
+        return render_template('index.html', data=data,
+                               error="Suspicious POST request received, hmmm")
+    for t in tests:
+        t.enabled = data[t.name]["enabled"]
+
+    return render_template('index.html', data=data)
 
 
 if __name__ == '__main__':
-    # run!
     app.run()
