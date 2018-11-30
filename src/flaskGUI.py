@@ -33,6 +33,7 @@ data = {
 testsuites = []
 testsuites.append(ZapTestSuite("ZAP"))
 tests = []
+testsLoaded = False
 
 
 def suiteToDict(suits):
@@ -54,15 +55,18 @@ def reDirect():
 
 @app.route('/')
 def displayTests():
-    for test in testsuites:
-        print("The tests are loading ...")
-        test.start()
-        time.sleep(3)
-        for t in test.generate_test_list():
-            tests.append(t)
-    testsDict = suiteToDict(tests)
-    for key, value in testsDict.items():
-        data[key] = value
+    global testsLoaded
+    if (testsLoaded == False):
+        for test in testsuites:
+            print("The tests are loading ...")
+            test.start()
+            time.sleep(3)
+            for t in test.generate_test_list():
+                tests.append(t)
+        testsDict = suiteToDict(tests)
+        for key, value in testsDict.items():
+            data[key] = value
+        testsLoaded = True
     return render_template('index.html', data = data)
 
 #change to runTests
