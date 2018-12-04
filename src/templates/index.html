@@ -21,7 +21,7 @@
     https://youtu.be/SZQz9tkEHIg
 </div>
 {% if error %}
-<div class="alert alert-danger">
+<div class="alert alert-danger" id="errorMsg">
   {{error}}
 </div>
 {% endif %}
@@ -186,6 +186,12 @@
     loadingMsg = document.getElementById("loadingMsg");
     loader.style.display = "block";
     loadingMsg.style.display = "block";
+
+    let errorMsg = document.getElementById("errorMsg");
+    console.log(errorMsg != null)
+    if(errorMsg != null){
+    errorMsg.style.display = "none";
+    }
     }
 
     function toggleUseHTTPS(){
