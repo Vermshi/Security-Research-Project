@@ -27,6 +27,7 @@ class SSLyzeTestSuite(TestSuite):
 
     def start(self):
         print("SSLyze does not require to start since it is a python module")
+        return True
 
     def connect(self, address, http_port=None, https_port=None):
         """
@@ -36,6 +37,7 @@ class SSLyzeTestSuite(TestSuite):
         """
         if http_port:
             print("SSLyze cannot scan a http port")
+            return False
 
         if https_port == None or len(https_port) == 0:
             print("https port not specified, SSLyze only runs on https")

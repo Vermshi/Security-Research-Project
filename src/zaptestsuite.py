@@ -67,7 +67,7 @@ class ZapTestSuite(TestSuite):
 
         self.target_address = address
 
-        if https_port:
+        if https_port and len(https_port) > 0:
             try:
                 self.zap.urlopen("https://" + address + ":" + http_port)
                 self.target_https_port = https_port
@@ -76,7 +76,7 @@ class ZapTestSuite(TestSuite):
                 print(e)
                 return False
 
-        if http_port:
+        if http_port and len(http_port) > 0:
             try:
                 self.zap.urlopen("http://" + address + ":" + http_port)
                 self.target_http_port = http_port
