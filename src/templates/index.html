@@ -41,7 +41,11 @@
             <h5>Target address and port number:</h5>
            <form method="post" action="/atc">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="localhost:63342" name="attackAddress">
+      <input type="text" class="form-control" placeholder="localhost:63342" name="attackAddress"/>
+
+      <h5>Target https port<h5/>
+      <input type="text" class="form-control" placeholder="8443" name="httpsport"/>
+
       <div class="input-group-btn">
             <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
       <span class="glyphicon glyphicon-education "></span> Attack!

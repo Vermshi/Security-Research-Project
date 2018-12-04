@@ -1,4 +1,10 @@
-from main2 import *
+from zaptestsuite import ZapTestSuite
+from sslyzetestsuite import SSLyzeTestSuite
+
+from json import *
+import sys
+
+import time
 from flask import Flask, render_template, request, redirect, Response
 
 app = Flask(__name__)
@@ -31,6 +37,7 @@ data = {
 
 }
 testsuites = []
+testsuites.append(SSLyzeTestSuite("SSLyze"))
 testsuites.append(ZapTestSuite("ZAP"))
 tests = []
 testsLoaded = False
@@ -73,16 +80,20 @@ def displayTests():
 @app.route('/atc', methods=['POST'])
 def attack():
     fullAddress = request.form["attackAddress"]
+
+    # TODO: Handle format
+    https_port = request.form["httpsport"]
+
     if(len(fullAddress) == 0):
         return render_template('index.html', data=data,
                                error="The attack address cannot be empty.")
     try:
-        address, port = fullAddress.split(":")
+        address, http_port = fullAddress.split(":")
     except:
         return render_template('index.html', data=data,
                                error="The given address was not in the right format")
 
-    Success = runTest(address,port)
+    Success = runTest(address, http_port, https_port)
     if(Success):
         return render_template('index.html', data=data)
     else:
@@ -90,16 +101,16 @@ def attack():
 
 
 
-def runTest(address,port):
+def runTest(address, http_port, https_port):
+    #TODO sett inn logikk for å kjøre testene her
     global data
     global tests
     testresults = []
     for test in testsuites:
-        if(test.connect(address,port)):
+
+        if(test.connect(address, http_port=http_port, https_port=https_port)):
             testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
-        else:
-            return False
-        # test.import_policy("path/to/policy", "Default Policy")
+
     res = suiteToDict(testresults)
     data = res
 
@@ -141,3 +152,4 @@ def enableDisableAll():
 
 if __name__ == '__main__':
     app.run()
+

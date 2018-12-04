@@ -15,7 +15,9 @@ class ZapTestSuite(TestSuite):
     """
 
     zap = None
-    targetURL = ""
+    target_address = ""
+    target_http_port = None
+    target_https_port = None
 
     def start(self):
         """
@@ -59,23 +61,31 @@ class ZapTestSuite(TestSuite):
 
     def connect(self, address, http_port=None, https_port=None):
         """
-        Connect to the targetURL
+        Connect to the targetURL. ZAP can only connect to one target at the time, so this must be performed in the run
+        function as well.
         """
-        if(http_port):
-            self.targetURL = "http://" + address + ":" + http_port
-        # ZAP active scanner may not be able to run on https
-        #elif(https_port):
-        #    self.targetURL = address + ":" + http_port
-        try:
-            print(self.targetURL)
-            self.zap.urlopen('http://' + self.targetURL)
-            return True
-        except:
-            print('Could not connect to', self.targetURL)
-            print('Specified URL must be on the format <address>:<port>')
-            print("The URL was", self.targetURL)
 
-            return False
+        self.target_address = address
+
+        if https_port:
+            try:
+                self.zap.urlopen("https://" + address + ":" + http_port)
+                self.target_https_port = https_port
+            except ConnectionError as e:
+                print('Could not connect to', "https://" + address + ":" + http_port)
+                print(e)
+                return False
+
+        if http_port:
+            try:
+                self.zap.urlopen("http://" + address + ":" + http_port)
+                self.target_http_port = http_port
+            except ConnectionError as e:
+                print('Could not connect to', "http://" + address + ":" + http_port)
+                print(e)
+                return False
+
+        return True
 
     def generate_test_list(self):
         """
@@ -126,11 +136,11 @@ class ZapTestSuite(TestSuite):
 
         :param tests: Array of Test objects
         :type tests: Array[Test...]
-        :param targetURL: The target including address and port
-        :type targetURL: str
         :return: Array of test objects
         :rtype: Array[Test...]
         """
+
+        # Activate only enabled tests
         self.zap.ascan.disable_all_scanners()
         self.zap.pscan.disable_all_scanners()
         for test in tests:
@@ -139,31 +149,58 @@ class ZapTestSuite(TestSuite):
             elif test.mode == 'active' and test.enabled is True:
                 self.zap.ascan.enable_scanners(test.testid)
 
-        # RUN PASSIVE TESTS
-        print("Run Spider")
-        scanid = self.zap.spider.scan(self.targetURL)
-        while (int(self.zap.spider.status(scanid)) < 100):
-            print('Spider progress %: ' + self.zap.spider.status(scanid))
-            time.sleep(0.1)
-        # Give the passive scanner a chance to finish (IMPORTANT)
-        time.sleep(3)
+        # TODO: Contains redundant spaghetti code below
 
-        # Run ACTIVE TESTS
-        print("Run active scan")
-        scanid = self.zap.ascan.scan(self.targetURL)
-        while int(self.zap.ascan.status(scanid)) < 100:
-            print('Scan progress %: ' + self.zap.ascan.status(scanid))
-            time.sleep(5)
+        # Run tests on https port
+        if self.target_https_port:
+            self.zap.urlopen("https://" + self.target_address + ":" + self.target_https_port)
 
-        # Store the test results back into the tests list
+            # RUN PASSIVE TESTS
+            print("Run Spider on port:", self.target_https_port)
+            https_spider = self.zap.spider.scan("https://" + self.target_address + ":" + self.target_https_port)
+            while (int(self.zap.spider.status(https_spider)) < 100):
+                print('Spider progress %: ' + self.zap.spider.status(https_spider))
+                time.sleep(0.1)
+            # Give the passive tests a chance to finish
+            time.sleep(4)
+
+            # Run ACTIVE TESTS
+            print("Run active scan on port:", self.target_https_port)
+            https_scan = self.zap.ascan.scan("https://" + self.target_address + ":" + self.target_https_port)
+            while int(self.zap.ascan.status(https_scan)) < 100:
+                print('Scan progress %: ' + self.zap.ascan.status(https_scan))
+                time.sleep(5)
+
+        # Run tests on http port
+        if self.target_http_port:
+            self.zap.urlopen("http://" + self.target_address + ":" + self.target_http_port)
+
+            # RUN PASSIVE TESTS
+            print("Run Spider on port:", self.target_http_port)
+            http_spider = self.zap.spider.scan("http://" + self.target_address + ":" + self.target_http_port)
+            while (int(self.zap.spider.status(http_spider)) < 100):
+                print('Spider progress %: ' + self.zap.spider.status(http_spider))
+                time.sleep(0.1)
+            # Give the passive tests a chance to finish
+            time.sleep(4)
+
+            # Run ACTIVE TESTS
+            print("Run active scan on port:", self.target_http_port)
+            http_scan = self.zap.ascan.scan("http://" + self.target_address + ":" + self.target_http_port)
+            while int(self.zap.ascan.status(http_scan)) < 100:
+                print('Scan progress %: ' + self.zap.ascan.status(http_scan))
+                time.sleep(5)
+
+        # Store the test results back into the tests list. In ZAP all tests ran on different targets are collected
         for index in range(len(tests)):
             tests[index].passed = None
             for alert in self.zap.core.alerts():
                 if str(tests[index].testid) == str(alert['pluginId']):
                     tests[index].description = alert['description']
                     tests[index].passed = False
-                
-            if tests[index].passed != False and tests[index].enabled == True:
+
+            # If the tests have not been classified as not passed they are by now passedgit p
+            if tests[index].passed is not False and tests[index].enabled is True:
                 tests[index].passed = True
         return tests
 

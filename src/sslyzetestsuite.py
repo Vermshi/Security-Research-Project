@@ -23,6 +23,7 @@ class SSLyzeTestSuite(TestSuite):
 
     # Required to run tests, is set in "connect"
     server_info = None
+    targetURL = ""
 
     def start(self):
         print("SSLyze does not require to start since it is a python module")
@@ -33,10 +34,15 @@ class SSLyzeTestSuite(TestSuite):
         :param targetURL:
         :return:
         """
+        if http_port:
+            print("SSLyze cannot scan a http port")
 
+        if https_port == None or len(https_port) == 0:
+            print("https port not specified, SSLyze only runs on https")
+            return False
         # Connect SSLyze to the specified target
         host = address
-        port = https_port
+        port = int(https_port)
         try:
             server_tester = ServerConnectivityTester(
                 hostname=host,
