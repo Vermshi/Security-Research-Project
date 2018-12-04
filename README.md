@@ -35,7 +35,11 @@ Review all running tests and corresponding vulnerabilities in the testsrunning.p
 
 ### TODO:
 
-- ON/OFF Switch
-- Installation guide
-- Login to session
+1. Support https for all engines
+2. Disable passed tests button
+3. Login to session
+4. Installation guide /docker
+5. Try a java app
+6. Test mac
+7. Make simple solution for categories
 
