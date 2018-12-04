@@ -39,8 +39,7 @@ class SSLyzeTestSuite(TestSuite):
 
         if https_port is None or len(https_port) == 0:
             print("https port not specified, SSLyze only runs on https")
-            self.server_info = None
-            return True
+            return False
         # Connect SSLyze to the specified target
         host = address
         port = int(https_port)
@@ -56,7 +55,7 @@ class SSLyzeTestSuite(TestSuite):
         except ServerConnectivityError as e:
             # Could not establish an SSL connection to the server
             print(f'Could not connect to {e.server_info.hostname}: {e.error_message}')
-            return True
+            return False
 
     def generate_test_list(self):
         """
@@ -78,10 +77,6 @@ class SSLyzeTestSuite(TestSuite):
         :param tests:
         :return:
         """
-
-        # Ugly hack to prevent crash when https port is not specified:
-        if self.server_info is None:
-            return self.generate_test_list()
 
         # Perform tests
 

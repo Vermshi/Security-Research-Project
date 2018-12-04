@@ -108,14 +108,18 @@ def runTest(address, http_port, https_port):
     testresults = []
 
     for testsuite in testsuites:
+
+        engine_tests = []
+        # Collect all tests for the specific testsuite before running
+        for test in tests:
+            if testsuite.engine_name == test.engine:
+                engine_tests.append(test)
+
         if(testsuite.connect(address, http_port=http_port, https_port=https_port)):
-            engine_tests = []
-            # Collect all tests for the specific testsuite before running
-            for test in tests:
-                if testsuite.engine_name == test.engine:
-                    engine_tests.append(test)
             # Run tests
             testresults.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
+        elif testsuite.engine_name == "SSLyze" and not len(https_port):
+            testresults.extend(engine_tests)
         else:
             return False
 
