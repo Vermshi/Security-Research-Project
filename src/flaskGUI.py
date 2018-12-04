@@ -100,22 +100,10 @@ def runTest(address, http_port, https_port):
     global tests
     testresults = []
     for test in testsuites:
-        http_test = False
-        https_test = False,
 
+        if(test.connect(address, http_port=http_port, https_port=https_port)):
+            testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
 
-        if(test.connect(address, http_port=http_port)):
-            http_test = testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
-
-        # Run tests for https port
-        # TODO: The result must somehow be merged
-        if(test.connect(address, https_port=https_port)):
-            https_test = testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
-
-        # TODO: The break condition must be different because a test engine may only work on one kind of port
-        # If none of the connection was a success
-        # else:
-        #    return False
     res = suiteToDict(testresults)
     data = res
 

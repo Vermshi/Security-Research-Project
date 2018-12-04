@@ -35,16 +35,22 @@ class TestSuite(object):
 
     def connect(self, address, http_port=None, https_port=None):
         """
-        TODO: Return
-        Run all configurations necessary to perform a test against the target.
-        This function is mean to set up proxies or perform other configurations to the engine.
+        Run all configurations necessary to perform a test against the target. This function is mean to set up
+        the connection to the target. The function should work for one or two specified ports if supported by engine
+
+        :param address: Target IP or address
+        :type address: str
+        :param http_port: Target http port
+        :type http_port: str
+        :param https_port: Target https port
+        :type https_port: str
         """
         raise NotImplementedError( "Should have implemented a method to configure the engine" )
 
     def generate_test_list(self):
         """
-        This function must make a array of Test objects representing each of the tests that can be executed by the engine.
-        The list must be compatible for the run_tests function
+        This function must make a array of Test objects representing each of the tests that can be executed by the
+        engine. The list must be compatible for the run_tests function
 
         :return: List of Test objects
         :rtype: Array[Test...]
@@ -65,8 +71,9 @@ class TestSuite(object):
 
     def run_tests(self, tests):
         """
-        Run all enabled tests against the target url. The Test objects within the tests array describes each test.
-        The array should be changed according to how the outcome of the tests are and returned
+        Run all enabled tests against the target url with the http or https port specified in the connect function.
+        The Test objects within the tests array describes each test. The array should be changed according to the
+        outcome, and if both ports have been specified and are supported the results must be merged before returned.
 
         :param tests: Array of Test objects
         :type tests: Array[Test...]
