@@ -37,7 +37,6 @@ class SSLyzeTestSuite(TestSuite):
         """
         if http_port:
             print("SSLyze cannot scan a http port")
-            return False
 
         if https_port == None or len(https_port) == 0:
             print("https port not specified, SSLyze only runs on https")

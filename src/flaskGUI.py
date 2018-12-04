@@ -111,10 +111,11 @@ def runTest(address, http_port, https_port):
         if(test.connect(address, http_port=http_port, https_port=https_port)):
             testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
         else:
-            print("failed to connect ")
+            return False
 
     res = suiteToDict(testresults)
     data = res
+    return True
 
 @app.route('/check-change', methods=['POST'])
 def checkChange():
