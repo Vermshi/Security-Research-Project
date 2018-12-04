@@ -8,159 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-  <style>
-    /* Remove the navbar's default margin-bottom and rounded borders */
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-      background-color: #5c6e89;
-      border-color: #5c6e89;
-    }
-
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
-
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #7a8ca8;
-      height: 100%;
-    }
-
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #5c6e89;
-      padding: 15px;
-    }
-
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;}
-    }
-
-    .middleContainer{
-    padding-top: 30px;
-    background-color: #b1b9c6;
-    }
-    body{
-    background-color: #7a8ca8;
-    color:black;
-    }
-    .well{
-    background-color: #7a8ca8;
-    border-color: #7a8ca8;
-    }
-
-
-    .notPassed{
-    position: relative;
-    background-color: #ed0000;
-    width: 90px;
-    height: 90px;
-    border-radius: 10px;
-
-    }
-        .passed{
-    position: relative;
-    background-color: #5cb85c;
-    width: 90px;
-    height: 90px;
-    border-radius: 10px;
-
-    }
-
-    .gly{
-    position: absolute;
-  top: 50%;
-  left:50%;
-  transform: translate(-50%,-50%);
-    }
-
-    #loaderElement, #loadingMsg{
-    display: none;
-    }
-        .loader {
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #5cb85c;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-  </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/index.css') }}">
 </head>
 <body>
 
@@ -169,7 +17,7 @@ input:checked + .slider:before {
 </nav>
 
 <div class="alert alert-success" id="loadingMsg">
-  The tests are running, this might take a while. In the meantime you could check the python console for progress or watch this:
+  The tests are running, this might take a while. In the meantime you could check the python console for progress or watch this video:
     https://youtu.be/SZQz9tkEHIg
 </div>
 {% if error %}
@@ -187,7 +35,6 @@ input:checked + .slider:before {
 
 
     <div class="col-sm-8 text-left middleContainer" >
-
 
                         <div class=" col-md-8 " id="addressInput">
         <div class="well">
@@ -211,7 +58,20 @@ input:checked + .slider:before {
           </div>
         </div>
 
-<form id="enabledForm" action="/checkChange" method="post">
+                             <div class=" col-md-7" id="buttonGroup">
+        <div class="well">
+            <form action="/auto-enable" method="post">
+  <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all</button>
+  <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all</button>
+  <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed</button>
+            </form>
+          </div>
+        </div>
+
+
+
+
+<form id="enabledForm" action="/check-change" method="post">
       {% for key, value in data.items() %}
 
 
@@ -228,8 +88,8 @@ input:checked + .slider:before {
 {% else %}
     <div class="notPassed pull-right " ><span class="glyphicon glyphicon-remove gly"></span> </div>
 {% endif %}
-        <div class="well">
-            Enabled:
+        <div class="well" id="switchContainer">
+            <p> On/Off:</p>
        <label class="switch">
            {% if value["enabled"] %}
   <input type="checkbox" onchange="document.getElementById('enabledForm').submit()" name="check" value="{{ key }}" checked>
@@ -240,7 +100,6 @@ input:checked + .slider:before {
 {% endif %}
   <span class="slider round"></span>
 </label>
-
           </div>
 
     </div>
