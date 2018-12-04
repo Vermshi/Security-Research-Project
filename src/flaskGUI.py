@@ -106,10 +106,16 @@ def runTest(address, http_port, https_port):
     global data
     global tests
     testresults = []
-    for test in testsuites:
 
-        if(test.connect(address, http_port=http_port, https_port=https_port)):
-            testresults.extend(test.run_tests(tests)) #Run when attack, show loading bar and update after finnished.
+    for testsuite in testsuites:
+        if(testsuite.connect(address, http_port=http_port, https_port=https_port)):
+            engine_tests = []
+            # Collect all tests for the specific testsuite before running
+            for test in tests:
+                if testsuite.engine_name == test.engine:
+                    engine_tests.append(test)
+            # Run tests
+            testresults.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
         else:
             return False
 

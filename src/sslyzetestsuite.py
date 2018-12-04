@@ -39,6 +39,7 @@ class SSLyzeTestSuite(TestSuite):
 
         if https_port is None or len(https_port) == 0:
             print("https port not specified, SSLyze only runs on https")
+            self.server_info = None
             return True
         # Connect SSLyze to the specified target
         host = address
