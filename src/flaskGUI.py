@@ -14,26 +14,26 @@ test1 = ["SQL injextion", "00:25", "SQL injection test bla bla vulnerabaility bl
 test2 = ["XSS attack", "00:32", "XSS injection can be done by bla bla bla", "XSS", 0, True,True]
 
 data = {
-#     "test1":{
-#   "name": "Sql injection",
-#   "testid": "00:25",
-#   "description":"SQL injection test bla bla vulnerabaility bla bla bla" ,
-#    "engine": "zap",
-#     "vulnerability": "SQl injection",
-#     "mode": 2,
-#     "passed": True,
-#     "enabled": True
-# },
-# "test2":{
-#   "name": "XSS",
-#   "testid": "00:32",
-#   "description":"XSSS test bla bla vulnerabaility bla bla bla" ,
-#    "engine": "zap",
-#     "vulnerability": "SQl injection",
-#     "mode": 2,
-#     "passed": False,
-#     "enabled": False
-# },
+    "test1":{
+  "name": "Sql injection",
+  "testid": "00:25",
+  "description":"SQL injection test bla bla vulnerabaility bla bla bla" ,
+   "engine": "zap",
+    "vulnerability": "SQl injection",
+    "mode": 2,
+    "passed": True,
+    "enabled": True
+},
+"test2":{
+  "name": "XSS",
+  "testid": "00:32",
+  "description":"XSSS test bla bla vulnerabaility bla bla bla" ,
+   "engine": "zap",
+    "vulnerability": "SQl injection",
+    "mode": 2,
+    "passed": False,
+    "enabled": False
+},
 
 }
 testsuites = []
@@ -62,27 +62,26 @@ def reDirect():
 
 @app.route('/')
 def displayTests():
-    global testsLoaded
-    if (testsLoaded == False):
-        for test in testsuites:
-            print("The tests are loading ...")
-            test.start()
-            time.sleep(3)
-            for t in test.generate_test_list():
-                tests.append(t)
-        testsDict = suiteToDict(tests)
-        for key, value in testsDict.items():
-            data[key] = value
-        testsLoaded = True
+    # global testsLoaded
+    # if (testsLoaded == False):
+    #     for test in testsuites:
+    #         print("The tests are loading ...")
+    #         test.start()
+    #         time.sleep(3)
+    #         for t in test.generate_test_list():
+    #             tests.append(t)
+    #     testsDict = suiteToDict(tests)
+    #     for key, value in testsDict.items():
+    #         data[key] = value
+    #     testsLoaded = True
     return render_template('index.html', data = data)
 
-#change to runTests
 @app.route('/atc', methods=['POST'])
 def attack():
     fullAddress = request.form["attackAddress"]
 
     # TODO: Handle format
-    https_port = request.form["httpsport"]
+    https_port = request.form["HTTPSport"]
 
     if(len(fullAddress) == 0):
         return render_template('index.html', data=data,
