@@ -23,7 +23,6 @@ class SSLyzeTestSuite(TestSuite):
 
     # Required to run tests, is set in "connect"
     server_info = None
-    targetURL = ""
 
     def start(self):
         print("SSLyze does not require to start since it is a python module")
@@ -38,9 +37,9 @@ class SSLyzeTestSuite(TestSuite):
         if http_port:
             print("SSLyze cannot scan a http port")
 
-        if https_port == None or len(https_port) == 0:
+        if https_port is None or len(https_port) == 0:
             print("https port not specified, SSLyze only runs on https")
-            return False
+            return True
         # Connect SSLyze to the specified target
         host = address
         port = int(https_port)
@@ -56,7 +55,7 @@ class SSLyzeTestSuite(TestSuite):
         except ServerConnectivityError as e:
             # Could not establish an SSL connection to the server
             print(f'Could not connect to {e.server_info.hostname}: {e.error_message}')
-            return False
+            return True
 
     def generate_test_list(self):
         """
@@ -79,8 +78,11 @@ class SSLyzeTestSuite(TestSuite):
         :return:
         """
 
+        # Ugly hack to prevent crash when https port is not specified:
+        if self.server_info is None:
+            return self.generate_test_list()
+
         # Perform tests
-        # TODO:
 
         synchronous_scanner = SynchronousScanner()
 
