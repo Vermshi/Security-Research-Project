@@ -43,3 +43,7 @@ Review all running tests and corresponding vulnerabilities in the testsrunning.p
 6. Test mac
 7. Make simple solution for categories
 
+### Windows installation:
+Install docker compose, download toolbox if you have win 10 home, reg installation for Enterprice and Pro:
+https://docs.docker.com/compose/install/
+
