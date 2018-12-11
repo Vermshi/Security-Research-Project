@@ -1,0 +1,41 @@
+1:2017. Injection,CRLF Injection,ZAP,easy
+1:2017. Injection,SQL Injection,ZAP,easy
+1:2017. Injection,Buffer Overflow,ZAP,easy
+1:2017. Injection,Format String Error,ZAP,easy
+1:2017. Injection,Content-Type Header Missing,ZAP,easy
+1:2017. Injection,Server Side Code Injection,ZAP,easy
+1:2017. Injection,Remote OS Command Injection,ZAP,easy
+1:2017. Injection,Server Side Include,ZAP,easy
+1:2017. Injection,Test the server(s) for the OpenSSL CCS injection vulnerability (CVE-2014-0224),SSLyze,easy
+2:2017. Broken Authentication,Cookie Without Secure Flag,ZAP,easy
+2:2017. Broken Authentication,Cookie No HttpOnly Flag,ZAP,easy
+2:2017. Broken Authentication,Session ID in URL Rewrite,ZAP,easy
+2:2017. Broken Authentication,Incomplete or No Cache-control and Pragma HTTP Header Set,ZAP,easy
+3:2017. Sensitive data exposure,Test the server(s) for session resumption,SSLyze,medium
+3:2017. Sensitive data exposure,Scan the server(s) for supported OpenSSL cipher suites.,SSLyze,medium
+3:2017. Sensitive data exposure,Test the server(s) for client-initiated and secure renegotiation support.,SSLyze,medium
+3:2017. Sensitive data exposure,Test the server(s) for the OpenSSL Heartbleed vulnerability(CVE-2014-0160),SSLyze,medium
+3:2017. Sensitive data exposure,Test the server(s) for Zlib compression support.,SSLyze,medium
+3:2017. Sensitive data exposure,Retrieve and validate the server(s)' certificate chain.,SSLyze,medium
+3:2017. Sensitive data exposure,Test the server(s) for the Return Of Bleichenbacher's Oracle Threat vulnerability.,SSLyze,medium
+3:2017. Sensitive data exposure,Test the server(s) for the presence of security-related HTTP headers.,SSLyze,medium
+5:2017. Broken Access Control,Path Traversal,ZAP,medium
+6:2017. Security misconfiguration,Cross Site Scripting (DOM Based),ZAP,easy
+6:2017. Security misconfiguration,Web Browser XSS Protection Not Enabled,ZAP,easy
+6:2017. Security misconfiguration,Application Error Disclosure,ZAP,easy
+6:2017. Security misconfiguration,Parameter Tampering,ZAP,easy
+6:2017. Security misconfiguration,Cross-Domain JavaScript Source File Inclusion,ZAP,easy
+6:2017. Security misconfiguration,Remote File Inclusion,ZAP,easy
+6:2017. Security misconfiguration,Secure Pages Include Mixed Content,ZAP,easy
+6:2017. Security misconfiguration,Private IP Disclosure,ZAP,easy
+6:2017. Security misconfiguration,X-Content-Type-Options Header Missing,ZAP,easy
+6:2017. Security misconfiguration,X-Frame-Options Header Scanner,ZAP,easy
+6:2017. Security misconfiguration,Directory Browsing,ZAP,easy
+6:2017. Security misconfiguration,Test the server(s) for TLS 1.3 early data support,SSLyze,easy
+6:2017. Security misconfiguration,Test the server(s) for support of the TLS_FALLBACK_SCSV cipher suite,SSLyze,easy
+7:2017. Cross-Site Scripting (XSS)	Cross Site Scripting (Persistent) - Prime,ZAP,easy
+7:2017. Cross-Site Scripting (XSS)	Cross Site Scripting (Persistent) - Spider,ZAP,easy
+7:2017. Cross-Site Scripting (XSS)	Content-Type Header Missing,ZAP,easy
+7:2017. Cross-Site Scripting (XSS)	Cross Site Scripting (Reflected),ZAP,easy
+7:2017. Cross-Site Scripting (XSS)	Cross Site Scripting (Persistent),ZAP,easy
+10:2013. Unvalidated Redirects and Forwards,External Redirect,ZAP,medium
