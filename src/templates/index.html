@@ -76,15 +76,40 @@
           </div>
         </div>
 
-                             <div class=" col-md-7" id="buttonGroup">
+                             <div class=" col-md-8" id="buttonGroup">
+                             <span for="selectDiv" class="col-sm-2 col-form-label">Difficulty:</span>
+                                                         <div class="form-group col-md-2" >
+                                                             <form id="selectForm" action="/diff-change" method="post">
+                    <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; ">&nbsp;
+     {% if diff == 0 %}
+      <option selected="selected">Min</option>
+      <option>Med</option>
+      <option>Max</option>
+      {% elif diff == 1 %}
+      <option>Min</option>
+      <option selected="selected">Med</option>
+      <option>Max</option>
+      {% elif diff == 2 %}
+      <option>Min</option>
+      <option>Med</option>
+      <option selected="selected">Max</option>
+
+{% endif %}
+
+    </select></form>
+                            </div>
         <div class="well">
             <form action="/auto-enable" method="post">
   <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all</button>
   <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all</button>
   <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed</button>
+
+
             </form>
           </div>
         </div>
+
+
 
 
 

@@ -1,3 +1,0 @@
-python-owasp-zap-v2.4
-sslyze
-Flask
