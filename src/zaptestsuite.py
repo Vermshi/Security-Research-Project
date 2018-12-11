@@ -120,7 +120,7 @@ class ZapTestSuite(TestSuite):
                 description="",
                 engine=self.engine_name,
                 vulnerability=test_dictionary[scan['name']][0],
-                mode="passive",
+                mode="active",
                 difficulty=test_dictionary[scan['name']][1],
                 passed=None,
                 enabled=(scan['enabled'] == 'true')
@@ -191,7 +191,7 @@ class ZapTestSuite(TestSuite):
             https_scan = self.zap.ascan.scan("https://" + self.target_address + ":" + self.target_https_port)
             while int(self.zap.ascan.status(https_scan)) < 100:
                 print('Scan progress %: ' + self.zap.ascan.status(https_scan))
-                time.sleep(5)
+                time.sleep(3)
 
         # Run tests on http port
         if self.target_http_port:
@@ -211,7 +211,7 @@ class ZapTestSuite(TestSuite):
             http_scan = self.zap.ascan.scan("http://" + self.target_address + ":" + self.target_http_port)
             while int(self.zap.ascan.status(http_scan)) < 100:
                 print('Scan progress %: ' + self.zap.ascan.status(http_scan))
-                time.sleep(5)
+                time.sleep(3)
 
         # Store the test results back into the tests list. In ZAP all tests ran on different targets are collected
         for index in range(len(tests)):
