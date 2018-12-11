@@ -97,12 +97,34 @@ class ZapTestSuite(TestSuite):
         """
 
         tests = []
+
+        test_dictionary = self.get_tests_from_file("tests.csv", self.engine_name)
+
         for scan in self.zap.pscan.scanners:
-            tests.append(Test(scan['name'], scan['id'], "", self.engine_name, "UNKNOWN", "passive", None, (scan['enabled'] == 'true')))
+            tests.append(Test(
+                name=scan['name'],
+                testid=scan['id'],
+                description="",
+                engine=self.engine_name,
+                vulnerability=test_dictionary[scan['name']][0],
+                mode="passive",
+                difficulty=test_dictionary[scan['name']][1],
+                passed=None,
+                enabled=(scan['enabled'] == 'true')
+            ))
 
         for scan in self.zap.ascan.scanners():
-            tests.append(Test(scan['name'], scan['id'], "", self.engine_name, "UNKNOWN", "active", None, (scan['enabled'] == 'true')))
-
+            tests.append(Test(
+                name=scan['name'],
+                testid=scan['id'],
+                description="",
+                engine=self.engine_name,
+                vulnerability=test_dictionary[scan['name']][0],
+                mode="passive",
+                difficulty=test_dictionary[scan['name']][1],
+                passed=None,
+                enabled=(scan['enabled'] == 'true')
+            ))
         return tests
 
     def import_policy(self, file="testpolicy.xml", name="testpolicy"):
