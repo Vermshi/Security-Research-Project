@@ -21,7 +21,7 @@ class TestSuite(object):
     :type engine_name: str
     """
 
-    targetURL = ""
+    test_dictionary = {}
 
     def __init__(self, engine_name='Custom Engine'):
         self.engine_name = engine_name
@@ -90,6 +90,18 @@ class TestSuite(object):
         """
         raise NotImplementedError('May need to implemented method to shut down the engine properly')
 
+    @staticmethod
+    def get_tests_from_file(file, engine_name):
+        # Retrieve extra information about the tests from the testfile
+        test_file = open(file, "r")
+        test_dictionary = {}
+        for line in test_file:
+            test_description = line.split(",")
+            if engine_name == test_description[2]:
+                # Maps the test name to vulnerability and difficulty
+                test_dictionary[test_description[1]] = [test_description[0], int(test_description[3].strip("\n"))]
+        return test_dictionary
+
 
 class Test(object):
     """
@@ -107,19 +119,22 @@ class Test(object):
     :type vulnerability: str
     :param mode: This field for metadata can be used by the engine to separate different categories
     :type mode: str
+    :param difficulty: An int in the range 0-2 to describe the simplicity of a test
+    :type difficulty: int
     :param passed: Determines whether the test was passed
     :type passed: bool
     :param enabled: Define if the test should be run or not
     :type enabled: bool
     """
 
-    def __init__(self, name, testid, description, engine, vulnerability, mode, passed, enabled=True):
+    def __init__(self, name, testid, description, engine, vulnerability, mode, difficulty, passed, enabled=True):
         self.name = name
         self.testid = testid
         self.description = description
         self.engine = engine
         self.vulnerability = vulnerability
         self.mode = mode
+        self.difficulty = difficulty
         self.passed = passed
         self.enabled = enabled
 
