@@ -62,9 +62,22 @@ class SSLyzeTestSuite(TestSuite):
 
         :return:
         """
+
+        test_dictionary = self.get_tests_from_file("tests.csv", self.engine_name)
+
         tests = []
         for i, plugin in enumerate(PluginsRepository._PLUGIN_CLASSES):
-            tests.append(Test(plugin.get_title(), i, plugin.get_description(), self.engine_name, "UNKNOWN", 'passive', None, True))
+            title = plugin.get_title()
+            tests.append(Test(
+                name=title,
+                testid=i,
+                description=plugin.get_description(),
+                engine=self.engine_name,
+                vulnerability=test_dictionary[title][0],
+                mode='passive',
+                difficulty=test_dictionary[title][1],
+                passed=None,
+                enabled=True))
         return tests
 
     def import_policy(self, path, name):

@@ -68,6 +68,7 @@ def displayTests():
             print("The tests are loading ...")
             test.start()
             time.sleep(3)
+
             for t in test.generate_test_list():
                 tests.append(t)
         testsDict = suiteToDict(tests)
