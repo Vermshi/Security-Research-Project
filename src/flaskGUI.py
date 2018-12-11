@@ -23,7 +23,7 @@ data = {
     "mode": 2,
     "passed": True,
     "enabled": True,
-    "diffculty": 0
+    "diffculty": 0,
 },
 "test2":{
   "name": "XSS",
@@ -34,7 +34,7 @@ data = {
     "mode": 2,
     "passed": False,
     "enabled": False,
-    "diffculty": 1
+    "diffculty": 1,
 },
 "testinator":{
   "name": "XSS",
@@ -65,6 +65,7 @@ def suiteToDict(suits):
         x["description"] = test.description
         x["passed"] = test.passed
         x["enabled"] = test.enabled
+        x["vulnerability"] = test.vulnerability
         testDict[x["name"]] = x
     return testDict
 

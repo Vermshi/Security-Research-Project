@@ -80,7 +80,7 @@
                              <span for="selectDiv" class="col-sm-2 col-form-label">Difficulty:</span>
                                                          <div class="form-group col-md-2" >
                                                              <form id="selectForm" action="/diff-change" method="post">
-                    <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; ">&nbsp;
+                    <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
      {% if diff == 0 %}
       <option selected="selected">Min</option>
       <option>Med</option>
@@ -123,7 +123,7 @@
 
           <div class="well" >
               <div class="row">
-    <div class="col-md-8"><h4>{{ key }}</h4>
+    <div class="col-md-8"><h4>{{ key }} ({{ value["vulnerability"] }})</h4>
             <p>{{ value["description"] }}</p></div>
     <div class="col-md-4">
         {% if value["passed"] %}
@@ -158,35 +158,8 @@
 
 
 
-                <div class=" col-md-10">
-          <div class="well">
-              <div class="row">
-
-    <div class="col-md-8"><h4>Sql Injection</h4>
-            <p>got something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p></div>
-    <div class="col-md-4"><div class="notPassed pull-right " ><span class="glyphicon glyphicon-remove gly"></span> </div></div>
-  </div>
-    </div>
-          </div>
 
 
-                  <div class=" col-md-12">
-          <div class="well">
-            <p>Jukjdfnsakjlndfskljadbsnlkhkdjbasdfkhjst Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
-          </div>
-        </div>
-
-                 <div class=" col-md-12">
-          <div class="well">
-            <p>Jukjdfnsakjlndfskljadbsnlkhkdjbasdfkhjst Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
-          </div>
-        </div>
-
-                 <div class=" col-md-12">
-          <div class="well">
-            <p>Jukjdfnsakjlndfskljadbsnlkhkdjbasdfkhjst Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
-          </div>
-        </div>
 
 
     </div>
