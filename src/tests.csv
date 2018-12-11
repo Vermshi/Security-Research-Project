@@ -1,45 +1,45 @@
-1:2017. Injection,CRLF Injection,ZAP,easy
-1:2017. Injection,SQL Injection,ZAP,easy
-1:2017. Injection,Buffer Overflow,ZAP,easy
-1:2017. Injection,Format String Error,ZAP,easy
-1:2017. Injection,Content-Type Header Missing,ZAP,easy
-1:2017. Injection,Server Side Code Injection,ZAP,easy
-1:2017. Injection,Remote OS Command Injection,ZAP,easy
-1:2017. Injection,Server Side Include,ZAP,easy
-1:2017. Injection,Script Active Scan Rules,ZAP,easy
-1:2017. Injection,OpenSslCcsInjectionPlugin,SSLyze,easy
-2:2017. Broken Authentication,Cookie Without Secure Flag,ZAP,easy
-2:2017. Broken Authentication,Cookie No HttpOnly Flag,ZAP,easy
-2:2017. Broken Authentication,Session ID in URL Rewrite,ZAP,easy
-2:2017. Broken Authentication,Incomplete or No Cache-control and Pragma HTTP Header Set,ZAP,easy
-2:2017. Broken Authentication,Password Autocomplete in Browser,ZAP,easy
-3:2017. Sensitive data exposure,SessionResumptionPlugin,SSLyze,medium
-3:2017. Sensitive data exposure,OpenSslCipherSuitesPlugin,SSLyze,medium
-3:2017. Sensitive data exposure,SessionRenegotiationPlugin,SSLyze,medium
-3:2017. Sensitive data exposure,HeartbleedPlugin,SSLyze,medium
-3:2017. Sensitive data exposure,CompressionPlugin,SSLyze,medium
-3:2017. Sensitive data exposure,CertificateInfoPlugin,SSLyze,medium
-3:2017. Sensitive data exposure,RobotPlugin,SSLyze,medium
-3:2017. Sensitive data exposure,HttpHeadersPlugin,SSLyze,medium
-5:2017. Broken Access Control,Path Traversal,ZAP,medium
-6:2017. Security misconfiguration,Cross Site Scripting (DOM Based),ZAP,easy
-6:2017. Security misconfiguration,Web Browser XSS Protection Not Enabled,ZAP,easy
-6:2017. Security misconfiguration,Application Error Disclosure,ZAP,easy
-6:2017. Security misconfiguration,Parameter Tampering,ZAP,easy
-6:2017. Security misconfiguration,Cross-Domain JavaScript Source File Inclusion,ZAP,easy
-6:2017. Security misconfiguration,Remote File Inclusion,ZAP,easy
-6:2017. Security misconfiguration,Secure Pages Include Mixed Content,ZAP,easy
-6:2017. Security misconfiguration,Private IP Disclosure,ZAP,easy
-6:2017. Security misconfiguration,X-Content-Type-Options Header Missing,ZAP,easy
-6:2017. Security misconfiguration,X-Frame-Options Header Scanner,ZAP,easy
-6:2017. Security misconfiguration,Directory Browsing,ZAP,easy
-6:2017. Security misconfiguration,Script Passive Scan Rules,ZAP,easy
-6:2017. Security misconfiguration,Stats Passive Scan Rule,ZAP,easy
-6:2017. Security misconfiguration,EarlyDataPlugin,SSLyze,easy
-6:2017. Security misconfiguration,FallbackScsvPlugin,SSLyze,easy
-7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Prime,ZAP,easy
-7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Spider,ZAP,easy
-7:2017. Cross-Site Scripting (XSS),Content-Type Header Missing,ZAP,easy
-7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Reflected),ZAP,easy
-7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent),ZAP,easy
-10:2013. Unvalidated Redirects and Forwards,External Redirect,ZAP,medium
+1:2017. Injection,CRLF Injection,ZAP,0
+1:2017. Injection,SQL Injection,ZAP,0
+1:2017. Injection,Buffer Overflow,ZAP,0
+1:2017. Injection,Format String Error,ZAP,0
+1:2017. Injection,Content-Type Header Missing,ZAP,0
+1:2017. Injection,Server Side Code Injection,ZAP,0
+1:2017. Injection,Remote OS Command Injection,ZAP,0
+1:2017. Injection,Server Side Include,ZAP,0
+1:2017. Injection,Script Active Scan Rules,ZAP,0
+1:2017. Injection,OpenSslCcsInjectionPlugin,SSLyze,0
+2:2017. Broken Authentication,Cookie Without Secure Flag,ZAP,0
+2:2017. Broken Authentication,Cookie No HttpOnly Flag,ZAP,0
+2:2017. Broken Authentication,Session ID in URL Rewrite,ZAP,0
+2:2017. Broken Authentication,Incomplete or No Cache-control and Pragma HTTP Header Set,ZAP,0
+2:2017. Broken Authentication,Password Autocomplete in Browser,ZAP,0
+3:2017. Sensitive data exposure,SessionResumptionPlugin,SSLyze,1
+3:2017. Sensitive data exposure,OpenSslCipherSuitesPlugin,SSLyze,1
+3:2017. Sensitive data exposure,SessionRenegotiationPlugin,SSLyze,1
+3:2017. Sensitive data exposure,HeartbleedPlugin,SSLyze,1
+3:2017. Sensitive data exposure,CompressionPlugin,SSLyze,1
+3:2017. Sensitive data exposure,CertificateInfoPlugin,SSLyze,1
+3:2017. Sensitive data exposure,RobotPlugin,SSLyze,1
+3:2017. Sensitive data exposure,HttpHeadersPlugin,SSLyze,1
+5:2017. Broken Access Control,Path Traversal,ZAP,1
+6:2017. Security misconfiguration,Cross Site Scripting (DOM Based),ZAP,0
+6:2017. Security misconfiguration,Web Browser XSS Protection Not Enabled,ZAP,0
+6:2017. Security misconfiguration,Application Error Disclosure,ZAP,0
+6:2017. Security misconfiguration,Parameter Tampering,ZAP,0
+6:2017. Security misconfiguration,Cross-Domain JavaScript Source File Inclusion,ZAP,0
+6:2017. Security misconfiguration,Remote File Inclusion,ZAP,0
+6:2017. Security misconfiguration,Secure Pages Include Mixed Content,ZAP,0
+6:2017. Security misconfiguration,Private IP Disclosure,ZAP,0
+6:2017. Security misconfiguration,X-Content-Type-Options Header Missing,ZAP,0
+6:2017. Security misconfiguration,X-Frame-Options Header Scanner,ZAP,0
+6:2017. Security misconfiguration,Directory Browsing,ZAP,0
+6:2017. Security misconfiguration,Script Passive Scan Rules,ZAP,0
+6:2017. Security misconfiguration,Stats Passive Scan Rule,ZAP,0
+6:2017. Security misconfiguration,EarlyDataPlugin,SSLyze,0
+6:2017. Security misconfiguration,FallbackScsvPlugin,SSLyze,0
+7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Prime,ZAP,0
+7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Spider,ZAP,0
+7:2017. Cross-Site Scripting (XSS),Content-Type Header Missing,ZAP,0
+7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Reflected),ZAP,0
+7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent),ZAP,0
+10:2013. Unvalidated Redirects and Forwards,External Redirect,ZAP,1

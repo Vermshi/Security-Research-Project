@@ -99,9 +99,7 @@ class TestSuite(object):
             test_description = line.split(",")
             if engine_name == test_description[2]:
                 # Maps the test name to vulnerability and difficulty
-                test_dictionary[test_description[1]] = [test_description[0], test_description[3].strip("\n")]
-        print("testdictionary")
-        print(test_dictionary)
+                test_dictionary[test_description[1]] = [test_description[0], int(test_description[3].strip("\n"))]
         return test_dictionary
 
 
@@ -121,6 +119,8 @@ class Test(object):
     :type vulnerability: str
     :param mode: This field for metadata can be used by the engine to separate different categories
     :type mode: str
+    :param difficulty: An int in the range 0-2 to describe the simplicity of a test
+    :type difficulty: int
     :param passed: Determines whether the test was passed
     :type passed: bool
     :param enabled: Define if the test should be run or not
