@@ -1,3 +1,6 @@
 python-owasp-zap-v2.4
+cryptography==2.3
+nassl==2.1
+psutil
 sslyze
-Flask
+flask
