@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from testsuite import TestSuite, Test
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import check_output, Popen, PIPE, STDOUT
 import os
 from zapv2 import ZAPv2
 import time
@@ -33,7 +33,15 @@ class ZapTestSuite(TestSuite):
         kill_port(int(proxy_port))
 
         if osys == 'Linux':
-            p = Popen(["zap", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+            version = check_output(["cat", "/etc/os-release"]).decode("utf-8")
+            wd = os.getcwd()
+            if "Ubuntu" in version:
+                os.chdir("/opt/zaproxy")
+            else:
+                os.chdir("/usr/share/owasp-zap")
+            p = Popen(["java", "-jar", "zap-2.7.0.jar", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+            os.chdir(wd)
+            #p = Popen(["zap", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
             #p = Popen(["zap", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
             while "ZAP is now listening" not in str(readline):
