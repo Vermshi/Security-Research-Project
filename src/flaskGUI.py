@@ -14,39 +14,39 @@ test1 = ["SQL injextion", "00:25", "SQL injection test bla bla vulnerabaility bl
 test2 = ["XSS attack", "00:32", "XSS injection can be done by bla bla bla", "XSS", 0, True,True]
 
 data = {
-    "test1":{
-  "name": "Sql injection",
-  "testid": "00:25",
-  "description":"SQL injection test bla bla vulnerabaility bla bla bla" ,
-   "engine": "zap",
-    "vulnerability": "SQl injection",
-    "mode": 2,
-    "passed": True,
-    "enabled": True,
-    "diffculty": 0,
-},
-"test2":{
-  "name": "XSS",
-  "testid": "00:32",
-  "description":"XSSS test bla bla vulnerabaility bla bla bla" ,
-   "engine": "zap",
-    "vulnerability": "SQl injection",
-    "mode": 2,
-    "passed": False,
-    "enabled": False,
-    "diffculty": 1,
-},
-"testinator":{
-  "name": "XSS",
-  "testid": "00:32",
-  "description":"The test the myth the legend of all legends" ,
-   "engine": "zasdfp",
-    "vulnerability": "wups",
-    "mode": 2,
-    "passed": False,
-    "enabled": True,
-    "diffculty": 2
-},
+#     "test1":{
+#   "name": "Sql injection",
+#   "testid": "00:25",
+#   "description":"SQL injection test bla bla vulnerabaility bla bla bla" ,
+#    "engine": "zap",
+#     "vulnerability": "SQl injection",
+#     "mode": 2,
+#     "passed": True,
+#     "enabled": True,
+#     "diffculty": 0,
+# },
+# "test2":{
+#   "name": "XSS",
+#   "testid": "00:32",
+#   "description":"XSSS test bla bla vulnerabaility bla bla bla" ,
+#    "engine": "zap",
+#     "vulnerability": "SQl injection",
+#     "mode": 2,
+#     "passed": False,
+#     "enabled": False,
+#     "diffculty": 1,
+# },
+# "testinator":{
+#   "name": "XSS",
+#   "testid": "00:32",
+#   "description":"The test the myth the legend of all legends" ,
+#    "engine": "zasdfp",
+#     "vulnerability": "wups",
+#     "mode": 2,
+#     "passed": False,
+#     "enabled": True,
+#     "diffculty": 2
+# },
 
 }
 testsuites = []
@@ -65,6 +65,7 @@ def suiteToDict(suits):
         x["description"] = test.description
         x["passed"] = test.passed
         x["enabled"] = test.enabled
+        x["difficulty"] = test.difficulty
         x["vulnerability"] = test.vulnerability
         testDict[x["name"]] = x
     return testDict
@@ -92,7 +93,7 @@ def displayTests():
         for key, value in testsDict.items():
             data[key] = value
         testsLoaded = True
-    return render_template('index.html', data = data)
+    return render_template('index.html', data = data, diff=difficulty)
 
 @app.route('/atc', methods=['POST'])
 def attack():
@@ -159,10 +160,20 @@ def checkChange():
 
 @app.route('/auto-enable', methods=['POST'])
 def enableDisableAll():
+    global difficulty
     val = request.form["sortAll"]
     if(val == "1"):
-        for key, value in enumerate(data):
-            data[value]["enabled"] = True
+        if (difficulty == 0):
+            for key, value in enumerate(data):
+                if (data[value]["difficulty"] == 0):
+                    data[value]["enabled"] = True
+        elif (difficulty == 1):
+            for key, value in enumerate(data):
+                if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1):
+                    data[value]["enabled"] = True
+        elif (difficulty == 2):
+            for key, value in enumerate(data):
+                data[value]["enabled"] = True
 
     elif(val == "2"):
         for key, value in enumerate(data):
@@ -182,20 +193,23 @@ def enableDisableAll():
 def changeDifficulty(difficulty):
     if(difficulty == 0):
         for key, value in enumerate(data):
-            if(data[value]["diffculty"] == 0):
-                data[value]["enabled"] = True
+            if(data[value]["difficulty"] == 0):
+                pass
+                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 1):
         for key, value in enumerate(data):
-            if (data[value]["diffculty"] == 0  or  data[value]["diffculty"] == 1):
-                data[value]["enabled"] = True
+            if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1):
+                pass
+                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 2):
         for key, value in enumerate(data):
-            if (data[value]["diffculty"] == 0  or  data[value]["diffculty"] == 1 or  data[value]["diffculty"] == 2):
-                data[value]["enabled"] = True
+            if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2):
+                pass
+                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     for t in tests:
@@ -206,13 +220,13 @@ def displayRightDifficulty():
     global difficulty
     if (difficulty == 0):
         for key, value in enumerate(data):
-            if (data[value]["diffculty"] == 0):
+            if (data[value]["difficulty"] == 0):
                 displayDict[value] = data[value]
-    if (difficulty == 1):
+    elif (difficulty == 1):
         for key, value in enumerate(data):
-            if (data[value]["diffculty"] == 0 or data[value]["diffculty"] == 1):
+            if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1):
                 displayDict[value] = data[value]
-    if (difficulty == 2):
+    elif (difficulty == 2):
         for key, value in enumerate(data):
                 displayDict[value] = data[value]
     return displayDict
