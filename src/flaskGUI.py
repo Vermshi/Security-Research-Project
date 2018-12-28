@@ -212,6 +212,21 @@ def changeDifficulty(difficulty):
                 # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
+    elif(difficulty == 3):
+        for key, value in enumerate(data):
+            if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
+                pass
+                # data[value]["enabled"] = True
+            else:
+                data[value]["enabled"] = False
+    elif(difficulty == 4):
+        for key, value in enumerate(data):
+            if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3 or data[value]["difficulty"] == 4):
+                pass
+                # data[value]["enabled"] = True
+            else:
+                data[value]["enabled"] = False
+
     for t in tests:
         t.enabled = data[t.name]["enabled"]
 
@@ -228,6 +243,14 @@ def displayRightDifficulty():
                 displayDict[value] = data[value]
     elif (difficulty == 2):
         for key, value in enumerate(data):
+            if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2):
+                displayDict[value] = data[value]
+    elif (difficulty == 3):
+        for key, value in enumerate(data):
+            if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
+                displayDict[value] = data[value]
+    elif (difficulty == 4):
+        for key, value in enumerate(data):
                 displayDict[value] = data[value]
     return displayDict
 
@@ -236,12 +259,16 @@ def displayRightDifficulty():
 def selectChange():
     global difficulty
     diffSelect = request.form["diffSelect"]
-    if(diffSelect == "Min"):
+    if(diffSelect == "Novice"):
         difficulty = 0
-    elif(diffSelect == "Med"):
+    elif(diffSelect == "Apprentice"):
         difficulty = 1
-    else:
+    elif(diffSelect == "Adept"):
         difficulty = 2
+    elif(diffSelect == "Expert"):
+        difficulty = 3
+    else:
+        difficulty = 4
     changeDifficulty(difficulty)
 
 
@@ -249,5 +276,5 @@ def selectChange():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 

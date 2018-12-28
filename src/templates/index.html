@@ -82,17 +82,35 @@
                                                              <form id="selectForm" action="/diff-change" method="post">
                     <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
      {% if diff == 0 %}
-      <option selected="selected">Min</option>
-      <option>Med</option>
-      <option>Max</option>
+      <option selected="selected">Novice</option>
+      <option>Apprentice</option>
+      <option>Adept</option>
+      <option>Expert</option>
+      <option>Master</option>
       {% elif diff == 1 %}
-      <option>Min</option>
-      <option selected="selected">Med</option>
-      <option>Max</option>
+      <option>Novice</option>
+      <option selected="selected">Apprentice</option>
+      <option>Adept</option>
+      <option>Expert</option>
+      <option>Master</option>
       {% elif diff == 2 %}
-      <option>Min</option>
-      <option>Med</option>
-      <option selected="selected">Max</option>
+      <option>Novice</option>
+      <option>Apprentice</option>
+      <option selected="selected">Adept</option>
+      <option>Expert</option>
+      <option>Master</option>
+      {% elif diff == 3 %}
+      <option>Novice</option>
+      <option>Apprentice</option>
+      <option>Adept</option>
+      <option selected="selected">Expert</option>
+      <option>Master</option>
+      {% elif diff == 4 %}
+      <option>Novice</option>
+      <option>Apprentice</option>
+      <option>Adept</option>
+      <option>Expert</option>
+      <option selected="selected">Master</option>
 
 {% endif %}
 
