@@ -8,7 +8,7 @@ OWASP Zed Attack Proxy 2.7
 
 Java jre 1.8
 
-Python 3.x
+Python 3.6
 
 ### Dependencies
 
