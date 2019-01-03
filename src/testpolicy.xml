@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configuration>
-<policy>test_policy</policy>
+<policy>test_policy4</policy>
 <scanner>
 <level>LOW</level>
-<strength>LOW</strength>
+<strength>MEDIUM</strength>
 </scanner>
 <plugins>
 <p6>

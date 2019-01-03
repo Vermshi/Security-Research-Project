@@ -144,7 +144,7 @@ class ZapTestSuite(TestSuite):
         # Import and set a new attack scan policy
         self.zap.ascan.import_scan_policy(path)
         self.zap.ascan.set_option_attack_policy(name)
-        self.zap.ascan.set_option_default_policy(name)
+        #self.zap.ascan.set_option_default_policy(name)
 
         # TODO: Changes in the a scan policy will not be made once they have been set. How to fix that? ZAP does not support deletion of policies
 
@@ -172,6 +172,10 @@ class ZapTestSuite(TestSuite):
                 self.zap.ascan.enable_scanners(test.testid)
 
         # TODO: Contains redundant spaghetti code below
+
+        self.import_policy("testpolicy.xml", "test_policy4")
+        print("Policy")
+        print(self.zap.ascan.policies())
 
         # Run tests on https port
         if self.target_https_port:
