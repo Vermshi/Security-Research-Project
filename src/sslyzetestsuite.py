@@ -49,12 +49,12 @@ class SSLyzeTestSuite(TestSuite):
                 port=port,
                 tls_wrapped_protocol=TlsWrappedProtocolEnum.HTTPS
             )
-            print(f'\nTesting connectivity with {server_tester.hostname}:{server_tester.port}...')
+            print('Testing connectivity with', server_tester.hostname + ':' + server_tester.port)
             self.server_info = server_tester.perform()
             return True
         except ServerConnectivityError as e:
             # Could not establish an SSL connection to the server
-            print(f'Could not connect to {e.server_info.hostname}: {e.error_message}')
+            print('Could not connect to', e.server_info.hostname, e.error_message)
             return False
 
     def generate_test_list(self):
