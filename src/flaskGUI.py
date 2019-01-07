@@ -54,7 +54,7 @@ testsuites.append(SSLyzeTestSuite("SSLyze"))
 testsuites.append(ZapTestSuite("ZAP"))
 tests = []
 testsLoaded = False
-difficulty = 0
+difficulty = 4
 
 
 def suiteToDict(suits):
