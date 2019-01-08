@@ -29,10 +29,10 @@ class ZapTestSuite(TestSuite):
         proxy_address = '127.0.0.1'
         proxy_port = '7576'
 
-        # Kill the proxy in case
-        kill_port(int(proxy_port))
-
         if osys == 'Linux':
+            # Kill the proxy in case zap was not shutdown correctly
+            kill_port(int(proxy_port))
+
             version = check_output(["cat", "/etc/os-release"]).decode("utf-8")
             wd = os.getcwd()
             if "Ubuntu" in version:
@@ -59,8 +59,7 @@ class ZapTestSuite(TestSuite):
 
         else:
             print("OS not supported yet:" + osys)
-            print("Start Zap proxy manually")
-            print("Go to Tools -> Options -> API and change port to", proxy_port, "and API key to", api_key)
+            print("Try using the docker image instead")
             return False
 
         self.zap = ZAPv2(apikey=str(api_key), proxies={'http': proxy_address + ':' + proxy_port,
