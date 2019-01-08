@@ -173,6 +173,14 @@ def enableDisableAll():
                     data[value]["enabled"] = True
         elif (difficulty == 2):
             for key, value in enumerate(data):
+                if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2):
+                    data[value]["enabled"] = True
+        elif (difficulty == 3):
+            for key, value in enumerate(data):
+                if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
+                    data[value]["enabled"] = True
+        elif (difficulty == 4):
+            for key, value in enumerate(data):
                 data[value]["enabled"] = True
 
     elif(val == "2"):
