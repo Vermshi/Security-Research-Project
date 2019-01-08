@@ -2,7 +2,7 @@
 
 Welcome to the web-application security testing suite
 
-For user guidance please refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
+For user guidance and installation with Docker please refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
 
 ### Prerequisites:
 
@@ -18,8 +18,12 @@ Python dependencies: src/requirements.txt
 
 ### Run
 
-$ cd src/
-$ sudo python flaskGUI.py
+	$ cd src/
+	$ sudo python flaskGUI.py
+
+### Docker
+
+A docker image is available at https://cloud.docker.com/repository/docker/jakobsn/testtool
 
 ### Code Documentation
 
