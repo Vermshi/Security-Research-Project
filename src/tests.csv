@@ -24,10 +24,10 @@
 5:2017. Broken Access Control,Path Traversal,ZAP,3
 6:2017. Security misconfiguration,Web Browser XSS Protection Not Enabled,ZAP,0
 6:2017. Security misconfiguration,Application Error Disclosure,ZAP,0
-6:2017. Security misconfiguration,Parameter Tampering,ZAP,2
+6:2017. Security misconfiguration,Parameter Tampering,ZAP,1
 6:2017. Security misconfiguration,Cross-Domain JavaScript Source File Inclusion,ZAP,3
 6:2017. Security misconfiguration,Remote File Inclusion,ZAP,3
-6:2017. Security misconfiguration,Secure Pages Include Mixed Content,ZAP,1
+6:2017. Security misconfiguration,Secure Pages Include Mixed Content,ZAP,2
 6:2017. Security misconfiguration,Private IP Disclosure,ZAP,2
 6:2017. Security misconfiguration,X-Content-Type-Options Header Missing,ZAP,1
 6:2017. Security misconfiguration,X-Frame-Options Header Scanner,ZAP,1
