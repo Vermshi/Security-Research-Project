@@ -8,11 +8,15 @@
 1:2017. Injection,Server Side Include,ZAP,2
 1:2017. Injection,Script Active Scan Rules,ZAP,2
 1:2017. Injection,OpenSslCcsInjectionPlugin,SSLyze,2
+1:2017. Injection,XPath Injection,ZAP,2
+1:2017. Injection,Expression Language Injection,ZAP,2
+1:2017. Injection,Integer Overflow Error,ZAP,2
 2:2017. Broken Authentication,Cookie Without Secure Flag,ZAP,0
 2:2017. Broken Authentication,Cookie No HttpOnly Flag,ZAP,0
 2:2017. Broken Authentication,Session ID in URL Rewrite,ZAP,3
 2:2017. Broken Authentication,Incomplete or No Cache-control and Pragma HTTP Header Set,ZAP,2
 2:2017. Broken Authentication,Password Autocomplete in Browser,ZAP,0
+2:2017. Broken Authentication,Session Fixation,ZAP,3
 3:2017. Sensitive data exposure,SessionResumptionPlugin,SSLyze,4
 3:2017. Sensitive data exposure,OpenSslCipherSuitesPlugin,SSLyze,3
 3:2017. Sensitive data exposure,SessionRenegotiationPlugin,SSLyze,4
@@ -21,6 +25,12 @@
 3:2017. Sensitive data exposure,CertificateInfoPlugin,SSLyze,2
 3:2017. Sensitive data exposure,RobotPlugin,SSLyze,4
 3:2017. Sensitive data exposure,HttpHeadersPlugin,SSLyze,1
+3:2017. Sensitive data exposure,Possible Username Enumeration,ZAP,3
+3:2017. Sensitive data exposure,Backup File Disclosure,ZAP,3
+3:2017. Sensitive data exposure,Source Code Disclosure – SVN,ZAP,3
+3:2017. Sensitive data exposure,Source Code Disclosure - /WEB-INF folder,ZAP,3
+3:2017. Sensitive data exposure,Generic Padding Oracle,ZAP,4
+4:2017. XML External Entities,XML External Entity Attack,ZAP,2
 5:2017. Broken Access Control,Path Traversal,ZAP,3
 6:2017. Security misconfiguration,Web Browser XSS Protection Not Enabled,ZAP,0
 6:2017. Security misconfiguration,Application Error Disclosure,ZAP,0
@@ -36,26 +46,14 @@
 6:2017. Security misconfiguration,Stats Passive Scan Rule,ZAP,2
 6:2017. Security misconfiguration,EarlyDataPlugin,SSLyze,3
 6:2017. Security misconfiguration,FallbackScsvPlugin,SSLyze,3
+6:2017. Security misconfiguration,Remote Code Execution,ZAP,4
+6:2017. Security misconfiguration,Remote Code Execution - Shell Shock,ZAP,4
+6:2017. Security misconfiguration,Insecure HTTP Method,ZAP,2
+6:2017. Security misconfiguration,HTTP Parameter Pollution scanner,ZAP,1
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Prime,ZAP,1
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Spider,ZAP,1
 7:2017. Cross-Site Scripting (XSS),Content-Type Header Missing,ZAP,0
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Reflected),ZAP,0
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent),ZAP,1
+8:2013. Cross-Site Request Forgery (CSRF),Anti CSRF Tokens Scanner,ZAP,1
 10:2013. Unvalidated Redirects and Forwards,External Redirect,ZAP,3
-0:0000.UNKNOWN,Source Code Disclosure - SVN,ZAP,1
-0:0000.UNKNOWN,Source Code Disclosure - /WEB-INF folder,ZAP,1
-0.0000.UNKNOWN,Remote Code Execution - Shell Shock,ZAP,1
-0.0000.UNKNOWN,Anti CSRF Tokens Scanner,ZAP,1
-0.0000.UNKNOWN,Cross-Domain Misconfiguration,ZAP,1
-0.0000.UNKNOWN,Source Code Disclosure,ZAP,1
-0.0000.UNKNOWN,Remote Code Execution,ZAP,1
-0.0000.UNKNOWN,Session Fixation,ZAP,1
-0.0000.UNKNOWN,XPath Injection,ZAP,1
-0.0000.UNKNOWN,XML External Entity Attack,ZAP,1
-0.0000.UNKNOWN,Generic Padding Oracle,ZAP,1
-0.0000.UNKNOWN,Expression Language Injection,ZAP,1
-0.0000.UNKNOWN,Backup File Disclosure,ZAP,1
-0.0000.UNKNOWN,Integer Overflow Error,ZAP,1
-0.0000.UNKNOWN,Insecure HTTP Method,ZAP,1
-0.0000.UNKNOWN,HTTP Parameter Pollution scanner,ZAP,1
-0.0000.UNKNOWN,Possible Username Enumeration,ZAP,1
