@@ -191,23 +191,37 @@ class ZapTestSuite(TestSuite):
         """
 
         # Activate only enabled tests
-        self.zap.ascan.disable_all_scanners()
+        # self.zap.ascan.disable_all_scanners()
         self.zap.pscan.disable_all_scanners()
-        for test in tests:
-            if test.mode == 'passive' and test.enabled is True:
-                self.zap.pscan.enable_scanners(test.testid)
-            elif test.mode == 'active' and test.enabled is True:
-                self.zap.ascan.enable_scanners(test.testid)
-
-        # TODO: Contains spaghetti code below?
-
 
         # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
         #  Also the import doesnt always work?
-        # self.import_policy("testpolicy.xml", "test_policy4")
+        self.import_policy("testpolicy.xml", "test_policy4")
+
+        for test in tests:
+            if test.mode == 'passive' and test.enabled is True:
+                self.zap.pscan.enable_scanners(test.testid)
+            elif test.mode == 'active':
+                if test.enabled is True:
+                    self.zap.ascan.enable_scanners(test.testid)
+                    self.zap.ascan.set_policy_attack_strength(test.testid, "HIGH")
+                    self.zap.ascan.set_policy_alert_threshold(test.testid, "OFF")
+                else:
+                    self.zap.ascan.disable_scanners(test.testid)
+
+        # TODO: Contains spaghetti code below?
 
         print("Policy")
         print(self.zap.ascan.policies())
+        print("Default")
+        print(self.zap.ascan.option_default_policy)
+        #print("passive scanners")
+        #print(self.zap.pscan.scanners)
+        print("active scanners")
+        for scan in self.zap.ascan.scanners():
+            if scan["enabled"] == 'true':
+                print(scan)
+                print("")
 
         # Run tests on https port
         if self.target_https_port:
