@@ -205,6 +205,8 @@ class ZapTestSuite(TestSuite):
                     #self.zap.ascan.set_policy_alert_threshold(test.testid, "OFF")
                 else:
                     self.zap.ascan.disable_scanners(test.testid)
+                    if test.name == 'Directory Browsing':
+                        print(test.name, "IS DISABLED")
 
         # TODO: Contains spaghetti code below?
 

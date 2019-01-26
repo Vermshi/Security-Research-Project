@@ -3,7 +3,7 @@
 <policy>test_policy4</policy>
 <scanner>
 <level>LOW</level>
-<strength>MEDIUM</strength>
+<strength>HIGH</strength>
 </scanner>
 <plugins>
 <p6>
