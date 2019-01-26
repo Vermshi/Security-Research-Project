@@ -42,3 +42,20 @@
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Reflected),ZAP,0
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent),ZAP,1
 10:2013. Unvalidated Redirects and Forwards,External Redirect,ZAP,3
+0:0000.UNKNOWN,Source Code Disclosure - SVN,ZAP,1
+0:0000.UNKNOWN,Source Code Disclosure - /WEB-INF folder,ZAP,1
+0.0000.UNKNOWN,Remote Code Execution - Shell Shock,ZAP,1
+0.0000.UNKNOWN,Anti CSRF Tokens Scanner,ZAP,1
+0.0000.UNKNOWN,Cross-Domain Misconfiguration,ZAP,1
+0.0000.UNKNOWN,Source Code Disclosure,ZAP,1
+0.0000.UNKNOWN,Remote Code Execution,ZAP,1
+0.0000.UNKNOWN,Session Fixation,ZAP,1
+0.0000.UNKNOWN,XPath Injection,ZAP,1
+0.0000.UNKNOWN,XML External Entity Attack,ZAP,1
+0.0000.UNKNOWN,Generic Padding Oracle,ZAP,1
+0.0000.UNKNOWN,Expression Language Injection,ZAP,1
+0.0000.UNKNOWN,Backup File Disclosure,ZAP,1
+0.0000.UNKNOWN,Integer Overflow Error,ZAP,1
+0.0000.UNKNOWN,Insecure HTTP Method,ZAP,1
+0.0000.UNKNOWN,HTTP Parameter Pollution scanner,ZAP,1
+0.0000.UNKNOWN,Possible Username Enumeration,ZAP,1

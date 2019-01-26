@@ -64,6 +64,16 @@ class ZapTestSuite(TestSuite):
 
         self.zap = ZAPv2(apikey=str(api_key), proxies={'http': proxy_address + ':' + proxy_port,
                                                             'https': proxy_address + ':' + proxy_port})
+
+        # Install addons
+
+        # print(self.zap.autoupdate.marketplace_addons)
+        print(self.zap.autoupdate.installed_addons)
+
+        # Install XSRF forgery supporting addon
+        xsrf_addon = 'ascanrulesBeta'
+        self.zap.autoupdate.install_addon(xsrf_addon)
+
         return True
 
     def connect(self, address, http_port=None, https_port=None):
@@ -108,30 +118,41 @@ class ZapTestSuite(TestSuite):
         test_dictionary = self.get_tests_from_file("tests.csv", self.engine_name)
 
         for scan in self.zap.pscan.scanners:
-            tests.append(Test(
-                name=scan['name'],
-                testid=scan['id'],
-                description="",
-                engine=self.engine_name,
-                vulnerability=test_dictionary[scan['name']][0],
-                mode="passive",
-                difficulty=test_dictionary[scan['name']][1],
-                passed=None,
-                enabled=(scan['enabled'] == 'true')
-            ))
+            try:
+                tests.append(Test(
+                    name=scan['name'],
+                    testid=scan['id'],
+                    description="",
+                    engine=self.engine_name,
+                    vulnerability=test_dictionary[scan['name']][0],
+                    mode="passive",
+                    difficulty=test_dictionary[scan['name']][1],
+                    passed=None,
+                    enabled=(scan['enabled'] == 'true')
+                ))
+            # Continue to not crash the program because we did not store test in our tests.csv file
+            except:
+                print("Test <<", scan["name"], ">> not found in tests.csv file")
+                continue
 
         for scan in self.zap.ascan.scanners():
-            tests.append(Test(
-                name=scan['name'],
-                testid=scan['id'],
-                description="",
-                engine=self.engine_name,
-                vulnerability=test_dictionary[scan['name']][0],
-                mode="active",
-                difficulty=test_dictionary[scan['name']][1],
-                passed=None,
-                enabled=(scan['enabled'] == 'true')
+
+            try:
+                tests.append(Test(
+                    name=scan['name'],
+                    testid=scan['id'],
+                    description="",
+                    engine=self.engine_name,
+                    vulnerability=test_dictionary[scan['name']][0],
+                    mode="active",
+                    difficulty=test_dictionary[scan['name']][1],
+                    passed=None,
+                    enabled=(scan['enabled'] == 'true')
             ))
+            except:
+                # print("Test", scan["name"], "not found in tests.csv file")
+                continue
+
         return tests
 
     def import_policy(self, file="testpolicy.xml", name="testpolicy"):
@@ -178,9 +199,13 @@ class ZapTestSuite(TestSuite):
             elif test.mode == 'active' and test.enabled is True:
                 self.zap.ascan.enable_scanners(test.testid)
 
-        # TODO: Contains redundant spaghetti code below
+        # TODO: Contains spaghetti code below?
 
-        self.import_policy("testpolicy.xml", "test_policy4")
+
+        # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
+        #  Also the import doesnt always work?
+        # self.import_policy("testpolicy.xml", "test_policy4")
+
         print("Policy")
         print(self.zap.ascan.policies())
 
