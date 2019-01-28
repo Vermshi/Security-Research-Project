@@ -191,7 +191,7 @@ class ZapTestSuite(TestSuite):
         """
 
         # Activate only enabled tests
-        # self.zap.ascan.disable_all_scanners()
+        self.zap.ascan.disable_all_scanners()
         self.zap.pscan.disable_all_scanners()
 
         for test in tests:
