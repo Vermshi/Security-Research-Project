@@ -71,9 +71,11 @@ def suiteToDict(suits):
     return testDict
 
 @app.route('/atc')
+@app.route('/reset')
 @app.route('/check-change')
 @app.route('/auto-enable')
 @app.route('/diff-change')
+
 def reDirect():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
 
@@ -117,7 +119,13 @@ def attack():
     else:
         return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty)
 
-
+@app.route('/reset', methods=['POST'])
+def reset():
+    for testsuite in testsuites:
+        print("Restarting", testsuite.engine_name)
+        testsuite.shutdown()
+        testsuite.start()
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
 
 def runTest(address, http_port, https_port):
     global data

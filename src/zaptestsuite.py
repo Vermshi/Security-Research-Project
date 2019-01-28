@@ -29,7 +29,11 @@ class ZapTestSuite(TestSuite):
         proxy_address = '127.0.0.1'
         proxy_port = '7576'
 
+        print("Start ZAP")
+
         if osys == 'Linux':
+
+            print("Kill port")
             # Kill the proxy in case zap was not shutdown correctly
             kill_port(int(proxy_port))
 
@@ -44,6 +48,7 @@ class ZapTestSuite(TestSuite):
             #p = Popen(["zap", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
             #p = Popen(["zap", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
             readline = p.stdout.readline()
+            print("Waiting for ZAP launch")
             while "ZAP is now listening" not in str(readline):
                 readline = p.stdout.readline()
                 continue
@@ -195,6 +200,8 @@ class ZapTestSuite(TestSuite):
 
         # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
         #  Also the import doesnt always work?
+        #  Most important is that this import sets strength and threshold
+
         self.import_policy("testpolicy.xml", "test_policy4")
 
         for test in tests:
@@ -211,8 +218,7 @@ class ZapTestSuite(TestSuite):
                     #self.zap.ascan.set_policy_alert_threshold(test.testid, "OFF")
                 else:
                     self.zap.ascan.disable_scanners(test.testid)
-                    if test.name == 'Directory Browsing':
-                        print(test.name, "IS DISABLED")
+                    print("DISABLED", test.name)
 
         # TODO: Contains spaghetti code below?
 
@@ -279,7 +285,7 @@ class ZapTestSuite(TestSuite):
                     tests[index].description = alert['description']
                     tests[index].passed = False
 
-            # If the tests have not been classified as not passed they are by now passedgit p
+            # If the tests have not been classified as not passed they are by now passed
             if tests[index].passed is not False and tests[index].enabled is True:
                 tests[index].passed = True
         return tests
@@ -288,4 +294,4 @@ class ZapTestSuite(TestSuite):
         """
         Properly shut down the zap engine
         """
-        self.zap.core.exit()
+        self.zap.core.shutdown()
