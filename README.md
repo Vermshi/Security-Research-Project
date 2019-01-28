@@ -1,3 +1,7 @@
+# EASY INSTALL
+
+>> Follow this guide https://docs.google.com/document/d/1qplZh1OLGGU7RmATFsGFOtikVoqYmQfIlTEbuyVF-JE/edit?usp=sharing <<
+
 # Security-Research-Project
 
 Welcome to the web-application security testing suite
