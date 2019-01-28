@@ -68,7 +68,6 @@ class ZapTestSuite(TestSuite):
         # Install addons
 
         # print(self.zap.autoupdate.marketplace_addons)
-        print(self.zap.autoupdate.installed_addons)
 
         # Install XSRF forgery supporting addon
         xsrf_addon = 'ascanrulesBeta'
@@ -191,12 +190,19 @@ class ZapTestSuite(TestSuite):
         """
 
         # Activate only enabled tests
-        self.zap.ascan.disable_all_scanners()
-        self.zap.pscan.disable_all_scanners()
+        #self.zap.ascan.disable_all_scanners()
+        #self.zap.pscan.disable_all_scanners()
+
+        # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
+        #  Also the import doesnt always work?
+        self.import_policy("testpolicy.xml", "test_policy4")
 
         for test in tests:
             if test.mode == 'passive' and test.enabled is True:
-                self.zap.pscan.enable_scanners(test.testid)
+                if test.enabled is True:
+                    self.zap.pscan.enable_scanners(test.testid)
+                else:
+                    self.zap.pscan.disable_scanners(test.testid)
             elif test.mode == 'active':
                 if test.enabled is True:
                     print("ENABLED", test.name, test.testid)
@@ -209,10 +215,6 @@ class ZapTestSuite(TestSuite):
                         print(test.name, "IS DISABLED")
 
         # TODO: Contains spaghetti code below?
-
-        # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
-        #  Also the import doesnt always work?
-        self.import_policy("testpolicy.xml", "test_policy4")
 
         print("Policy")
         print(self.zap.ascan.policies())
