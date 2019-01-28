@@ -247,7 +247,7 @@ class ZapTestSuite(TestSuite):
             # RUN PASSIVE TESTS
             print("Run Spider on port:", self.target_https_port)
             https_spider = self.zap.spider.scan("https://" + self.target_address + ":" + self.target_https_port)
-            while (int(self.zap.spider.status(https_spider)) < 100 and scan_active):
+            while (int(self.zap.spider.status(https_spider)) < 100 and self.scan_active):
                 print('Spider progress %: ' + self.zap.spider.status(https_spider))
                 time.sleep(0.1)
             # Give the passive tests a chance to finish
