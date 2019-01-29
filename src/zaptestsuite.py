@@ -34,13 +34,13 @@ class ZapTestSuite(TestSuite):
 
         if osys == 'Linux':
 
-            print("Kill port")
-            # Kill the proxy in case zap was not shutdown correctly
-            kill_port(int(proxy_port))
-
             version = check_output(["cat", "/etc/os-release"]).decode("utf-8")
             wd = os.getcwd()
             if "Ubuntu" in version:
+                print("Kill port")
+                # Kill the proxy in case zap was not shutdown correctly
+                kill_port(int(proxy_port))
+
                 os.chdir("/opt/zaproxy")
             else:
                 os.chdir("/usr/share/owasp-zap")
@@ -155,7 +155,7 @@ class ZapTestSuite(TestSuite):
                     enabled=(scan['enabled'] == 'true')
             ))
             except:
-                # print("Test", scan["name"], "not found in tests.csv file")
+                print("Test", scan["name"], "not found in tests.csv file")
                 continue
 
         return tests
@@ -177,7 +177,8 @@ class ZapTestSuite(TestSuite):
         # Import and set a new attack scan policy
         self.zap.ascan.import_scan_policy(path)
         self.zap.ascan.set_option_attack_policy(name)
-        self.zap.ascan.set_option_default_policy(name)
+        self.zap.ascan.set_enabled_policies(name)
+        # self.zap.ascan.set_option_default_policy(name)
 
         # TODO: Changes in the a scan policy will not be made once they have been set. How to fix that? ZAP does not support deletion of policies
 
@@ -198,8 +199,8 @@ class ZapTestSuite(TestSuite):
         self.scan_active = True
 
         # Activate only enabled tests
-        #self.zap.ascan.disable_all_scanners()
-        #self.zap.pscan.disable_all_scanners()
+        self.zap.ascan.disable_all_scanners()
+        self.zap.pscan.disable_all_scanners()
 
         # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
         #  Also the import doesnt always work?
@@ -208,7 +209,7 @@ class ZapTestSuite(TestSuite):
         self.import_policy("testpolicy.xml", "test_policy4")
 
         for test in tests:
-            if test.mode == 'passive' and test.enabled is True:
+            if test.mode == 'passive':
                 if test.enabled is True:
                     self.zap.pscan.enable_scanners(test.testid)
                 else:
