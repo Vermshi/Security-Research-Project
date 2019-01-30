@@ -247,5 +247,8 @@ class SSLyzeTestSuite(TestSuite):
     def is_early_data_secure(self, scan_result):
         return scan_result.is_early_data_supported
 
+    def stop(self):
+        print("Can SSLyze be stopped?")
+
     def shutdown(self):
         print("SSLyse does not require to shut down since it is a python module")

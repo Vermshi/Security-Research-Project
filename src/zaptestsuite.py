@@ -18,6 +18,7 @@ class ZapTestSuite(TestSuite):
     target_address = ""
     target_http_port = None
     target_https_port = None
+    scan_active = False
 
     def start(self):
         """
@@ -193,6 +194,7 @@ class ZapTestSuite(TestSuite):
         :return: Array of test objects
         :rtype: Array[Test...]
         """
+        self.scan_active = True
 
         # Activate only enabled tests
         self.zap.ascan.disable_all_scanners()
@@ -238,13 +240,13 @@ class ZapTestSuite(TestSuite):
                 print(scan)
                 print("")
         # Run tests on https port
-        if self.target_https_port:
+        if self.target_https_port and self.scan_active:
             self.zap.urlopen("https://" + self.target_address + ":" + self.target_https_port)
 
             # RUN PASSIVE TESTS
             print("Run Spider on port:", self.target_https_port)
             https_spider = self.zap.spider.scan("https://" + self.target_address + ":" + self.target_https_port)
-            while (int(self.zap.spider.status(https_spider)) < 100):
+            while (int(self.zap.spider.status(https_spider)) < 100) and self.scan_active:
                 print('Spider progress %: ' + self.zap.spider.status(https_spider))
                 time.sleep(0.1)
             # Give the passive tests a chance to finish
@@ -253,18 +255,18 @@ class ZapTestSuite(TestSuite):
             # Run ACTIVE TESTS
             print("Run active scan on port:", self.target_https_port)
             https_scan = self.zap.ascan.scan("https://" + self.target_address + ":" + self.target_https_port)
-            while int(self.zap.ascan.status(https_scan)) < 100:
+            while int(self.zap.ascan.status(https_scan)) < 100 and self.scan_active:
                 print('Scan progress %: ' + self.zap.ascan.status(https_scan))
                 time.sleep(3)
 
         # Run tests on http port
-        if self.target_http_port:
+        if self.target_http_port and self.scan_active:
             self.zap.urlopen("http://" + self.target_address + ":" + self.target_http_port)
 
             # RUN PASSIVE TESTS
             print("Run Spider on port:", self.target_http_port)
             http_spider = self.zap.spider.scan("http://" + self.target_address + ":" + self.target_http_port)
-            while (int(self.zap.spider.status(http_spider)) < 100):
+            while (int(self.zap.spider.status(http_spider)) < 100) and self.scan_active:
                 print('Spider progress %: ' + self.zap.spider.status(http_spider))
                 time.sleep(0.1)
             # Give the passive tests a chance to finish
@@ -273,7 +275,7 @@ class ZapTestSuite(TestSuite):
             # Run ACTIVE TESTS
             print("Run active scan on port:", self.target_http_port)
             http_scan = self.zap.ascan.scan("http://" + self.target_address + ":" + self.target_http_port)
-            while int(self.zap.ascan.status(http_scan)) < 100:
+            while int(self.zap.ascan.status(http_scan)) < 100 and self.scan_active:
                 print('Scan progress %: ' + self.zap.ascan.status(http_scan))
                 time.sleep(3)
 
@@ -288,7 +290,18 @@ class ZapTestSuite(TestSuite):
             # If the tests have not been classified as not passed they are by now passed
             if tests[index].passed is not False and tests[index].enabled is True:
                 tests[index].passed = True
+
+        self.scan_active = False
+
         return tests
+
+    def stop(self):
+        if self.scan_active:
+            self.scan_active = False
+            self.zap.spider.stop_all_scans()
+            self.zap.ascan.stop_all_scans()
+        else:
+            print("Did not stop because tests are not running")
 
     def shutdown(self):
         """

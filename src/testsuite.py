@@ -84,6 +84,12 @@ class TestSuite(object):
         """
         raise NotImplementedError( "Should have implemented a method to run all the tests from the engine" )
 
+    def stop(self):
+        """
+        Stop all running tests
+        """
+        raise NotImplementedError('May need to implemented method to stop running tests')
+
     def shutdown(self):
         """
         Some external engines needs to be properly shut down before closing the python program
