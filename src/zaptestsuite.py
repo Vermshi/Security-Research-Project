@@ -195,8 +195,8 @@ class ZapTestSuite(TestSuite):
         """
 
         # Activate only enabled tests
-        #self.zap.ascan.disable_all_scanners()
-        #self.zap.pscan.disable_all_scanners()
+        self.zap.ascan.disable_all_scanners()
+        self.zap.pscan.disable_all_scanners()
 
         # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
         #  Also the import doesnt always work?
