@@ -1,8 +1,13 @@
+# EASY INSTALL
+
+Follow this guide 
+https://docs.google.com/document/d/1qplZh1OLGGU7RmATFsGFOtikVoqYmQfIlTEbuyVF-JE/edit?usp=sharing 
+
 # Security-Research-Project
 
 Welcome to the web-application security testing suite
 
-For user guidance and installation with Docker please refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
+For extended user guidance and refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
 
 ### Prerequisites:
 

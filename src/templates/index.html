@@ -132,18 +132,18 @@
 
     <div id="control-panel" class="col-md-2">
         <div class="well">
-            Control Panel
-            <form method="post" action="/reset">
-                <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
-                    Reset Engines
-                </button>
-            </form>
+            <h5>Control Panel</h5>
+            Dont spam these. The system must do one task at the time. An engine cannot be reset if scans are running
             <form method="post" action="/stop">
                 <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
-                    Stop scans
+                    STOP scans
                 </button>
             </form>
-
+            <form method="post" action="/reset">
+                <button type="sumbit" class="btn btn-success no" style="color: red" onclick="displayLoader()">
+                    RESET Engines
+                </button>
+            </form>
         </div>
     </div>
 
