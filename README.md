@@ -1,7 +1,14 @@
+Welcome to the Security Testing Tool, please notice that the tool has been developed recently and is still work in progress. However all basic features required to get introduced to automatic penetration testing should be working. It is worth mentioning that the tool mostly depends on the open source project from OWASP: Zed Attack Proxy https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project. In addition the tool intends to combine different automated security tools to simplify the process of automated penetration testing. 
+
 # EASY INSTALL
 
-Follow this guide 
+Follow this guide to install the tool
 https://docs.google.com/document/d/1qplZh1OLGGU7RmATFsGFOtikVoqYmQfIlTEbuyVF-JE/edit?usp=sharing 
+
+# Proposed testing target
+
+Follow this guide to run a testing target with docker
+https://github.com/matuskosut/tdt4237-public/blob/master/sql.txt
 
 # Security-Research-Project
 
