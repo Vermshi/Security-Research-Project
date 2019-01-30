@@ -137,7 +137,8 @@ class ZapTestSuite(TestSuite):
                 ))
             # Continue to not crash the program because we did not store test in our tests.csv file
             except:
-                print("Test <<", scan["name"], ">> not found in tests.csv file")
+                print("Test <<", scan["name"], ">> not found in tests.csv file. Disable test")
+                self.zap.pscan.disable_scanners(scan['id'])
                 continue
 
         for scan in self.zap.ascan.scanners():
@@ -155,7 +156,8 @@ class ZapTestSuite(TestSuite):
                     enabled=(scan['enabled'] == 'true')
             ))
             except:
-                print("Test", scan["name"], "not found in tests.csv file")
+                print("Test <<", scan["name"], ">> not found in tests.csv file. Disable test")
+                self.zap.ascan.disable_scanners(scan['id'])
                 continue
 
         return tests

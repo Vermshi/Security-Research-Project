@@ -1,7 +1,7 @@
 1:2017. Injection,CRLF Injection,ZAP,2
 1:2017. Injection,SQL Injection,ZAP,0
 1:2017. Injection,Buffer Overflow,ZAP,1
-1:2017. Injection,Format String Error,ZAP,1
+1:2017. Injection,Format String Error,ZAP,2
 1:2017. Injection,Content-Type Header Missing,ZAP,0
 1:2017. Injection,Server Side Code Injection,ZAP,2
 1:2017. Injection,Remote OS Command Injection,ZAP,2
@@ -48,7 +48,7 @@
 6:2017. Security misconfiguration,FallbackScsvPlugin,SSLyze,3
 6:2017. Security misconfiguration,Remote Code Execution,ZAP,4
 6:2017. Security misconfiguration,Remote Code Execution - Shell Shock,ZAP,4
-6:2017. Security misconfiguration,Insecure HTTP Method,ZAP,2
+6:2017. Security misconfiguration,Insecure HTTP Method,ZAP,1
 6:2017. Security misconfiguration,HTTP Parameter Pollution scanner,ZAP,1
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Prime,ZAP,1
 7:2017. Cross-Site Scripting (XSS),Cross Site Scripting (Persistent) - Spider,ZAP,1

@@ -22,6 +22,6 @@ def kill_port(port):
     #    print(errMsg)
     #    exit()
     except Exception as e:
-        # print("No process running on port {0}".format(port))
+        print("No process running on port {0}".format(port))
         pass
 
