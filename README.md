@@ -14,7 +14,7 @@ https://docs.google.com/document/d/1Y3YV3POaJdohPlDcZCtEWIYE1J7qmCkkwmMvPTfthAU/
 
 Welcome to the web-application security testing suite
 
-For extended user guidance and refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
+For extended user guidance and alternative installation, refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
 
 ### Prerequisites:
 
@@ -56,8 +56,4 @@ Review all running tests and corresponding vulnerabilities in the testcoverage.p
 5. Try a java app x
 6. Test mac
 7. Make simple solution for categories x
-
-### Windows installation:
-Install docker compose, download toolbox if you have win 10 home, reg installation for Enterprice and Pro:
-https://docs.docker.com/compose/install/
 
