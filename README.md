@@ -8,7 +8,7 @@ https://docs.google.com/document/d/1qplZh1OLGGU7RmATFsGFOtikVoqYmQfIlTEbuyVF-JE/
 # Proposed testing target
 
 Follow this guide to run a testing target with docker
-https://github.com/matuskosut/tdt4237-public/blob/master/sql.txt
+https://docs.google.com/document/d/1Y3YV3POaJdohPlDcZCtEWIYE1J7qmCkkwmMvPTfthAU/edit?usp=sharing
 
 # Security-Research-Project
 
