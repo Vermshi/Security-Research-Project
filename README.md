@@ -1,13 +1,20 @@
+Welcome to the Security Testing Tool, please notice that the tool has been developed recently and is still work in progress. However all basic features required to get introduced to automatic penetration testing should be working. It is worth mentioning that the tool mostly depends on the open source project from OWASP: Zed Attack Proxy https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project. In addition the tool intends to combine different automated security tools to simplify the process of automated penetration testing. 
+
 # EASY INSTALL
 
-Follow this guide 
+Follow this guide to install the tool
 https://docs.google.com/document/d/1qplZh1OLGGU7RmATFsGFOtikVoqYmQfIlTEbuyVF-JE/edit?usp=sharing 
+
+# Proposed testing target
+
+Follow this guide to run a testing target with docker
+https://docs.google.com/document/d/1Y3YV3POaJdohPlDcZCtEWIYE1J7qmCkkwmMvPTfthAU/edit?usp=sharing
 
 # Security-Research-Project
 
 Welcome to the web-application security testing suite
 
-For extended user guidance and refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
+For extended user guidance and alternative installation, refer to the following manual: https://docs.google.com/document/d/14ctYlZG4iIHCMvTNi2JWvYJrRYK5ay7OvZyjGjLmO0w/edit?usp=sharing
 
 ### Prerequisites:
 
@@ -49,8 +56,4 @@ Review all running tests and corresponding vulnerabilities in the testcoverage.p
 5. Try a java app x
 6. Test mac
 7. Make simple solution for categories x
-
-### Windows installation:
-Install docker compose, download toolbox if you have win 10 home, reg installation for Enterprice and Pro:
-https://docs.docker.com/compose/install/
 
