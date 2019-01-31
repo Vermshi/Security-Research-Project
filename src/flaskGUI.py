@@ -50,8 +50,8 @@ data = {
 
 }
 testsuites = []
-testsuites.append(SSLyzeTestSuite("SSLyze"))
 testsuites.append(ZapTestSuite("ZAP"))
+testsuites.append(SSLyzeTestSuite("SSLyze"))
 tests = []
 testsLoaded = False
 difficulty = 4
