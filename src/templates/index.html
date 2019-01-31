@@ -48,8 +48,10 @@
     <div id="displayHTTPS" style="display: none; ">
         <br>
         <br>
-      <h5 style="color: red">Notice: HTTPS scanning is not a stable feature</h5>
-      <h5>Target https port</h5>
+
+       <h5 style="color: red">Notice: HTTPS scanning is not a stable feature</h5>
+       <h5>Target https port</h5>
+
       <input type="text" class="form-control" placeholder="8443" name="HTTPSport"/>
     </div>
 
@@ -78,22 +80,6 @@
           </div>
         </div>
 
-    <div id="control-panel" class="col-md-2">
-        <div class="well">
-            Control Panel
-            <form method="post" action="/reset">
-                <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
-                    Reset Engines
-                </button>
-            </form>
-            <form method="post" action="/stop">
-                <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
-                    Stop scans
-                </button>
-            </form>
-
-        </div>
-    </div>
                              <div class=" col-md-8" id="buttonGroup">
                              <span for="selectDiv" class="col-sm-2 col-form-label">Difficulty:</span>
                                                          <div class="form-group col-md-2" >
@@ -144,6 +130,24 @@
             </form>
           </div>
         </div>
+
+
+    <div id="control-panel" class="col-md-2">
+        <div class="well">
+            <h5>Control Panel</h5>
+            Dont spam these. The system must do one task at the time. An engine cannot be reset if scans are running
+            <form method="post" action="/stop">
+                <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
+                    STOP scans
+                </button>
+            </form>
+            <form method="post" action="/reset">
+                <button type="sumbit" class="btn btn-success no" style="color: red" onclick="displayLoader()">
+                    RESET Engines
+                </button>
+            </form>
+        </div>
+    </div>
 
 
 

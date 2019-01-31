@@ -194,12 +194,13 @@ class ZapTestSuite(TestSuite):
         :return: Array of test objects
         :rtype: Array[Test...]
         """
+        self.scan_active = True
 
         self.scan_active = True
 
         # Activate only enabled tests
-        #self.zap.ascan.disable_all_scanners()
-        #self.zap.pscan.disable_all_scanners()
+        self.zap.ascan.disable_all_scanners()
+        self.zap.pscan.disable_all_scanners()
 
         # TODO: Handle file import for policy. For this line many tests are missing in the xml file.
         #  Also the import doesnt always work?
@@ -247,7 +248,7 @@ class ZapTestSuite(TestSuite):
             # RUN PASSIVE TESTS
             print("Run Spider on port:", self.target_https_port)
             https_spider = self.zap.spider.scan("https://" + self.target_address + ":" + self.target_https_port)
-            while (int(self.zap.spider.status(https_spider)) < 100 and self.scan_active):
+            while (int(self.zap.spider.status(https_spider)) < 100) and self.scan_active:
                 print('Spider progress %: ' + self.zap.spider.status(https_spider))
                 time.sleep(0.1)
             # Give the passive tests a chance to finish
@@ -267,7 +268,8 @@ class ZapTestSuite(TestSuite):
             # RUN PASSIVE TESTS
             print("Run Spider on port:", self.target_http_port)
             http_spider = self.zap.spider.scan("http://" + self.target_address + ":" + self.target_http_port)
-            while (int(self.zap.spider.status(http_spider)) < 100 and self.scan_active):
+
+            while (int(self.zap.spider.status(http_spider)) < 100) and self.scan_active:
                 print('Spider progress %: ' + self.zap.spider.status(http_spider))
                 time.sleep(0.1)
             # Give the passive tests a chance to finish
