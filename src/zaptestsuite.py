@@ -91,10 +91,10 @@ class ZapTestSuite(TestSuite):
 
         if https_port and len(https_port) > 0:
             try:
-                self.zap.urlopen("https://" + address + ":" + http_port)
+                self.zap.urlopen("https://" + address + ":" + https_port)
                 self.target_https_port = https_port
             except ConnectionError as e:
-                print('Could not connect to', "https://" + address + ":" + http_port)
+                print('Could not connect to', "https://" + address + ":" + https_port)
                 print(e)
                 return False
 
@@ -177,7 +177,7 @@ class ZapTestSuite(TestSuite):
         # Import and set a new attack scan policy
         self.zap.ascan.import_scan_policy(path)
         self.zap.ascan.set_option_attack_policy(name)
-        self.zap.ascan.set_option_default_policy(name)
+        #self.zap.ascan.set_option_default_policy(name)
 
         # TODO: Changes in the a scan policy will not be made once they have been set. How to fix that? ZAP does not support deletion of policies
 
