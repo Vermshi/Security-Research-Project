@@ -79,6 +79,8 @@ class ZapTestSuite(TestSuite):
         xsrf_addon = 'ascanrulesBeta'
         self.zap.autoupdate.install_addon(xsrf_addon)
 
+        self.import_policy("testpolicy.xml", "test_policy4")
+
         return True
 
     def connect(self, address, http_port=None, https_port=None):
@@ -206,7 +208,6 @@ class ZapTestSuite(TestSuite):
         #  Also the import doesnt always work?
         #  Most important is that this import sets strength and threshold
 
-        self.import_policy("testpolicy.xml", "test_policy4")
 
         for test in tests:
             if test.mode == 'passive' and test.enabled is True:

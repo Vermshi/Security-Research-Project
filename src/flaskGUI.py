@@ -55,6 +55,7 @@ testsuites.append(SSLyzeTestSuite("SSLyze"))
 tests = []
 testsLoaded = False
 difficulty = 4
+strength = 0
 
 
 def suiteToDict(suits):
@@ -80,7 +81,7 @@ def suiteToDict(suits):
 
 
 def reDirect():
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 @app.route('/')
 def displayTests():
@@ -97,7 +98,7 @@ def displayTests():
         for key, value in testsDict.items():
             data[key] = value
         testsLoaded = True
-    return render_template('index.html', data = data, diff=difficulty)
+    return render_template('index.html', data = data, diff=difficulty, strength=strength)
 
 @app.route('/atc', methods=['POST'])
 def attack():
@@ -108,25 +109,25 @@ def attack():
 
     if(len(fullAddress) == 0):
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="The attack address cannot be empty.", diff=difficulty)
+                               error="The attack address cannot be empty.", diff=difficulty, strength=strength)
     try:
         address, http_port = fullAddress.split(":")
     except:
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="The given address was not in the right format",  diff=difficulty)
+                               error="The given address was not in the right format",  diff=difficulty, strength=strength)
 
     Success = runTest(address, http_port, https_port)
     if(Success):
-        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
     else:
-        return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty)
+        return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength)
 
 @app.route('/stop', methods=['POST'])
 def stop():
     for testsuite in testsuites:
         print("Stopping", testsuite.engine_name)
         testsuite.stop()
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 @app.route('/reset', methods=['POST'])
 def reset():
@@ -134,7 +135,7 @@ def reset():
         print("Restarting", testsuite.engine_name)
         testsuite.shutdown()
         testsuite.start()
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 def runTest(address, http_port, https_port):
     global data
@@ -174,7 +175,7 @@ def checkChange():
     for t in tests:
          t.enabled = data[t.name]["enabled"]
 
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 @app.route('/auto-enable', methods=['POST'])
 def enableDisableAll():
@@ -210,11 +211,11 @@ def enableDisableAll():
                 data[value]["enabled"] = False
     else:
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="Suspicious POST request received, hmmm", diff=difficulty)
+                               error="Suspicious POST request received, hmmm", diff=difficulty, strength=strength)
     for t in tests:
         t.enabled = data[t.name]["enabled"]
 
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 def changeDifficulty(difficulty):
     if(difficulty == 0):
@@ -298,27 +299,21 @@ def selectChange():
     changeDifficulty(difficulty)
 
 
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 @app.route('/strength-change' , methods=['POST'])
 def selectStrength():
-        global difficulty
-        diffSelect = request.form["diffSelect"]
-        if(diffSelect == "Novice"):
-            difficulty = 0
-        elif(diffSelect == "Apprentice"):
-            difficulty = 1
-        elif(diffSelect == "Adept"):
-            difficulty = 2
-        elif(diffSelect == "Expert"):
-            difficulty = 3
-        else:
-            difficulty = 4
-        changeDifficulty(difficulty)
+        global strength
+        strengthSelect = request.form["strengthSelect"]
+        if(strengthSelect == "Low"):
+            strength = 0
+        elif(strengthSelect == "Medium"):
+            strength = 1
+        elif(strengthSelect == "High"):
+            strength = 2
+        #changeDifficulty(difficulty)
 
-
-        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
-
+        return render_template('index.html', data=data, diff=difficulty, strength=strength)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)

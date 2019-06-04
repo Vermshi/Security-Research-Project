@@ -131,52 +131,26 @@
           <div class=" col-md-8" id="buttonGroup">
             <span for="selectDiv" class="col-sm-2 col-form-label">Strength:</span>
             <div class="form-group col-md-2" >
-              <form id="selectForm" action="/strength-change" method="post">
-                <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
-                  {% if diff == 0 %}
-                  <option selected="selected">Novice</option>
-                  <option>Apprentice</option>
-                  <option>Adept</option>
-                  <option>Expert</option>
-                  <option>Master</option>
-                  {% elif diff == 1 %}
-                  <option>Novice</option>
-                  <option selected="selected">Apprentice</option>
-                  <option>Adept</option>
-                  <option>Expert</option>
-                  <option>Master</option>
-                  {% elif diff == 2 %}
-                  <option>Novice</option>
-                  <option>Apprentice</option>
-                  <option selected="selected">Adept</option>
-                  <option>Expert</option>
-                  <option>Master</option>
-                  {% elif diff == 3 %}
-                  <option>Novice</option>
-                  <option>Apprentice</option>
-                  <option>Adept</option>
-                  <option selected="selected">Expert</option>
-                  <option>Master</option>
-                  {% elif diff == 4 %}
-                  <option>Novice</option>
-                  <option>Apprentice</option>
-                  <option>Adept</option>
-                  <option>Expert</option>
-                  <option selected="selected">Master</option>
+              <form id="selectForm2" action="/strength-change" method="post">
+                <select name="strengthSelect" onchange="document.getElementById('selectForm2').submit()" class="form-control"  id="strengthSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
+                  {% if strength == 0 %}
+                  <option selected="selected">Low</option>
+                  <option>Medium</option>
+                  <option>High</option>
+                  {% elif strength == 1 %}
+                  <option>Low</option>
+                  <option selected="selected">Medium</option>
+                  <option>High</option>
+                  {% elif strength == 2 %}
+                  <option>Low</option>
+                  <option>Medium</option>
+                  <option selected="selected">High</option>
 
                   {% endif %}
 
                 </select></form>
               </div>
-              <div class="well">
-                <form action="/auto-enable" method="post">
-                  <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all</button>
-                  <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all</button>
-                  <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed</button>
 
-
-                </form>
-              </div>
 
             </div>
 
