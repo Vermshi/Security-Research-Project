@@ -8,190 +8,233 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/index.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/index.css') }}">
 </head>
 <body>
 
-<nav class="navbar navbar-inverse text-center">
-<h4>Attack Engine</h4>
+  <nav class="navbar navbar-inverse text-center">
+    <h4>Attack Engine</h4>
     <h5 style="color: red">Warning: This testing tool performs aggressive tests and users must ensure that they are allowed to launch it against some web-application</h5>
-</nav>
+  </nav>
 
-<div class="alert alert-success" id="loadingMsg">
-  The tests are running, this might take a while. In the meantime you could check the python console for progress or watch this video:
+  <div class="alert alert-success" id="loadingMsg">
+    The tests are running, this might take a while. In the meantime you could check the python console for progress or watch this video:
     https://youtu.be/SZQz9tkEHIg
-</div>
-{% if error %}
-<div class="alert alert-danger" id="errorMsg">
-  {{error}}
-</div>
-{% endif %}
+  </div>
+  {% if error %}
+  <div class="alert alert-danger" id="errorMsg">
+    {{error}}
+  </div>
+  {% endif %}
 
-<div class="container-fluid text-center">
-  <div class="row content">
-    <div class="col-sm-2 sidenav">
+  <div class="container-fluid text-center">
+    <div class="row content">
+      <div class="col-sm-2 sidenav">
 
-    </div>
-
-
-
-    <div class="col-sm-8 text-left middleContainer" >
-
-                        <div class=" col-md-8 " id="addressInput">
-        <div class="well">
-            <h5>Target address and port number:</h5>
-           <form method="post" action="/atc">
-
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="localhost:63342" name="attackAddress"/>
-
-    <div id="displayHTTPS" style="display: none; ">
-        <br>
-        <br>
-
-       <h5 style="color: red">Notice: HTTPS scanning is not a stable feature</h5>
-       <h5>Target https port</h5>
-
-      <input type="text" class="form-control" placeholder="8443" name="HTTPSport"/>
-    </div>
-
-        <div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="useHTTPS" onclick='toggleUseHTTPS()'>
-  <label class="form-check-label" for="useHTTPS" style="font-weight: normal !important;">
-    Use HTTPS
-  </label>
-</div>
-
-            <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
-      <span class="glyphicon glyphicon-education "></span> Attack!
-    </button>
-
-
-
-
-    </div>
-  </form>
-          </div>
-        </div>
-
-                     <div class=" col-md-2 " id = "loaderElement">
-        <div class="well">
-    <div class="loader"></div>
-          </div>
-        </div>
-
-                             <div class=" col-md-8" id="buttonGroup">
-                             <span for="selectDiv" class="col-sm-2 col-form-label">Difficulty:</span>
-                                                         <div class="form-group col-md-2" >
-                                                             <form id="selectForm" action="/diff-change" method="post">
-                    <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
-     {% if diff == 0 %}
-      <option selected="selected">Novice</option>
-      <option>Apprentice</option>
-      <option>Adept</option>
-      <option>Expert</option>
-      <option>Master</option>
-      {% elif diff == 1 %}
-      <option>Novice</option>
-      <option selected="selected">Apprentice</option>
-      <option>Adept</option>
-      <option>Expert</option>
-      <option>Master</option>
-      {% elif diff == 2 %}
-      <option>Novice</option>
-      <option>Apprentice</option>
-      <option selected="selected">Adept</option>
-      <option>Expert</option>
-      <option>Master</option>
-      {% elif diff == 3 %}
-      <option>Novice</option>
-      <option>Apprentice</option>
-      <option>Adept</option>
-      <option selected="selected">Expert</option>
-      <option>Master</option>
-      {% elif diff == 4 %}
-      <option>Novice</option>
-      <option>Apprentice</option>
-      <option>Adept</option>
-      <option>Expert</option>
-      <option selected="selected">Master</option>
-
-{% endif %}
-
-    </select></form>
-                            </div>
-        <div class="well">
-            <form action="/auto-enable" method="post">
-  <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all</button>
-  <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all</button>
-  <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed</button>
-
-
-            </form>
-          </div>
-        </div>
-
-
-    <div id="control-panel" class="col-md-2">
-        <div class="well">
-            <h5>Control Panel</h5>
-            Dont spam these. The system must do one task at the time. An engine cannot be reset if scans are running
-            <form method="post" action="/stop">
-                <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
-                    STOP scans
-                </button>
-            </form>
-            <form method="post" action="/reset">
-                <button type="sumbit" class="btn btn-success no" style="color: red" onclick="displayLoader()">
-                    RESET Engines
-                </button>
-            </form>
-        </div>
-    </div>
-
-
-
-
-
-
-<form id="enabledForm" action="/check-change" method="post">
-      {% for key, value in data.items() %}
-
-
-
-                     <div class=" col-md-12">
-
-          <div class="well" >
-              <div class="row">
-    <div class="col-md-8"><h4>{{ key }} ({{ value["vulnerability"] }})</h4>
-            <p>{{ value["description"] }}</p></div>
-    <div class="col-md-4">
-        {% if value["passed"] %}
-    <div class="passed pull-right " ><span class="glyphicon glyphicon-check gly"></span> </div>
-{% else %}
-    <div class="notPassed pull-right " ><span class="glyphicon glyphicon-remove gly"></span> </div>
-{% endif %}
-        <div class="well" id="switchContainer">
-            <p> On/Off:</p>
-       <label class="switch">
-           {% if value["enabled"] %}
-  <input type="checkbox" onchange="document.getElementById('enabledForm').submit()" name="check" value="{{ key }}" checked>
-
-{% else %}
-    <input type="checkbox" onchange="document.getElementById('enabledForm').submit()" name="check" value="{{ key }}" >
-
-{% endif %}
-  <span class="slider round"></span>
-</label>
-          </div>
-
-    </div>
       </div>
-          </div>
+
+
+
+      <div class="col-sm-8 text-left middleContainer" >
+
+        <div class=" col-md-8 " id="addressInput">
+          <div class="well">
+            <h5>Target address and port number:</h5>
+            <form method="post" action="/atc">
+
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="localhost:63342" name="attackAddress"/>
+
+                <div id="displayHTTPS" style="display: none; ">
+                  <br>
+                  <br>
+
+                  <h5 style="color: red">Notice: HTTPS scanning is not a stable feature</h5>
+                  <h5>Target https port</h5>
+
+                  <input type="text" class="form-control" placeholder="8443" name="HTTPSport"/>
                 </div>
 
-         {% endfor %}
-    </form>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="useHTTPS" onclick='toggleUseHTTPS()'>
+                  <label class="form-check-label" for="useHTTPS" style="font-weight: normal !important;">
+                    Use HTTPS
+                  </label>
+                </div>
+                <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
+                  <span class="glyphicon glyphicon-education "></span> Attack!
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class=" col-md-2 " id = "loaderElement">
+            <div class="well">
+              <div class="loader"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class=" col-md-8" id="buttonGroup">
+          <span for="selectDiv" class="col-sm-2 col-form-label">Difficulty:</span>
+          <div class="form-group col-md-2" >
+            <form id="selectForm" action="/diff-change" method="post">
+              <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
+                {% if diff == 0 %}
+                <option selected="selected">Novice</option>
+                <option>Apprentice</option>
+                <option>Adept</option>
+                <option>Expert</option>
+                <option>Master</option>
+                {% elif diff == 1 %}
+                <option>Novice</option>
+                <option selected="selected">Apprentice</option>
+                <option>Adept</option>
+                <option>Expert</option>
+                <option>Master</option>
+                {% elif diff == 2 %}
+                <option>Novice</option>
+                <option>Apprentice</option>
+                <option selected="selected">Adept</option>
+                <option>Expert</option>
+                <option>Master</option>
+                {% elif diff == 3 %}
+                <option>Novice</option>
+                <option>Apprentice</option>
+                <option>Adept</option>
+                <option selected="selected">Expert</option>
+                <option>Master</option>
+                {% elif diff == 4 %}
+                <option>Novice</option>
+                <option>Apprentice</option>
+                <option>Adept</option>
+                <option>Expert</option>
+                <option selected="selected">Master</option>
+
+                {% endif %}
+
+              </select></form>
+            </div>
+            <div class="well">
+              <form action="/auto-enable" method="post">
+                <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all</button>
+                <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all</button>
+                <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed</button>
+
+
+              </form>
+            </div>
+
+          </div>
+
+
+          <div class=" col-md-8" id="buttonGroup">
+            <span for="selectDiv" class="col-sm-2 col-form-label">Strength:</span>
+            <div class="form-group col-md-2" >
+              <form id="selectForm" action="/strength-change" method="post">
+                <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
+                  {% if diff == 0 %}
+                  <option selected="selected">Novice</option>
+                  <option>Apprentice</option>
+                  <option>Adept</option>
+                  <option>Expert</option>
+                  <option>Master</option>
+                  {% elif diff == 1 %}
+                  <option>Novice</option>
+                  <option selected="selected">Apprentice</option>
+                  <option>Adept</option>
+                  <option>Expert</option>
+                  <option>Master</option>
+                  {% elif diff == 2 %}
+                  <option>Novice</option>
+                  <option>Apprentice</option>
+                  <option selected="selected">Adept</option>
+                  <option>Expert</option>
+                  <option>Master</option>
+                  {% elif diff == 3 %}
+                  <option>Novice</option>
+                  <option>Apprentice</option>
+                  <option>Adept</option>
+                  <option selected="selected">Expert</option>
+                  <option>Master</option>
+                  {% elif diff == 4 %}
+                  <option>Novice</option>
+                  <option>Apprentice</option>
+                  <option>Adept</option>
+                  <option>Expert</option>
+                  <option selected="selected">Master</option>
+
+                  {% endif %}
+
+                </select></form>
+              </div>
+              <div class="well">
+                <form action="/auto-enable" method="post">
+                  <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all</button>
+                  <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all</button>
+                  <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed</button>
+
+
+                </form>
+              </div>
+
+            </div>
+
+          <div>
+            CAUTION, DONT SPAM, BE PATIONATE
+            <form method="post" action="/stop">
+              <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
+                STOP scans
+              </button>
+            </form>
+            <form method="post" action="/reset">
+              <button type="sumbit" class="btn btn-success no" style="color: red" onclick="displayLoader()">
+                RESET Engines
+              </button>
+            </form>
+          </div>
+
+
+
+
+          <form id="enabledForm" action="/check-change" method="post">
+            {% for key, value in data.items() %}
+
+
+
+            <div class=" col-md-12">
+
+              <div class="well" >
+                <div class="row">
+                  <div class="col-md-8"><h4>{{ key }} ({{ value["vulnerability"] }})</h4>
+                    <p>{{ value["description"] }}</p></div>
+                    <div class="col-md-4">
+                      {% if value["passed"] %}
+                      <div class="passed pull-right " ><span class="glyphicon glyphicon-check gly"></span> </div>
+                      {% else %}
+                      <div class="notPassed pull-right " ><span class="glyphicon glyphicon-remove gly"></span> </div>
+                      {% endif %}
+                      <div class="well" id="switchContainer">
+                        <p> On/Off:</p>
+                        <label class="switch">
+                          {% if value["enabled"] %}
+                          <input type="checkbox" onchange="document.getElementById('enabledForm').submit()" name="check" value="{{ key }}" checked>
+
+                          {% else %}
+                          <input type="checkbox" onchange="document.getElementById('enabledForm').submit()" name="check" value="{{ key }}" >
+
+                          {% endif %}
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {% endfor %}
+            </form>
 
 
 
@@ -202,48 +245,48 @@
 
 
 
-    </div>
+          </div>
 
 
-    <div class="col-sm-2 sidenav">
+          <div class="col-sm-2 sidenav">
 
-    </div>
-  </div>
-</div>
+          </div>
+        </div>
+      </div>
 
-<footer class="container-fluid text-center">
-    <p>Made for TDT4237 - Software Security</p>
-    <p>Powered by: OWASP Zed Attack Proxy and SSLyze</p>
-</footer>
+      <footer class="container-fluid text-center">
+        <p>Made for TDT4237 - Software Security</p>
+        <p>Powered by: OWASP Zed Attack Proxy and SSLyze</p>
+      </footer>
 
-</body>
-   <script>
+    </body>
+    <script>
 
 
-   function displayLoader(){
-    loader = document.getElementById("loaderElement");
-    loadingMsg = document.getElementById("loadingMsg");
-    loader.style.display = "block";
-    loadingMsg.style.display = "block";
+    function displayLoader(){
+      loader = document.getElementById("loaderElement");
+      loadingMsg = document.getElementById("loadingMsg");
+      loader.style.display = "block";
+      loadingMsg.style.display = "block";
 
-    let errorMsg = document.getElementById("errorMsg");
-    console.log(errorMsg != null)
-    if(errorMsg != null){
-    errorMsg.style.display = "none";
-    }
+      let errorMsg = document.getElementById("errorMsg");
+      console.log(errorMsg != null)
+      if(errorMsg != null){
+        errorMsg.style.display = "none";
+      }
     }
 
     function toggleUseHTTPS(){
-    HTTPSdisplay = document.getElementById("displayHTTPS");
-    console.log(HTTPSdisplay.style.display);
-    if( HTTPSdisplay.style.display == "block"){
+      HTTPSdisplay = document.getElementById("displayHTTPS");
+      console.log(HTTPSdisplay.style.display);
+      if( HTTPSdisplay.style.display == "block"){
         HTTPSdisplay.style.display = "none";
 
 
-    }
-    else{
+      }
+      else{
         HTTPSdisplay.style.display = "block"
+      }
     }
-    }
-</script>
-</html>
+  </script>
+  </html>

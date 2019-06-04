@@ -76,13 +76,14 @@ def suiteToDict(suits):
 @app.route('/check-change')
 @app.route('/auto-enable')
 @app.route('/diff-change')
+@app.route('/strength-change')
+
 
 def reDirect():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
 
 @app.route('/')
 def displayTests():
-
     global testsLoaded
     if (testsLoaded == False):
         for test in testsuites:
@@ -151,6 +152,7 @@ def runTest(address, http_port, https_port):
         if(testsuite.connect(address, http_port=http_port, https_port=https_port)):
             # Run tests
             testresults.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
+        # The SSLyze tool will only run when a HTTPS port is specified
         elif testsuite.engine_name == "SSLyze" and not len(https_port):
             testresults.extend(engine_tests)
         else:
@@ -298,7 +300,25 @@ def selectChange():
 
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
 
+@app.route('/strength-change' , methods=['POST'])
+def selectStrength():
+        global difficulty
+        diffSelect = request.form["diffSelect"]
+        if(diffSelect == "Novice"):
+            difficulty = 0
+        elif(diffSelect == "Apprentice"):
+            difficulty = 1
+        elif(diffSelect == "Adept"):
+            difficulty = 2
+        elif(diffSelect == "Expert"):
+            difficulty = 3
+        else:
+            difficulty = 4
+        changeDifficulty(difficulty)
+
+
+        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty)
+
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
-
+    app.run(host="0.0.0.0", debug=True)
