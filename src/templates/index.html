@@ -37,6 +37,7 @@
       <div class="col-sm-8 text-left middleContainer" >
         <div id="addressInput">
           <div class="well">
+            <h3>Run Tests<h3>
             <h5>Target address and port number:</h5>
             <form method="post" action="/atc">
               <div class="input-group">
@@ -68,9 +69,10 @@
           </div>
         </div>
 
-
+        <div id=control>
           <div id="settings">
-                <form id="selectForm" action="/diff-change" method="post">
+                <h3>Control Panel</h3>
+                <form id="selectForm" class="wrapit" action="/diff-change" method="post">
                   <span for="selectDiv">Difficulty - Amount of tests:</span>
 
                   <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
@@ -108,7 +110,8 @@
                   </select></form>
 
 
-              <form id="selectForm2" action="/strength-change" method="post">
+              <form id="selectForm2" class="wrapit" action="/strength-change" method="post">
+                <div class="wrapit">
                 <span for="selectDiv">Test strength:</span>
                 <select name="strengthSelect" onchange="document.getElementById('selectForm2').submit()" class="form-control"  id="strengthSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
                   {% if strength == 0 %}
@@ -125,7 +128,9 @@
                   <option selected="selected">High</option>
                   {% endif %}
                 </select>
+                </div>
 
+                <div class="wrapit">
                 <span for="selectDiv">Alert treshold:</span>
                 <select name="thresholdSelect" onchange="document.getElementById('selectForm2').submit()" class="form-control"  id="thresholdSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
                   {% if threshold == 0 %}
@@ -142,34 +147,35 @@
                   <option selected="selected">High</option>
                   {% endif %}
                 </select>
+              </div>
+
               </form>
             </div>
 
-            <div class=" col-md-8" id="buttonGroup">
-            <div class="well">
+            <div class=" col-md-8" id="enable">
               <br>
-              <span for="selectDiv" class="col-sm-2 col-form-label">Tests:</span>
               <form action="/auto-enable" method="post">
-                <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all</button>
-                <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all</button>
-                <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed</button>
+                <button type="submit" name="sortAll" id="btnGroup1" class="btn btn-secondary" value="1">Enable all tests</button>
+                <button type="submit" name="sortAll" id="btnGroup2" class="btn btn-secondary" value="2">Disable all tests</button>
+                <button type="submit" name="sortAll" id="btnGroup3" class="btn btn-secondary" value="3">Disable passed tests</button>
               </form>
-            </div>
+            <br>
           </div>
 
-          <div>
-            CAUTION, DONT SPAM, BE PATIONATE
-            <form method="post" action="/stop">
-              <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
+          <div id="danger">
+            <form method="post" action="/stop" class="wrapit">
+              <button id="btnGroup1" type="sumbit" class="btn btn-secondary" onclick="displayLoader()">
                 STOP scans
               </button>
             </form>
-            <form method="post" action="/reset">
-              <button type="sumbit" class="btn btn-success no" style="color: red" onclick="displayLoader()">
+            <form method="post" action="/reset" class="wrapit">
+              <button id="btnGroup1" type="sumbit" class="btn btn-secondary" style="color: red" onclick="displayLoader()">
                 RESET Engines
               </button>
             </form>
+            CAUTION, dont spam these, be pationate
           </div>
+        </div>
 
           <form id="enabledForm" action="/check-change" method="post">
             {% for key, value in data.items() %}

@@ -171,6 +171,7 @@ margin-right: 5px;
 
 #settings {
   width: 100%;
+  padding-left: 15px;
 }
 
 #addressInput {
@@ -179,4 +180,42 @@ margin-right: 5px;
 
 #diffSelect select{
 
+}
+
+#danger {
+  padding-left: 15px;
+  margin-bottom: 15px;
+}
+
+#control {
+  border-width: 3px;
+  border-radius: 5px;
+  border-style: dashed;
+  background-color: orange;
+  margin-bottom: 15px;
+}
+
+.wrapit {
+  display: inline-block;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+#enable{
+  width: 100%;
 }
