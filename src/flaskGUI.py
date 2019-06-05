@@ -19,7 +19,7 @@ testsuites.append(SSLyzeTestSuite("SSLyze"))
 tests = []
 testsLoaded = False
 difficulty = 4
-strength = 0
+strength = 2
 threshold = 0
 zap_policy = "testpolicy.xml"
 zap_policy_name = "test_policy4"
