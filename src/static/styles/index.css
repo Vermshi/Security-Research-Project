@@ -149,6 +149,10 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+#buttonGroup {
+  width: 100%;
+}
+
 #buttonGroup div{
 padding: 0px;
 background-color: #b1b9c6;
@@ -163,6 +167,14 @@ border-radius: 0px;
 #btnGroup2{
 margin-left: 5px;
 margin-right: 5px;
+}
+
+#settings {
+  width: 100%;
+}
+
+#addressInput {
+  width: 100%
 }
 
 #diffSelect select{

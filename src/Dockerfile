@@ -7,6 +7,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		bzip2 \
 		unzip \
+		apt-utils \
 		xz-utils \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -43,8 +44,10 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-		openjdk-8-jre="$JAVA_DEBIAN_VERSION" \
-		ca-certificates-java="$CA_CERTIFICATES_JAVA_VERSION" \
+		openjdk-8-jre \
+#="$JAVA_DEBIAN_VERSION" \
+		ca-certificates-java \ 
+#"$CA_CERTIFICATES_JAVA_VERSION" \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
@@ -67,7 +70,7 @@ RUN apt-key add - < Release.key
 RUN apt-get -y update
 RUN apt-get -y install owasp-zap
 RUN chmod +x /usr/share/owasp-zap/zap-2.7.0.jar
-RUN apt-get -y upgrade && apt-get install -y gcc && apt-get install -y apt-utils && pip --version && apt-get install libffi-dev && apt-get install openssl && pip install --no-cache-dir -r requirements.txt
+RUN apt-get -y upgrade && apt-get install -y gcc && pip --version && apt-get install libffi-dev && apt-get install openssl && pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 CMD python ./flaskGUI.py
 

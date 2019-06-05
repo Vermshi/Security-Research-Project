@@ -1,54 +1,18 @@
 from zaptestsuite import ZapTestSuite
 from sslyzetestsuite import SSLyzeTestSuite
-
 from json import *
 import sys
-
 import time
 from flask import Flask, render_template, request, redirect, Response
 
 app = Flask(__name__)
 
-# name, testid, description, engine, vulnerability, mode, passed, enabled
-test1 = ["SQL injextion", "00:25", "SQL injection test bla bla vulnerabaility bla bla bla", "zap", "SQl injection", 2, False, True]
-test2 = ["XSS attack", "00:32", "XSS injection can be done by bla bla bla", "XSS", 0, True,True]
-
+# data dictionary contains all the tests from all the testsuites
+# variables:
+# name, testid, description, engine, vulnerability, mode, difficulty, passed, enabled
 data = {
-#     "test1":{
-#   "name": "Sql injection",
-#   "testid": "00:25",
-#   "description":"SQL injection test bla bla vulnerabaility bla bla bla" ,
-#    "engine": "zap",
-#     "vulnerability": "SQl injection",
-#     "mode": 2,
-#     "passed": True,
-#     "enabled": True,
-#     "diffculty": 0,
-# },
-# "test2":{
-#   "name": "XSS",
-#   "testid": "00:32",
-#   "description":"XSSS test bla bla vulnerabaility bla bla bla" ,
-#    "engine": "zap",
-#     "vulnerability": "SQl injection",
-#     "mode": 2,
-#     "passed": False,
-#     "enabled": False,
-#     "diffculty": 1,
-# },
-# "testinator":{
-#   "name": "XSS",
-#   "testid": "00:32",
-#   "description":"The test the myth the legend of all legends" ,
-#    "engine": "zasdfp",
-#     "vulnerability": "wups",
-#     "mode": 2,
-#     "passed": False,
-#     "enabled": True,
-#     "diffculty": 2
-# },
-
 }
+
 testsuites = []
 testsuites.append(ZapTestSuite("ZAP"))
 testsuites.append(SSLyzeTestSuite("SSLyze"))
@@ -56,8 +20,12 @@ tests = []
 testsLoaded = False
 difficulty = 4
 strength = 0
+threshold = 0
+zap_policy = "testpolicy.xml"
+zap_policy_name = "test_policy4"
 
 
+# Convert python test object to dictionary
 def suiteToDict(suits):
     testDict = {}
     for test in suits:
@@ -71,6 +39,7 @@ def suiteToDict(suits):
         testDict[x["name"]] = x
     return testDict
 
+
 @app.route('/atc')
 @app.route('/reset')
 @app.route('/stop')
@@ -81,8 +50,10 @@ def suiteToDict(suits):
 
 
 def reDirect():
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
+
+# Show all the tests of each test suite with the generate_test_list function as defined in the testsuite interface
 @app.route('/')
 def displayTests():
     global testsLoaded
@@ -90,16 +61,22 @@ def displayTests():
         for test in testsuites:
             print("The tests are loading ...")
             test.start()
-            time.sleep(3)
 
+            # Import policy
+            if(test.engine_name == "ZAP"):
+                test.import_policy(zap_policy, zap_policy_name)
+
+            #time.sleep(3)
             for t in test.generate_test_list():
                 tests.append(t)
         testsDict = suiteToDict(tests)
         for key, value in testsDict.items():
             data[key] = value
         testsLoaded = True
-    return render_template('index.html', data = data, diff=difficulty, strength=strength)
+    return render_template('index.html', data = data, diff=difficulty, strength=strength, threshold=threshold)
 
+
+# Launch all enabled tests against target address
 @app.route('/atc', methods=['POST'])
 def attack():
     fullAddress = request.form["attackAddress"]
@@ -109,47 +86,50 @@ def attack():
 
     if(len(fullAddress) == 0):
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="The attack address cannot be empty.", diff=difficulty, strength=strength)
+                               error="The attack address cannot be empty.", diff=difficulty, strength=strength, threshold=threshold)
     try:
         address, http_port = fullAddress.split(":")
     except:
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="The given address was not in the right format",  diff=difficulty, strength=strength)
+                               error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold)
 
     Success = runTest(address, http_port, https_port)
     if(Success):
-        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
+        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
     else:
-        return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength)
+        return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold)
 
+
+# Stop all engines
 @app.route('/stop', methods=['POST'])
 def stop():
     for testsuite in testsuites:
         print("Stopping", testsuite.engine_name)
         testsuite.stop()
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
+
+# Restart all engines
 @app.route('/reset', methods=['POST'])
 def reset():
     for testsuite in testsuites:
         print("Restarting", testsuite.engine_name)
         testsuite.shutdown()
         testsuite.start()
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
+
+# Run all the tests against the different ports.
 def runTest(address, http_port, https_port):
     global data
     global tests
     testresults = []
-
     for testsuite in testsuites:
-
         engine_tests = []
         # Collect all tests for the specific testsuite before running
         for test in tests:
             if testsuite.engine_name == test.engine:
                 engine_tests.append(test)
-
         if(testsuite.connect(address, http_port=http_port, https_port=https_port)):
             # Run tests
             testresults.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
@@ -158,11 +138,11 @@ def runTest(address, http_port, https_port):
             testresults.extend(engine_tests)
         else:
             return False
-
     res = suiteToDict(testresults)
     data = res
     changeDifficulty(difficulty)
     return True
+
 
 @app.route('/check-change', methods=['POST'])
 def checkChange():
@@ -175,7 +155,8 @@ def checkChange():
     for t in tests:
          t.enabled = data[t.name]["enabled"]
 
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
+
 
 @app.route('/auto-enable', methods=['POST'])
 def enableDisableAll():
@@ -211,11 +192,11 @@ def enableDisableAll():
                 data[value]["enabled"] = False
     else:
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="Suspicious POST request received, hmmm", diff=difficulty, strength=strength)
+                               error="Suspicious POST request received, hmmm", diff=difficulty, strength=strength, threshold=threshold)
     for t in tests:
         t.enabled = data[t.name]["enabled"]
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 def changeDifficulty(difficulty):
     if(difficulty == 0):
@@ -257,6 +238,7 @@ def changeDifficulty(difficulty):
     for t in tests:
         t.enabled = data[t.name]["enabled"]
 
+
 def displayRightDifficulty():
     displayDict = {}
     global difficulty
@@ -297,13 +279,15 @@ def selectChange():
     else:
         difficulty = 4
     changeDifficulty(difficulty)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
-
-    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength)
 
 @app.route('/strength-change' , methods=['POST'])
 def selectStrength():
         global strength
+        global threshold
+        global testsuites
+        global zap_policy_name
         strengthSelect = request.form["strengthSelect"]
         if(strengthSelect == "Low"):
             strength = 0
@@ -311,9 +295,21 @@ def selectStrength():
             strength = 1
         elif(strengthSelect == "High"):
             strength = 2
-        #changeDifficulty(difficulty)
 
-        return render_template('index.html', data=data, diff=difficulty, strength=strength)
+        thresholdSelect = request.form["thresholdSelect"]
+        if(thresholdSelect == "Low"):
+            threshold = 0
+        elif(thresholdSelect == "Medium"):
+            threshold = 1
+        elif(thresholdSelect == "High"):
+            threshold = 2
+
+        for testsuite in testsuites:
+            if testsuite.engine_name == "ZAP":
+                testsuite.zap.ascan.update_scan_policy(zap_policy_name, thresholdSelect, strengthSelect)
+
+        return render_template('index.html', data=data, diff=difficulty, strength=strength, threshold=threshold)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)

@@ -79,7 +79,7 @@ class ZapTestSuite(TestSuite):
         xsrf_addon = 'ascanrulesBeta'
         self.zap.autoupdate.install_addon(xsrf_addon)
 
-        self.import_policy("testpolicy.xml", "test_policy4")
+        #self.import_policy("testpolicy.xml", "test_policy4")
 
         return True
 

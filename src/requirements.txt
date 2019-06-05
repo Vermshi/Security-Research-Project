@@ -1,5 +1,5 @@
 python-owasp-zap-v2.4
-cryptography==2.3
+cryptography==2.5
 psutil
 sslyze
 flask
