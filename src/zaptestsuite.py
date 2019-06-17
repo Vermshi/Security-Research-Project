@@ -26,7 +26,8 @@ class ZapTestSuite(TestSuite):
         """
 
         osys = platform.system()
-        api_key = os.urandom(16)
+        #api_key = os.urandom(16)
+        api_key = "123"
         proxy_address = '127.0.0.1'
         proxy_port = '7576'
 
@@ -38,13 +39,26 @@ class ZapTestSuite(TestSuite):
             # Kill the proxy in case zap was not shutdown correctly
             kill_port(int(proxy_port))
 
+            # Try starting ZAP from default install directory, if not start with default shortcut
             version = check_output(["cat", "/etc/os-release"]).decode("utf-8")
             wd = os.getcwd()
             if "Ubuntu" in version:
-                os.chdir("/opt/zaproxy")
+                try:
+                    os.chdir("/opt/zaproxy")
+                    p = Popen(["java", "-jar", "zap-2.8.0.jar", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+                except Exception as e:
+                    p = Popen(["zaproxy", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+                    pass
             else:
-                os.chdir("/usr/share/owasp-zap")
-            p = Popen(["java", "-jar", "zap-2.7.0.jar", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+                p = Popen(["owasp-zap", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+                """
+                try:
+                    os.chdir("/usr/share/owasp-zap")
+                    p = Popen(["java", "-jar", "zap-2.8.0.jar", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+                except Exception as e:
+                    p = Popen(["owasp-zap", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
+                    pass
+                """
             os.chdir(wd)
             #p = Popen(["zap", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
             #p = Popen(["zap", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
@@ -75,9 +89,14 @@ class ZapTestSuite(TestSuite):
 
         # print(self.zap.autoupdate.marketplace_addons)
 
+        try:
         # Install XSRF forgery supporting addon
-        xsrf_addon = 'ascanrulesBeta'
-        self.zap.autoupdate.install_addon(xsrf_addon)
+            xsrf_addon = 'ascanrulesBeta'
+            self.zap.autoupdate.install_addon(xsrf_addon)
+        except Exception as e:
+            print("could not install xsrf addons")
+            pass
+
 
         #self.import_policy("testpolicy.xml", "test_policy4")
 
