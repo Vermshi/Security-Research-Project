@@ -3,6 +3,7 @@ from sslyzetestsuite import SSLyzeTestSuite
 from json import *
 import sys
 import time
+import math
 from flask import Flask, render_template, request, redirect, Response
 
 app = Flask(__name__)
@@ -93,9 +94,9 @@ def attack():
         return render_template('index.html', data=displayRightDifficulty(),
                                error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold)
 
-    Success = runTest(address, http_port, https_port)
-    if(Success):
-        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
+    elapsed_time, test_amount, vulnerabilities = runTest(address, http_port, https_port)
+    if(elapsed_time):
+        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities)
     else:
         return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold)
 
@@ -123,17 +124,23 @@ def reset():
 def runTest(address, http_port, https_port):
     global data
     global tests
-    testresults = []
+    test_results = []
+
+    test_amount = 0
+    vulnerabilities = 0
+    start_time = time.time()
+
     for testsuite in testsuites:
         engine_tests = []
         # Collect all tests for the specific testsuite before running
         for test in tests:
             if testsuite.engine_name == test.engine:
                 engine_tests.append(test)
+
         try:
             testsuite.connect(address, http_port=http_port, https_port=https_port)
             # Run tests
-            testresults.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
+            test_results.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
         except Exception as e:
             # The SSLyze tool will only run when a HTTPS port is specified
             if testsuite.engine_name == "SSLyze" and not len(https_port):
@@ -141,10 +148,18 @@ def runTest(address, http_port, https_port):
             else:
                 return False
 
-    res = suiteToDict(testresults)
+    # Record statistics
+    elapsed_time = math.ceil(time.time() - start_time)
+    for test in tests:
+        if test.enabled:
+            test_amount += 1
+            if not test.passed:
+                vulnerabilities += 1
+
+    res = suiteToDict(test_results)
     data = res
     changeDifficulty(difficulty)
-    return True
+    return elapsed_time, test_amount, vulnerabilities
 
 
 @app.route('/check-change', methods=['POST'])
