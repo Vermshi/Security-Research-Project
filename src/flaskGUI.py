@@ -130,14 +130,17 @@ def runTest(address, http_port, https_port):
         for test in tests:
             if testsuite.engine_name == test.engine:
                 engine_tests.append(test)
-        if(testsuite.connect(address, http_port=http_port, https_port=https_port)):
+        try:
+            testsuite.connect(address, http_port=http_port, https_port=https_port)
             # Run tests
             testresults.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
-        # The SSLyze tool will only run when a HTTPS port is specified
-        elif testsuite.engine_name == "SSLyze" and not len(https_port):
-            testresults.extend(engine_tests)
-        else:
-            return False
+        except Exception as e:
+            # The SSLyze tool will only run when a HTTPS port is specified
+            if testsuite.engine_name == "SSLyze" and not len(https_port):
+                testresults.extend(engine_tests)
+            else:
+                return False
+
     res = suiteToDict(testresults)
     data = res
     changeDifficulty(difficulty)

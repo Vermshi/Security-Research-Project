@@ -49,7 +49,7 @@ class SSLyzeTestSuite(TestSuite):
                 port=port,
                 tls_wrapped_protocol=TlsWrappedProtocolEnum.HTTPS
             )
-            print('Testing connectivity with', server_tester.hostname + ':' + server_tester.port)
+            print('Testing connectivity with', server_tester.hostname + ':' + str(server_tester.port))
             self.server_info = server_tester.perform()
             return True
         except ServerConnectivityError as e:
