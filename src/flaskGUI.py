@@ -83,18 +83,18 @@ def attack():
     fullAddress = request.form["attackAddress"]
 
     # TODO: Handle format
-    https_port = request.form["HTTPSport"]
+    https = request.form["https"]
 
     if(len(fullAddress) == 0):
         return render_template('index.html', data=displayRightDifficulty(),
                                error="The attack address cannot be empty.", diff=difficulty, strength=strength, threshold=threshold)
     try:
-        address, http_port = fullAddress.split(":")
+        address, port = fullAddress.split(":")
     except:
         return render_template('index.html', data=displayRightDifficulty(),
                                error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold)
 
-    elapsed_time, test_amount, vulnerabilities = runTest(address, http_port, https_port)
+    elapsed_time, test_amount, vulnerabilities = runTest(address, port, https)
     if(elapsed_time):
         return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities)
     else:
@@ -121,7 +121,7 @@ def reset():
 
 
 # Run all the tests against the different ports.
-def runTest(address, http_port, https_port):
+def runTest(address, port, https):
     global data
     global tests
     test_results = []
@@ -138,15 +138,12 @@ def runTest(address, http_port, https_port):
                 engine_tests.append(test)
 
         try:
-            testsuite.connect(address, http_port=http_port, https_port=https_port)
+            testsuite.connect(address, port=http_port, https=https)
             # Run tests
             test_results.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
         except Exception as e:
             # The SSLyze tool will only run when a HTTPS port is specified
-            if testsuite.engine_name == "SSLyze" and not len(https_port):
-                testresults.extend(engine_tests)
-            else:
-                return False
+            print(e)
 
     # Record statistics
     elapsed_time = math.ceil(time.time() - start_time)

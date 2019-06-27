@@ -33,7 +33,7 @@ class TestSuite(object):
         """
         raise NotImplementedError( "Should have implemented a method to start the chosen engine" )
 
-    def connect(self, address, http_port=None, https_port=None):
+    def connect(self, address, port=None, https=False):
         """
         Run all configurations necessary to perform a test against the target. This function is mean to set up
         the connection to the target. The function should work for one or two specified ports if supported by engine
@@ -42,8 +42,8 @@ class TestSuite(object):
         :type address: str
         :param http_port: Target http port
         :type http_port: str
-        :param https_port: Target https port
-        :type https_port: str
+        :param https: Toggle if using https port
+        :type https: bool
         """
         raise NotImplementedError( "Should have implemented a method to configure the engine" )
 
@@ -143,6 +143,3 @@ class Test(object):
         self.difficulty = difficulty
         self.passed = passed
         self.enabled = enabled
-
-
-

@@ -16,8 +16,8 @@ class ZapTestSuite(TestSuite):
 
     zap = None
     target_address = ""
-    target_http_port = None
-    target_https_port = None
+    port = None
+    https = False
     scan_active = False
 
     def start(self):
@@ -102,32 +102,26 @@ class ZapTestSuite(TestSuite):
 
         return True
 
-    def connect(self, address, http_port=None, https_port=None):
+    def connect(self, address, port=None, https=False):
         """
         Connect to the targetURL. ZAP can only connect to one target at the time, so this must be performed in the run
         function as well.
         """
 
         self.target_address = address
+        self.port = port
+        self.https = https
 
-        if https_port and len(https_port) > 0:
-            try:
-                self.zap.urlopen("https://" + address + ":" + http_port)
-                self.target_https_port = https_port
-            except ConnectionError as e:
-                print('Could not connect to', "https://" + address + ":" + http_port)
-                print(e)
-                return False
-
-        if http_port and len(http_port) > 0:
-            try:
-                self.zap.urlopen("http://" + address + ":" + http_port)
-                self.target_http_port = http_port
-            except ConnectionError as e:
-                print('Could not connect to', "http://" + address + ":" + http_port)
-                print(e)
-                return False
-
+        if https:
+            target = "https://" + address + ":" + _port
+        else:
+            target = "http://" + address + ":" + _port
+        try:
+                self.zap.urlopen(target)
+        except ConnectionError as e:
+            print('Could not connect to', target)
+            print(e)
+            return False
         return True
 
     def generate_test_list(self):
@@ -215,7 +209,6 @@ class ZapTestSuite(TestSuite):
         :return: Array of test objects
         :rtype: Array[Test...]
         """
-        self.scan_active = True
 
         self.scan_active = True
 
@@ -261,26 +254,27 @@ class ZapTestSuite(TestSuite):
             if scan["enabled"] == 'true':
                 print(scan)
                 print("")
-        # Run tests on https port
-        if self.target_https_port and self.scan_active:
-            self.zap.urlopen("https://" + self.target_address + ":" + self.target_https_port)
+        # Run tests on  port
+        if self.scan_active:
+            self.zap.urlopen(self.target)
 
             # RUN PASSIVE TESTS
-            print("Run Spider on port:", self.target_https_port)
-            https_spider = self.zap.spider.scan("https://" + self.target_address + ":" + self.target_https_port)
-            while (int(self.zap.spider.status(https_spider)) < 100) and self.scan_active:
+            print("Run Spider on port:", self.port)
+            spider = self.zap.spider.scan(self.target)
+            while (int(self.zap.spider.status(spider)) < 100) and self.scan_active:
                 print('Spider progress %: ' + self.zap.spider.status(https_spider))
                 time.sleep(0.1)
             # Give the passive tests a chance to finish
             time.sleep(4)
 
             # Run ACTIVE TESTS
-            print("Run active scan on port:", self.target_https_port)
-            https_scan = self.zap.ascan.scan("https://" + self.target_address + ":" + self.target_https_port)
-            while int(self.zap.ascan.status(https_scan)) < 100 and self.scan_active:
-                print('Scan progress %: ' + self.zap.ascan.status(https_scan))
+            print("Run active scan on port:", self.port)
+            scan = self.zap.ascan.scan(self.target)
+            while int(self.zap.ascan.status(scan)) < 100 and self.scan_active:
+                print('Scan progress %: ' + self.zap.ascan.status(scan))
                 time.sleep(3)
 
+        """
         # Run tests on http port
         if self.target_http_port and self.scan_active:
             self.zap.urlopen("http://" + self.target_address + ":" + self.target_http_port)
@@ -301,6 +295,7 @@ class ZapTestSuite(TestSuite):
             while int(self.zap.ascan.status(http_scan)) < 100 and self.scan_active:
                 print('Scan progress %: ' + self.zap.ascan.status(http_scan))
                 time.sleep(3)
+        """
 
         # Store the test results back into the tests list. In ZAP all tests ran on different targets are collected
         for index in range(len(tests)):
