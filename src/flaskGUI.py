@@ -144,7 +144,7 @@ def runTest(address, http_port, https_port):
         except Exception as e:
             # The SSLyze tool will only run when a HTTPS port is specified
             if testsuite.engine_name == "SSLyze" and not len(https_port):
-                testresults.extend(engine_tests)
+                test_results.extend(engine_tests)
             else:
                 return False
 
