@@ -39,10 +39,11 @@ class SSLyzeTestSuite(TestSuite):
             return False
         else:
         # Connect SSLyze to the specified target
+            port = int(port)
             try:
                 server_tester = ServerConnectivityTester(
                     hostname=address,
-                    port=int(port),
+                    port=port,
                     tls_wrapped_protocol=TlsWrappedProtocolEnum.HTTPS
                 )
                 print('Testing connectivity with', server_tester.hostname + ':' + str(server_tester.port))

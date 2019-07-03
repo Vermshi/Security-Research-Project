@@ -49,7 +49,7 @@ class ZapTestSuite(TestSuite):
                     pass
             else:
                 p = Popen(["owasp-zap", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
-                """target_https_port
+                """
                 try:
                     os.chdir("/usr/share/owasp-zap")
                     p = Popen(["java", "-jar", "zap-2.8.0.jar", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
@@ -106,7 +106,7 @@ class ZapTestSuite(TestSuite):
         function as well.
         """
 
-        self.target_address = scheme + "://" + address + ":" + port
+        self.target_address = scheme + "://" + address + ":" + str(port)
 
         try:
             self.zap.urlopen(self.target_address)
@@ -202,6 +202,9 @@ class ZapTestSuite(TestSuite):
         :return: Array of test objects
         :rtype: Array[Test...]
         """
+
+        print("=======================RUN TESTS=======================")
+
         self.scan_active = True
 
         # Activate only enabled tests
@@ -246,6 +249,8 @@ class ZapTestSuite(TestSuite):
             if scan["enabled"] == 'true':
                 print(scan)
                 print("")
+
+        self.zap.urlopen(self.target_address)
 
         # Run tests on https port
         if self.scan_active:
