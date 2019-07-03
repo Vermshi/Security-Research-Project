@@ -65,18 +65,22 @@ def displayTests():
             test.start()
 
             # Import policy
-            if(test.engine_name == "ZAP"):
-                test.import_policy(zap_policy, zap_policy_name)
+            #if(test.engine_name == "ZAP"):
+            #    test.import_policy(zap_policy, zap_policy_name)
 
-            time.sleep(3)
-            print("Tests for" + test.engine_name)
+            time.sleep(5)
+            print("Tests for " + test.engine_name)
             for t in test.generate_test_list():
-                print(t)
+                print(t.name)
                 tests.append(t)
+            print("===========================================================")
         testsDict = suiteToDict(tests)
+        print("=====================================KEYS=====================================")
         for key, value in testsDict.items():
             data[key] = value
+            print(key)
         testsLoaded = True
+        print("=====================================KEYS=====================================")
     return render_template('index.html', data = data, diff=difficulty, strength=strength, threshold=threshold)
 
 
@@ -261,9 +265,11 @@ def changeDifficulty(difficulty):
     print(data)
     print("======================DATA======================")
     print("======================TESTS======================")
-    print(tests)
+    for test in tests:
+        print(test.name)
     print("======================TESTS======================")
     for t in tests:
+        print(t.name)
         t.enabled = data[t.name]["enabled"]
 
 
