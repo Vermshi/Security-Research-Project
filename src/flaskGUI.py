@@ -5,6 +5,7 @@ import sys
 import time
 import math
 from flask import Flask, render_template, request, redirect, Response
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
@@ -67,8 +68,10 @@ def displayTests():
             if(test.engine_name == "ZAP"):
                 test.import_policy(zap_policy, zap_policy_name)
 
-            #time.sleep(3)
+            time.sleep(3)
+            print("Tests for" + test.engine_name)
             for t in test.generate_test_list():
+                print(t)
                 tests.append(t)
         testsDict = suiteToDict(tests)
         for key, value in testsDict.items():
@@ -82,19 +85,21 @@ def displayTests():
 def attack():
     fullAddress = request.form["attackAddress"]
 
-    # TODO: Handle format
-    https_port = request.form["HTTPSport"]
-
     if(len(fullAddress) == 0):
         return render_template('index.html', data=displayRightDifficulty(),
                                error="The attack address cannot be empty.", diff=difficulty, strength=strength, threshold=threshold)
     try:
-        address, http_port = fullAddress.split(":")
+         parse_object = urlparse(fullAddress)
+         scheme = parse_object.scheme
+         address = parse_object.hostname
+         port = parse_object.port
     except:
         return render_template('index.html', data=displayRightDifficulty(),
                                error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold)
 
-    elapsed_time, test_amount, vulnerabilities = runTest(address, http_port, https_port)
+    elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port)
+
+
     if(elapsed_time):
         return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities)
     else:
@@ -121,7 +126,7 @@ def reset():
 
 
 # Run all the tests against the different ports.
-def runTest(address, http_port, https_port):
+def runTest(scheme, address, port):
     global data
     global tests
     test_results = []
@@ -138,15 +143,14 @@ def runTest(address, http_port, https_port):
                 engine_tests.append(test)
 
         try:
-            testsuite.connect(address, http_port=http_port, https_port=https_port)
-            # Run tests
+            testsuite.connect(scheme, address, run_testport)
+            # Run testslen(https_port)
             test_results.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
         except Exception as e:
+
             # The SSLyze tool will only run when a HTTPS port is specified
-            if testsuite.engine_name == "SSLyze" and not len(https_port):
-                testresults.extend(engine_tests)
-            else:
-                return False
+            if testsuite.engine_name == "SSLyze" and scheme == "http":
+                test_results.extend(engine_tests)
 
     # Record statistics
     elapsed_time = math.ceil(time.time() - start_time)
@@ -253,6 +257,12 @@ def changeDifficulty(difficulty):
             else:
                 data[value]["enabled"] = False
 
+    print("======================DATA======================")
+    print(data)
+    print("======================DATA======================")
+    print("======================TESTS======================")
+    print(tests)
+    print("======================TESTS======================")
     for t in tests:
         t.enabled = data[t.name]["enabled"]
 

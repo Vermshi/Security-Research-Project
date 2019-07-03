@@ -41,20 +41,7 @@
             <h5>Target address and port number:</h5>
             <form method="post" action="/atc">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="localhost:63342" name="attackAddress"/>
-                <div id="displayHTTPS" style="display: none; ">
-                  <br>
-                  <br>
-                  <h5 style="color: red">Notice: HTTPS scanning is not a stable feature</h5>
-                  <h5>Target https port</h5>
-                  <input type="text" class="form-control" placeholder="8443" name="HTTPSport"/>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="useHTTPS" onclick='toggleUseHTTPS()'>
-                  <label class="form-check-label" for="useHTTPS" style="font-weight: normal !important;">
-                    Use HTTPS
-                  </label>
-                </div>
+                <input type="text" class="form-control" placeholder="http://localhost:63342" name="attackAddress"/>
                 <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
                   <span class="glyphicon glyphicon-education "></span> Attack!
                 </button>
@@ -249,17 +236,5 @@
       }
     }
 
-    function toggleUseHTTPS(){
-      HTTPSdisplay = document.getElementById("displayHTTPS");
-      console.log(HTTPSdisplay.style.display);
-      if( HTTPSdisplay.style.display == "block"){
-        HTTPSdisplay.style.display = "none";
-
-
-      }
-      else{
-        HTTPSdisplay.style.display = "block"
-      }
-    }
   </script>
   </html>

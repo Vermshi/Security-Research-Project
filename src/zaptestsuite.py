@@ -16,8 +16,6 @@ class ZapTestSuite(TestSuite):
 
     zap = None
     target_address = ""
-    target_http_port = None
-    target_https_port = None
     scan_active = False
 
     def start(self):
@@ -51,7 +49,7 @@ class ZapTestSuite(TestSuite):
                     pass
             else:
                 p = Popen(["owasp-zap", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
-                """
+                """target_https_port
                 try:
                     os.chdir("/usr/share/owasp-zap")
                     p = Popen(["java", "-jar", "zap-2.8.0.jar", "-dir", ".", "-daemon", "-port", proxy_port, "-config", ("api.key="+str(api_key))], stdout=PIPE, stderr=STDOUT)
@@ -102,31 +100,20 @@ class ZapTestSuite(TestSuite):
 
         return True
 
-    def connect(self, address, http_port=None, https_port=None):
+    def connect(self, scheme, address, port):
         """
         Connect to the targetURL. ZAP can only connect to one target at the time, so this must be performed in the run
         function as well.
         """
 
-        self.target_address = address
+        self.target_address = scheme + "://" + address + ":" + port
 
-        if https_port and len(https_port) > 0:
-            try:
-                self.zap.urlopen("https://" + address + ":" + http_port)
-                self.target_https_port = https_port
-            except ConnectionError as e:
-                print('Could not connect to', "https://" + address + ":" + http_port)
-                print(e)
-                return False
-
-        if http_port and len(http_port) > 0:
-            try:
-                self.zap.urlopen("http://" + address + ":" + http_port)
-                self.target_http_port = http_port
-            except ConnectionError as e:
-                print('Could not connect to', "http://" + address + ":" + http_port)
-                print(e)
-                return False
+        try:
+            self.zap.urlopen(self.target_address)
+        except ConnectionError as e:
+            print('Could not connect to', self.target_address)
+            print(e)
+            return False
 
         return True
 
@@ -217,8 +204,6 @@ class ZapTestSuite(TestSuite):
         """
         self.scan_active = True
 
-        self.scan_active = True
-
         # Activate only enabled tests
         self.zap.ascan.disable_all_scanners()
         self.zap.pscan.disable_all_scanners()
@@ -261,13 +246,12 @@ class ZapTestSuite(TestSuite):
             if scan["enabled"] == 'true':
                 print(scan)
                 print("")
-        # Run tests on https port
-        if self.target_https_port and self.scan_active:
-            self.zap.urlopen("https://" + self.target_address + ":" + self.target_https_port)
 
+        # Run tests on https port
+        if self.scan_active:
             # RUN PASSIVE TESTS
-            print("Run Spider on port:", self.target_https_port)
-            https_spider = self.zap.spider.scan("https://" + self.target_address + ":" + self.target_https_port)
+            print("Run Spider on:", self.target_address)
+            https_spider = self.zap.spider.scan(self.target_address)
             while (int(self.zap.spider.status(https_spider)) < 100) and self.scan_active:
                 print('Spider progress %: ' + self.zap.spider.status(https_spider))
                 time.sleep(0.1)
@@ -275,31 +259,10 @@ class ZapTestSuite(TestSuite):
             time.sleep(4)
 
             # Run ACTIVE TESTS
-            print("Run active scan on port:", self.target_https_port)
-            https_scan = self.zap.ascan.scan("https://" + self.target_address + ":" + self.target_https_port)
+            print("Run active scan on port:", self.target_address)
+            https_scan = self.zap.ascan.scan(self.target_address)
             while int(self.zap.ascan.status(https_scan)) < 100 and self.scan_active:
                 print('Scan progress %: ' + self.zap.ascan.status(https_scan))
-                time.sleep(3)
-
-        # Run tests on http port
-        if self.target_http_port and self.scan_active:
-            self.zap.urlopen("http://" + self.target_address + ":" + self.target_http_port)
-
-            # RUN PASSIVE TESTS
-            print("Run Spider on port:", self.target_http_port)
-            http_spider = self.zap.spider.scan("http://" + self.target_address + ":" + self.target_http_port)
-
-            while (int(self.zap.spider.status(http_spider)) < 100) and self.scan_active:
-                print('Spider progress %: ' + self.zap.spider.status(http_spider))
-                time.sleep(0.1)
-            # Give the passive tests a chance to finish
-            time.sleep(4)
-
-            # Run ACTIVE TESTS
-            print("Run active scan on port:", self.target_http_port)
-            http_scan = self.zap.ascan.scan("http://" + self.target_address + ":" + self.target_http_port)
-            while int(self.zap.ascan.status(http_scan)) < 100 and self.scan_active:
-                print('Scan progress %: ' + self.zap.ascan.status(http_scan))
                 time.sleep(3)
 
         # Store the test results back into the tests list. In ZAP all tests ran on different targets are collected
