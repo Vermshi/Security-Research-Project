@@ -35,13 +35,24 @@ class TestServerCode(object):
         os.close(db_fd)
         os.unlink(flaskGUI.app.config['DATABASE'])
 
+    # Test if the page and engines launches
     def test_load(self, client):
         response = self.load(client)
         assert response.status_code == 200
 
+    # Launch app
     def load(self, client):
         return client.get('/', follow_redirects=True)
 
+    # Run application attacks against a target url
+    def test_attack(self, client):
+        if self.real_target == None:
+            return False
+        response = self.attack(client, self.real_target)
+        assert response.status_code == 200
+
+    def attack(self, client, target):
+        return client.post('/atc', data=dict(attackAddress=target), follow_redirects=True)
 
     def main(self):
         # extract your arg here

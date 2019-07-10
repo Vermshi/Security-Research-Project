@@ -91,7 +91,7 @@ def attack():
 
     if(len(fullAddress) == 0):
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="The attack address cannot be empty.", diff=difficulty, strength=strength, threshold=threshold)
+                               error="The attack address cannot be empty.", diff=difficulty, strength=strength, threshold=threshold), 201
     try:
          parse_object = urlparse(fullAddress)
          scheme = parse_object.scheme
@@ -99,15 +99,13 @@ def attack():
          port = parse_object.port
     except:
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold)
+                               error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold), 201
 
-    elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port)
-
-
-    if(elapsed_time):
+    try:
+        elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port)
         return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities)
-    else:
-        return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold)
+    except:
+        return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold), 201
 
 
 # Stop all engines
@@ -148,11 +146,11 @@ def runTest(scheme, address, port):
 
         try:
             testsuite.connect(scheme, address, port)
-        except:
+        except Exception as e:
             if testsuite.engine_name == "SSLyze" and scheme == "http":
                 pass
             else:
-                return render_template('index.html', data=displayRightDifficulty(), error=e, diff=difficulty, strength=strength, threshold=threshold)
+                return render_template('index.html', data=displayRightDifficulty(), error=e, diff=difficulty, strength=strength, threshold=threshold), 201
 
         try:
             # Run tests
@@ -162,8 +160,12 @@ def runTest(scheme, address, port):
             print(e)
 
             # The SSLyze tool will only run when a HTTPS port is specified
+
             if testsuite.engine_name == "SSLyze" and scheme == "http":
                 test_results.extend(engine_tests)
+            else:
+                return render_template('index.html', data=displayRightDifficulty(), error=e, diff=difficulty, strength=strength, threshold=threshold), 201
+
 
     # Record statistics
     elapsed_time = math.ceil(time.time() - start_time)
