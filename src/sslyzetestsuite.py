@@ -28,34 +28,31 @@ class SSLyzeTestSuite(TestSuite):
         print("SSLyze does not require to start since it is a python module")
         return True
 
-    def connect(self, address, http_port=None, https_port=None):
+    def connect(self, scheme, address, port):
         """
 
         :param targetURL:
         :return:
         """
-        if http_port:
+        if scheme == "http":
             print("SSLyze cannot scan a http port")
-
-        if https_port is None or len(https_port) == 0:
-            print("https port not specified, SSLyze only runs on https")
             return False
+        else:
         # Connect SSLyze to the specified target
-        host = address
-        port = int(https_port)
-        try:
-            server_tester = ServerConnectivityTester(
-                hostname=host,
-                port=port,
-                tls_wrapped_protocol=TlsWrappedProtocolEnum.HTTPS
-            )
-            print('Testing connectivity with', server_tester.hostname + ':' + str(server_tester.port))
-            self.server_info = server_tester.perform()
-            return True
-        except ServerConnectivityError as e:
-            # Could not establish an SSL connection to the server
-            print('Could not connect to', e.server_info.hostname, e.error_message)
-            return False
+            port = int(port)
+            try:
+                server_tester = ServerConnectivityTester(
+                    hostname=address,
+                    port=port,
+                    tls_wrapped_protocol=TlsWrappedProtocolEnum.HTTPS
+                )
+                print('Testing connectivity with', server_tester.hostname + ':' + str(server_tester.port))
+                self.server_info = server_tester.perform()
+                return True
+            except ServerConnectivityError as e:
+                # Could not establish an SSL connection to the server
+                print('Could not connect to', e.server_info.hostname, e.error_message)
+                return False
 
     def generate_test_list(self):
         """
