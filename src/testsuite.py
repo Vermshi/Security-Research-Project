@@ -38,12 +38,13 @@ class TestSuite(object):
         Run all configurations necessary to perform a test against the target. This function is mean to set up
         the connection to the target. The function should work for one or two specified ports if supported by engine
 
-        :param address: Target IP or address
-        :type address: str
-        :param http_port: Target http port
-        :type http_port: str
-        :param https_port: Target https port
-        :type https_port: str
+        :param scheme: http or https
+        :type scheme: str
+        :param: address
+        :type: str 
+        :param port:
+        :type str: 
+    
         """
         raise NotImplementedError( "Should have implemented a method to configure the engine" )
 
@@ -125,7 +126,7 @@ class Test(object):
     :type vulnerability: str
     :param mode: This field for metadata can be used by the engine to separate different categories
     :type mode: str
-    :param difficulty: An int in the range 0-2 to describe the simplicity of a test
+    :param difficulty: An int in the range 0-4 to describe how advanced the test is
     :type difficulty: int
     :param passed: Determines whether the test was passed
     :type passed: bool

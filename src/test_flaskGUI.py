@@ -54,8 +54,22 @@ class TestServerCode(object):
     def attack(self, client, target):
         return client.post('/atc', data=dict(attackAddress=target), follow_redirects=True)
 
-    def main(self):
-        # extract your arg here
-        print('Extracted arg is ==> %s' % sys.argv[2])
-        pytest.main([sys.argv[1]])
 
+    def check_change(self, client):
+        return client.post('/check-change', data=dict(check=True), follow_redirects=True) 
+
+#    def auto_enable(self, client):
+
+#    def diff_change(self, client):
+
+
+    def test_difficulty(self, client):
+        response = self.check_change(client)
+        assert b'0' in response.data["diff"]
+        assert b'2' in response.data["strength"]
+
+
+    def main(self):
+        # extract target from command line
+        print('Extracted arg is ==> %s' % sys.argv[1])
+        pytest.main([sys.argv[1]])

@@ -41,7 +41,7 @@
             <h5>Target address and port number:</h5>
             <form method="post" action="/atc">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="http://localhost:63342" name="attackAddress"/>
+                <input type="text" class="form-control" placeholder="http(s)://localhost:63342" name="attackAddress"/>
                 <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
                   <span class="glyphicon glyphicon-education "></span> Attack!
                 </button>
@@ -61,7 +61,7 @@
           <div id="settings">
                 <h3>Control Panel</h3>
                 <form id="selectForm" class="wrapit" action="/diff-change" method="post">
-                  <span for="selectDiv">Difficulty - Amount of tests:</span>
+                  <span for="selectDiv">Amount of tests:</span>
 
                   <select name="diffSelect" onchange="document.getElementById('selectForm').submit()" class="form-control"  id="diffSelect" style="background-color: #7a8ca8; border-color:#7a8ca8; color: black; ">&nbsp;
                     {% if diff == 0 %}

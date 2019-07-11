@@ -20,15 +20,17 @@ testsuites.append(ZapTestSuite("ZAP"))
 testsuites.append(SSLyzeTestSuite("SSLyze"))
 tests = []
 testsLoaded = False
-difficulty = 4
+difficulty = 0
 strength = 2
 threshold = 0
 zap_policy = "testpolicy.xml"
 zap_policy_name = "test_policy4"
 
 
-# Convert python test object to dictionary
 def suiteToDict(suits):
+    """
+    Convert python test object to dictionary
+    """
     testDict = {}
     for test in suits:
         x = {}
@@ -58,6 +60,9 @@ def reDirect():
 # Show all the tests of each test suite with the generate_test_list function as defined in the testsuite interface
 @app.route('/')
 def displayTests():
+    """
+    Load main page, show all tests
+    """
     global testsLoaded
     if (testsLoaded == False):
         for test in testsuites:
@@ -68,25 +73,21 @@ def displayTests():
             #if(test.engine_name == "ZAP"):
             #    test.import_policy(zap_policy, zap_policy_name)
 
-            time.sleep(5)
-            print("Tests for " + test.engine_name)
+            #time.sleep(5)
             for t in test.generate_test_list():
-                print(t.name)
                 tests.append(t)
-            print("===========================================================")
         testsDict = suiteToDict(tests)
-        print("=====================================KEYS=====================================")
         for key, value in testsDict.items():
             data[key] = value
-            print(key)
         testsLoaded = True
-        print("=====================================KEYS=====================================")
-    return render_template('index.html', data = data, diff=difficulty, strength=strength, threshold=threshold)
+    return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-# Launch all enabled tests against target address
 @app.route('/atc', methods=['POST'])
 def attack():
+    """
+    Launch all enabled tests against target address
+    """
     fullAddress = request.form["attackAddress"]
 
     if(len(fullAddress) == 0):
@@ -108,18 +109,22 @@ def attack():
         return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold), 201
 
 
-# Stop all engines
 @app.route('/stop', methods=['POST'])
 def stop():
+    """
+    Stop a running test
+    """
     for testsuite in testsuites:
         print("Stopping", testsuite.engine_name)
         testsuite.stop()
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-# Restart all engines
 @app.route('/reset', methods=['POST'])
 def reset():
+    """
+    Reset the test engines
+    """
     for testsuite in testsuites:
         print("Restarting", testsuite.engine_name)
         testsuite.shutdown()
@@ -127,8 +132,18 @@ def reset():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-# Run all the tests against the different ports.
 def runTest(scheme, address, port):
+    """
+    Run all the tests against the target.
+
+    :param scheme: http or https
+    :type scheme: str
+    :param: address
+    :type: str 
+    :param port:
+    :type str: 
+    """
+
     global data
     global tests
     test_results = []
@@ -144,28 +159,25 @@ def runTest(scheme, address, port):
             if testsuite.engine_name == test.engine:
                 engine_tests.append(test)
 
+        # Connect to keytarget
         try:
             testsuite.connect(scheme, address, port)
         except Exception as e:
+            # The SSLyze tool will only run when a HTTPS port is specified
             if testsuite.engine_name == "SSLyze" and scheme == "http":
                 pass
             else:
                 return render_template('index.html', data=displayRightDifficulty(), error=e, diff=difficulty, strength=strength, threshold=threshold), 201
 
+        # Run tests
         try:
-            # Run tests
             test_results.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
         except Exception as e:
-            print("======ERROR======")
-            print(e)
-
             # The SSLyze tool will only run when a HTTPS port is specified
-
             if testsuite.engine_name == "SSLyze" and scheme == "http":
                 test_results.extend(engine_tests)
             else:
                 return render_template('index.html', data=displayRightDifficulty(), error=e, diff=difficulty, strength=strength, threshold=threshold), 201
-
 
     # Record statistics
     elapsed_time = math.ceil(time.time() - start_time)
@@ -175,6 +187,7 @@ def runTest(scheme, address, port):
             if not test.passed:
                 vulnerabilities += 1
 
+    # Save the test results
     res = suiteToDict(test_results)
     data = res
     changeDifficulty(difficulty)
@@ -183,8 +196,11 @@ def runTest(scheme, address, port):
 
 @app.route('/check-change', methods=['POST'])
 def checkChange():
+    """
+    Check if tests are enabled
+    """
     check = request.form.getlist('check')
-    for key, value in enumerate(data):
+    for value in data:
         if(value in check):
             data[value]["enabled"] = True
         else:
@@ -194,9 +210,11 @@ def checkChange():
 
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
-
 @app.route('/auto-enable', methods=['POST'])
 def enableDisableAll():
+    """
+    Enable or disable all tests
+    """
     global difficulty
     val = request.form["sortAll"]
     if(val == "1"):
@@ -237,74 +255,64 @@ def enableDisableAll():
 
 def changeDifficulty(difficulty):
     if(difficulty == 0):
-        for key, value in enumerate(data):
+        for value in data:
             if(data[value]["difficulty"] == 0):
                 pass
-                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 1):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1):
                 pass
-                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 2):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2):
                 pass
-                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 3):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
                 pass
-                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 4):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3 or data[value]["difficulty"] == 4):
                 pass
-                # data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
 
-    print("======================DATA======================")
-    print(data)
-    print("======================DATA======================")
-    print("======================TESTS======================")
-    for test in tests:
-        print(test.name)
-    print("======================TESTS======================")
     for t in tests:
-        print(t.name)
         t.enabled = data[t.name]["enabled"]
 
 
 def displayRightDifficulty():
+    """
+    Get the correct difficulty for the application
+    """
     displayDict = {}
     global difficulty
     if (difficulty == 0):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0):
                 displayDict[value] = data[value]
     elif (difficulty == 1):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1):
                 displayDict[value] = data[value]
     elif (difficulty == 2):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2):
                 displayDict[value] = data[value]
     elif (difficulty == 3):
-        for key, value in enumerate(data):
+        for value in data:
             if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
                 displayDict[value] = data[value]
     elif (difficulty == 4):
-        for key, value in enumerate(data):
+        for value in data:
                 displayDict[value] = data[value]
     return displayDict
 
