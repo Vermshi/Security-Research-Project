@@ -48,7 +48,7 @@ class TestSuite(object):
         """
         raise NotImplementedError( "Should have implemented a method to configure the engine" )
 
-    def generate_test_list(self):
+    def generate_test_list(self, testfile):
         """
         This function must make a array of Test objects representing each of the tests that can be executed by the
         engine. The list must be compatible for the run_tests function

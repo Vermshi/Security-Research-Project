@@ -84,7 +84,6 @@ class ZapTestSuite(TestSuite):
                                                             'https': proxy_address + ':' + proxy_port})
 
         # Install addons
-
         # print(self.zap.autoupdate.marketplace_addons)
 
         try:
@@ -117,7 +116,7 @@ class ZapTestSuite(TestSuite):
 
         return True
 
-    def generate_test_list(self):
+    def generate_test_list(self, testfile='tests.csv'):
         """
         This function must make a array of Test objects representing each of the tests that can be executed by the engine.
         The list must be compatible for the run_tests function
@@ -128,7 +127,7 @@ class ZapTestSuite(TestSuite):
 
         tests = []
 
-        test_dictionary = self.get_tests_from_file("tests.csv", self.engine_name)
+        test_dictionary = self.get_tests_from_file(testfile, self.engine_name)
 
         for scan in self.zap.pscan.scanners:
             try:
@@ -163,7 +162,7 @@ class ZapTestSuite(TestSuite):
                     enabled=(scan['enabled'] == 'true')
             ))
             except:
-                # print("Test", scan["name"], "not found in tests.csv file")
+                print("Test", scan["name"], "not found in tests.csv file")
                 continue
 
         return tests
