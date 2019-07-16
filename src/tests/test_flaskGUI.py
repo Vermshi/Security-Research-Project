@@ -24,24 +24,24 @@ class TestServerCode(object):
 
     @pytest.fixture
     def client(self):
-        db_fd, flaskGUI.app.config['DATABASE'] = tempfile.mkstemp()
-        flaskGUI.app.config['TESTING'] = True
-        client = flaskGUI.app.test_client()
+        db_fd, flaskGUI.application.config['DATABASE'] = tempfile.mkstemp()
+        flaskGUI.application.config['TESTING'] = True
+        client = flaskGUI.application.test_client()
 
-        #with flaskGUI.app.app_context():
+        #with flaskGUI.application.app_context():
         #    flaskGUI.init_db()
 
         yield client
 
         os.close(db_fd)
-        os.unlink(flaskGUI.app.config['DATABASE'])
+        os.unlink(flaskGUI.application.config['DATABASE'])
 
     # Test if the page and engines launches
     def test_load(self, client):
         response = self.load(client)
         assert response.status_code == 200
 
-    # Launch app
+    # Launch application
     def load(self, client):
         return client.get('/', follow_redirects=True)
 

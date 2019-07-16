@@ -72,5 +72,5 @@ RUN apt-get -y install owasp-zap
 RUN chmod +x /usr/share/owasp-zap/zap-2.8.0.jar
 RUN apt-get -y upgrade && apt-get install -y gcc && pip --version && apt-get install libffi-dev && apt-get install openssl && pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
-CMD python ./flaskGUI.py
+CMD python -m gunicorn -b 0.0.0.0:90 flaskGUI -t 100
 

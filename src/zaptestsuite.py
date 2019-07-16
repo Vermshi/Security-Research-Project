@@ -125,12 +125,18 @@ class ZapTestSuite(TestSuite):
         :rtype: Array[Test...]
         """
 
+
         tests = []
 
         test_dictionary = self.get_tests_from_file(testfile, self.engine_name)
 
         for scan in self.zap.pscan.scanners:
             try:
+                """if test_dictionary[scan['name']][1] == 0:
+                    self.zap.pscan.enable_scanners(scan['id'])
+                else:
+                    self.zap.ascan.disable_scanners(scan['id'])
+                """
                 tests.append(Test(
                     name=scan['name'],
                     testid=scan['id'],
@@ -148,8 +154,12 @@ class ZapTestSuite(TestSuite):
                 continue
 
         for scan in self.zap.ascan.scanners():
-
             try:
+                """if test_dictionary[scan['name']][1] == 0:
+                    self.zap.ascan.enable_scanners(scan['id'])
+                else:
+                    self.zap.ascan.disable_scanners(scan['id'])
+                """
                 tests.append(Test(
                     name=scan['name'],
                     testid=scan['id'],
@@ -230,8 +240,6 @@ class ZapTestSuite(TestSuite):
                 else:
                     self.zap.ascan.disable_scanners(test.testid)
                     print("DISABLED", test.name)
-
-        # TODO: Contains spaghetti code below?
 
         print("Policy")
         print(self.zap.ascan.policies())

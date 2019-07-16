@@ -3,3 +3,4 @@ cryptography==2.5
 psutil
 sslyze
 flask
+gunicorn

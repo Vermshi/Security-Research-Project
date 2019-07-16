@@ -7,7 +7,7 @@ import math
 from flask import Flask, render_template, request, redirect, Response
 from urllib.parse import urlparse
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # data dictionary contains all the tests from all the testsuites
 # variables:
@@ -44,13 +44,13 @@ def suiteToDict(suits):
     return testDict
 
 
-@app.route('/atc')
-@app.route('/reset')
-@app.route('/stop')
-@app.route('/check-change')
-@app.route('/auto-enable')
-@app.route('/diff-change')
-@app.route('/strength-change')
+@application.route('/atc')
+@application.route('/reset')
+@application.route('/stop')
+@application.route('/check-change')
+@application.route('/auto-enable')
+@application.route('/diff-change')
+@application.route('/strength-change')
 
 
 def reDirect():
@@ -58,12 +58,13 @@ def reDirect():
 
 
 # Show all the tests of each test suite with the generate_test_list function as defined in the testsuite interface
-@app.route('/')
+@application.route('/')
 def displayTests():
     """
     Load main page, show all tests
     """
     global testsLoaded
+    global data
     if (testsLoaded == False):
         for test in testsuites:
             print("The tests are loading ...")
@@ -79,11 +80,15 @@ def displayTests():
         testsDict = suiteToDict(tests)
         for key, value in testsDict.items():
             data[key] = value
+
+        disableAll()
+        changeDifficulty(difficulty)
+        enableAll()
         testsLoaded = True
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-@app.route('/atc', methods=['POST'])
+@application.route('/atc', methods=['POST'])
 def attack():
     """
     Launch all enabled tests against target address
@@ -109,7 +114,7 @@ def attack():
         return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold), 201
 
 
-@app.route('/stop', methods=['POST'])
+@application.route('/stop', methods=['POST'])
 def stop():
     """
     Stop a running test
@@ -120,7 +125,7 @@ def stop():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-@app.route('/reset', methods=['POST'])
+@application.route('/reset', methods=['POST'])
 def reset():
     """
     Reset the test engines
@@ -190,11 +195,10 @@ def runTest(scheme, address, port):
     # Save the test results
     res = suiteToDict(test_results)
     data = res
-    changeDifficulty(difficulty)
     return elapsed_time, test_amount, vulnerabilities
 
 
-@app.route('/check-change', methods=['POST'])
+@application.route('/check-change', methods=['POST'])
 def checkChange():
     """
     Check if tests are enabled
@@ -210,41 +214,20 @@ def checkChange():
 
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
-@app.route('/auto-enable', methods=['POST'])
+@application.route('/auto-enable', methods=['POST'])
 def enableDisableAll():
     """
     Enable or disable all tests
     """
-    global difficulty
+    global data
     val = request.form["sortAll"]
     if(val == "1"):
-        if (difficulty == 0):
-            for key, value in enumerate(data):
-                if (data[value]["difficulty"] == 0):
-                    data[value]["enabled"] = True
-        elif (difficulty == 1):
-            for key, value in enumerate(data):
-                if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1):
-                    data[value]["enabled"] = True
-        elif (difficulty == 2):
-            for key, value in enumerate(data):
-                if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2):
-                    data[value]["enabled"] = True
-        elif (difficulty == 3):
-            for key, value in enumerate(data):
-                if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
-                    data[value]["enabled"] = True
-        elif (difficulty == 4):
-            for key, value in enumerate(data):
-                data[value]["enabled"] = True
+        enableAll()
 
     elif(val == "2"):
-        for key, value in enumerate(data):
-            data[value]["enabled"] = False
+        disableAll()
     elif(val == "3"):
-        for key, value in enumerate(data):
-            if(data[value]["passed"]):
-                data[value]["enabled"] = False
+        disablePassed()
     else:
         return render_template('index.html', data=displayRightDifficulty(),
                                error="Suspicious POST request received, hmmm", diff=difficulty, strength=strength, threshold=threshold)
@@ -252,36 +235,69 @@ def enableDisableAll():
         t.enabled = data[t.name]["enabled"]
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
+def disablePassed():
+    global data
+    for value in data:
+        if(data[value]["passed"]):
+            data[value]["enabled"] = False
+
+def disableAll():
+    global data
+    for value in data:
+            data[value]["enabled"] = False
+
+def enableAll():
+    global difficulty
+    global data
+    if (difficulty == 0):
+        for value in data:
+            if (data[value]["difficulty"] == 0):
+                data[value]["enabled"] = True
+    elif (difficulty == 1):
+        for value in data:
+            if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1):
+                data[value]["enabled"] = True
+    elif (difficulty == 2):
+        for value in data:
+            if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2):
+                data[value]["enabled"] = True
+    elif (difficulty == 3):
+        for value in data:
+            if (data[value]["difficulty"] == 0 or data[value]["difficulty"] == 1 or data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
+                data[value]["enabled"] = True
+    elif (difficulty == 4):
+        for value in data:
+            data[value]["enabled"] = True
 
 def changeDifficulty(difficulty):
     if(difficulty == 0):
         for value in data:
             if(data[value]["difficulty"] == 0):
-                pass
+                data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 1):
         for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1):
-                pass
+                data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 2):
         for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2):
-                pass
+                data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 3):
         for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3):
-                pass
+                data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
     elif(difficulty == 4):
         for value in data:
             if (data[value]["difficulty"] == 0  or  data[value]["difficulty"] == 1 or  data[value]["difficulty"] == 2 or data[value]["difficulty"] == 3 or data[value]["difficulty"] == 4):
-                pass
+                data[value]["enabled"] = True
             else:
                 data[value]["enabled"] = False
 
@@ -317,7 +333,7 @@ def displayRightDifficulty():
     return displayDict
 
 
-@app.route('/diff-change', methods=['POST'])
+@application.route('/diff-change', methods=['POST'])
 def selectChange():
     global difficulty
     diffSelect = request.form["diffSelect"]
@@ -335,7 +351,7 @@ def selectChange():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-@app.route('/strength-change' , methods=['POST'])
+@application.route('/strength-change' , methods=['POST'])
 def selectStrength():
         global strength
         global threshold
@@ -365,4 +381,4 @@ def selectStrength():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+    application.run(host="0.0.0.0", debug=True)
