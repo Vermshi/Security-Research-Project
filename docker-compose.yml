@@ -3,7 +3,7 @@ services:
   product-service:
     build: ./src
     ports:
-      - 5000:5000
+      - 90:90
 
 
     
