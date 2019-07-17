@@ -54,13 +54,13 @@ class SSLyzeTestSuite(TestSuite):
                 print('Could not connect to', e.server_info.hostname, e.error_message)
                 return False
 
-    def generate_test_list(self):
+    def generate_test_list(self, testfile='tests.csv'):
         """
 
         :return:
         """
 
-        test_dictionary = self.get_tests_from_file("tests.csv", self.engine_name)
+        test_dictionary = self.get_tests_from_file(testfile, self.engine_name)
 
         tests = []
         for i, plugin in enumerate(PluginsRepository._PLUGIN_CLASSES):
