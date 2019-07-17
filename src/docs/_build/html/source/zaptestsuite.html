@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -38,20 +39,16 @@
 <em class="property">class </em><code class="descclassname">zaptestsuite.</code><code class="descname">ZapTestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="testsuite.html#testsuite.TestSuite" title="testsuite.TestSuite"><code class="xref py py-class docutils literal notranslate"><span class="pre">testsuite.TestSuite</span></code></a></p>
 <p>Module to automate use of ZAP and its API</p>
-<dl class="attribute">
-<dt id="zaptestsuite.ZapTestSuite.api_key">
-<code class="descname">api_key</code><em class="property"> = None</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.api_key" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
-<dt id="zaptestsuite.ZapTestSuite.configure">
-<code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.configure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Connect python to the ZAP proxy</p>
+<dt id="zaptestsuite.ZapTestSuite.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>scheme</em>, <em>address</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the targetURL. ZAP can only connect to one target at the time, so this must be performed in the run
+function as well.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="zaptestsuite.ZapTestSuite.generate_test_list">
-<code class="descname">generate_test_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.generate_test_list" title="Permalink to this definition">¶</a></dt>
+<code class="descname">generate_test_list</code><span class="sig-paren">(</span><em>testfile='tests.csv'</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.generate_test_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function must make a array of Test objects representing each of the tests that can be executed by the engine.
 The list must be compatible for the run_tests function</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -68,7 +65,7 @@ The list must be compatible for the run_tests function</p>
 
 <dl class="method">
 <dt id="zaptestsuite.ZapTestSuite.import_policy">
-<code class="descname">import_policy</code><span class="sig-paren">(</span><em>path</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.import_policy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">import_policy</code><span class="sig-paren">(</span><em>file='testpolicy.xml'</em>, <em>name='testpolicy'</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.import_policy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Import testing policy from file. This makes the initial configuration of which tests that are enabled.
 As well as other policies such as strength and sensitivity</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -85,39 +82,34 @@ As well as other policies such as strength and sensitivity</p>
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="zaptestsuite.ZapTestSuite.proxy_address">
-<code class="descname">proxy_address</code><em class="property"> = '127.0.0.1'</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.proxy_address" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="zaptestsuite.ZapTestSuite.proxy_port">
-<code class="descname">proxy_port</code><em class="property"> = '7576'</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.proxy_port" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="zaptestsuite.ZapTestSuite.run_tests">
-<code class="descname">run_tests</code><span class="sig-paren">(</span><em>tests</em>, <em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_tests</code><span class="sig-paren">(</span><em>tests</em><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run all enabled tests against the target url. The Test objects within the tests array describes each test.
 The array should be changed according to how the outcome of the tests are and returned</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>tests</strong> (<em>Array</em><em>[</em><em>Test...</em><em>]</em>) – Array of Test objects</li>
-<li><strong>targetURL</strong> (<em>str</em>) – The target including address and port</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tests</strong> (<em>Array</em><em>[</em><em>Test...</em><em>]</em>) – Array of Test objects</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array of test objects</p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of test objects</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Array[Test…]</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Array[Test…]</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="zaptestsuite.ZapTestSuite.scan_active">
+<code class="descname">scan_active</code><em class="property"> = False</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.scan_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="zaptestsuite.ZapTestSuite.shutdown">
+<code class="descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Properly shut down the zap engine</p>
 </dd></dl>
 
 <dl class="method">
@@ -125,6 +117,17 @@ The array should be changed according to how the outcome of the tests are and re
 <code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start the ZAP engine in the background</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="zaptestsuite.ZapTestSuite.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zaptestsuite.ZapTestSuite.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop all running tests</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="zaptestsuite.ZapTestSuite.target_address">
+<code class="descname">target_address</code><em class="property"> = ''</em><a class="headerlink" href="#zaptestsuite.ZapTestSuite.target_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="zaptestsuite.ZapTestSuite.zap">
@@ -188,7 +191,7 @@ The array should be changed according to how the outcome of the tests are and re
       &copy;2018, jakob & shivam.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,8 +4,7 @@ src
 .. toctree::
    :maxdepth: 4
 
-   demo_scanner
-   main2
+   flaskGUI
    sslyzetestsuite
    testsuite
    zaptestsuite

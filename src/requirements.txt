@@ -4,3 +4,4 @@ psutil
 sslyze
 flask
 gunicorn
+pytest

@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -38,17 +39,35 @@
 <em class="property">class </em><code class="descclassname">sslyzetestsuite.</code><code class="descname">SSLyzeTestSuite</code><span class="sig-paren">(</span><em>engine_name='Custom Engine'</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="testsuite.html#testsuite.TestSuite" title="testsuite.TestSuite"><code class="xref py py-class docutils literal notranslate"><span class="pre">testsuite.TestSuite</span></code></a></p>
 <dl class="method">
-<dt id="sslyzetestsuite.SSLyzeTestSuite.configure">
-<code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.configure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run all configurations necessary to perform a test against the target.
-This function is mean to set up proxies or perform other configurations to the engine.</p>
+<dt id="sslyzetestsuite.SSLyzeTestSuite.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>scheme</em>, <em>address</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all configurations necessary to perform a test against the target. This function is mean to set up
+the connection to the target. The function should work for one or two specified ports if supported by engine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>scheme</strong> (<em>str</em>) – http or https</li>
+<li><strong>port</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body"><p class="first">address</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="sslyzetestsuite.SSLyzeTestSuite.generate_test_list">
-<code class="descname">generate_test_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.generate_test_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function must make a array of Test objects representing each of the tests that can be executed by the engine.
-The list must be compatible for the run_tests function</p>
+<code class="descname">generate_test_list</code><span class="sig-paren">(</span><em>testfile='tests.csv'</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.generate_test_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function must make a array of Test objects representing each of the tests that can be executed by the
+engine. The list must be compatible for the run_tests function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -81,10 +100,112 @@ As well as other policies such as strength and sensitivity</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_certificate_info_secure">
+<code class="descname">is_certificate_info_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_certificate_info_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if certificate info is secure
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_compression_secure">
+<code class="descname">is_compression_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_compression_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if compression is performed securely
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_early_data_secure">
+<code class="descname">is_early_data_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_early_data_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if th early data plugin is supported
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_fallback_scsv_secure">
+<code class="descname">is_fallback_scsv_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_fallback_scsv_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the fallback function used is secure
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_heartbleed_secure">
+<code class="descname">is_heartbleed_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_heartbleed_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true the application is secure from hearthbleed vulnerability
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_http_headers_secure">
+<code class="descname">is_http_headers_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_http_headers_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the http headers are secure
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_open_ssl_cihper_suites_secure">
+<code class="descname">is_open_ssl_cihper_suites_secure</code><span class="sig-paren">(</span><em>command</em>, <em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_open_ssl_cihper_suites_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the given result shows a secure cipher suite, else return false</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>command</strong> – Transport layer protocol</li>
+<li><strong>scan_result</strong> – Results from sslyze scan</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_openssl_css_injection_secure">
+<code class="descname">is_openssl_css_injection_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_openssl_css_injection_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the application is secure from css injection
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_robot_secure">
+<code class="descname">is_robot_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_robot_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the application is secure from the robot attach
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_session_renegotiation_secure">
+<code class="descname">is_session_renegotiation_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_session_renegotiation_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the session renegotiation is secure
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.is_session_resumption_secure">
+<code class="descname">is_session_resumption_secure</code><span class="sig-paren">(</span><em>scan_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.is_session_resumption_secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the session resumption is secure
+:param scan_result: Results from sslyze scan
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="sslyzetestsuite.SSLyzeTestSuite.run_tests">
-<code class="descname">run_tests</code><span class="sig-paren">(</span><em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run all enabled tests against the target url. The Test objects within the tests array describes each test.
-The array should be changed according to how the outcome of the tests are and returned</p>
+<code class="descname">run_tests</code><span class="sig-paren">(</span><em>tests</em><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all enabled tests against the target url with the http or https port specified in the connect function.
+The Test objects within the tests array describes each test. The array should be changed according to the
+outcome, and if both ports have been specified and are supported the results must be merged before returned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -105,12 +226,29 @@ The array should be changed according to how the outcome of the tests are and re
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.server_info">
+<code class="descname">server_info</code><em class="property"> = None</em><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.server_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.shutdown">
+<code class="descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Some external engines needs to be properly shut down before closing the python program</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="sslyzetestsuite.SSLyzeTestSuite.start">
 <code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>”
 Most testing tools needs to be started before they can be interacted with.
 Even if this is just a python module the class should be initiated here.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sslyzetestsuite.SSLyzeTestSuite.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sslyzetestsuite.SSLyzeTestSuite.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop all running tests</p>
 </dd></dl>
 
 </dd></dl>
@@ -170,7 +308,7 @@ Even if this is just a python module the class should be initiated here.</p>
       &copy;2018, jakob & shivam.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

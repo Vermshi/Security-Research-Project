@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -35,7 +36,7 @@
 <span id="testsuite-module"></span><h1>testsuite module<a class="headerlink" href="#module-testsuite" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="testsuite.Test">
-<em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">Test</code><span class="sig-paren">(</span><em>name</em>, <em>testid</em>, <em>description</em>, <em>engine</em>, <em>vulnerability</em>, <em>mode</em>, <em>passed</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.Test" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">testsuite.</code><code class="descname">Test</code><span class="sig-paren">(</span><em>name</em>, <em>testid</em>, <em>description</em>, <em>engine</em>, <em>vulnerability</em>, <em>mode</em>, <em>difficulty</em>, <em>passed</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.Test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The Test object represent an individual test that can be executed by a test engine.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -49,6 +50,7 @@
 <li><strong>engine</strong> (<em>str</em>) – The name of the engine running the test</li>
 <li><strong>vulnerability</strong> (<em>str</em>) – Describes which vulnerability the test reveals</li>
 <li><strong>mode</strong> (<em>str</em>) – This field for metadata can be used by the engine to separate different categories</li>
+<li><strong>difficulty</strong> (<em>int</em>) – An int in the range 0-4 to describe how advanced the test is</li>
 <li><strong>passed</strong> (<em>bool</em>) – Determines whether the test was passed</li>
 <li><strong>enabled</strong> (<em>bool</em>) – Define if the test should be run or not</li>
 </ul>
@@ -66,7 +68,7 @@
 The testing application is composed by this interface interacting between a GUI and all the implemented tools.
 Required Functions:
 - start
-- configure
+- connect
 - import_policy
 - generate_test_list
 - run_tests</p>
@@ -82,17 +84,35 @@ within a session. However this is not part of the current implementation</p>
 </tbody>
 </table>
 <dl class="method">
-<dt id="testsuite.TestSuite.configure">
-<code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.configure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run all configurations necessary to perform a test against the target.
-This function is mean to set up proxies or perform other configurations to the engine.</p>
+<dt id="testsuite.TestSuite.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>scheme</em>, <em>address</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all configurations necessary to perform a test against the target. This function is mean to set up
+the connection to the target. The function should work for one or two specified ports if supported by engine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>scheme</strong> (<em>str</em>) – http or https</li>
+<li><strong>port</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body"><p class="first">address</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="testsuite.TestSuite.generate_test_list">
-<code class="descname">generate_test_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.generate_test_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function must make a array of Test objects representing each of the tests that can be executed by the engine.
-The list must be compatible for the run_tests function</p>
+<code class="descname">generate_test_list</code><span class="sig-paren">(</span><em>testfile</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.generate_test_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function must make a array of Test objects representing each of the tests that can be executed by the
+engine. The list must be compatible for the run_tests function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -104,6 +124,11 @@ The list must be compatible for the run_tests function</p>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="staticmethod">
+<dt id="testsuite.TestSuite.get_tests_from_file">
+<em class="property">static </em><code class="descname">get_tests_from_file</code><span class="sig-paren">(</span><em>file</em>, <em>engine_name</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.get_tests_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="testsuite.TestSuite.import_policy">
@@ -126,9 +151,10 @@ As well as other policies such as strength and sensitivity</p>
 
 <dl class="method">
 <dt id="testsuite.TestSuite.run_tests">
-<code class="descname">run_tests</code><span class="sig-paren">(</span><em>tests</em>, <em>targetURL</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run all enabled tests against the target url. The Test objects within the tests array describes each test.
-The array should be changed according to how the outcome of the tests are and returned</p>
+<code class="descname">run_tests</code><span class="sig-paren">(</span><em>tests</em><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.run_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all enabled tests against the target url with the http or https port specified in the connect function.
+The Test objects within the tests array describes each test. The array should be changed according to the
+outcome, and if both ports have been specified and are supported the results must be merged before returned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -162,6 +188,17 @@ The array should be changed according to how the outcome of the tests are and re
 Most testing tools needs to be started before they can be interacted with.
 Even if this is just a python module the class should be initiated here.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="testsuite.TestSuite.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testsuite.TestSuite.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop all running tests</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="testsuite.TestSuite.test_dictionary">
+<code class="descname">test_dictionary</code><em class="property"> = {}</em><a class="headerlink" href="#testsuite.TestSuite.test_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -220,7 +257,7 @@ Even if this is just a python module the class should be initiated here.</p>
       &copy;2018, jakob & shivam.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
