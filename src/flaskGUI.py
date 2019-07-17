@@ -144,9 +144,9 @@ def runTest(scheme, address, port):
     :param scheme: http or https
     :type scheme: str
     :param: address
-    :type: str 
+    :type address: str 
     :param port:
-    :type str: 
+    :type port: str 
     """
 
     global data
@@ -236,17 +236,26 @@ def enableDisableAll():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 def disablePassed():
+    """
+    Disable all passed tests
+    """
     global data
     for value in data:
         if(data[value]["passed"]):
             data[value]["enabled"] = False
 
 def disableAll():
+    """
+    Disable all tests
+    """
     global data
     for value in data:
             data[value]["enabled"] = False
 
 def enableAll():
+    """
+    Enable all tests in the current difficulty
+    """
     global difficulty
     global data
     if (difficulty == 0):
@@ -270,6 +279,12 @@ def enableAll():
             data[value]["enabled"] = True
 
 def changeDifficulty(difficulty):
+    """
+    Set difficulty, which is the amount of tests executed in one run
+    
+    :param difficulty: The difficulty level 0-4
+    :type difficulty: int
+    """
     if(difficulty == 0):
         for value in data:
             if(data[value]["difficulty"] == 0):
@@ -335,6 +350,9 @@ def displayRightDifficulty():
 
 @application.route('/diff-change', methods=['POST'])
 def selectChange():
+    """
+    Change difficulty - amount of tests to execute in one run
+    """
     global difficulty
     diffSelect = request.form["diffSelect"]
     if(diffSelect == "Novice"):
@@ -353,32 +371,53 @@ def selectChange():
 
 @application.route('/strength-change' , methods=['POST'])
 def selectStrength():
-        global strength
-        global threshold
-        global testsuites
-        global zap_policy_name
-        strengthSelect = request.form["strengthSelect"]
-        if(strengthSelect == "Low"):
-            strength = 0
-        elif(strengthSelect == "Medium"):
-            strength = 1
-        elif(strengthSelect == "High"):
-            strength = 2
+    """
+    Change threshold or strength for zap
+    """
+    global testsuites
+    global zap_policy_name
+    strengthSelect = request.form["strengthSelect"]
+    set_strength(strengthSelect)
 
-        thresholdSelect = request.form["thresholdSelect"]
-        if(thresholdSelect == "Low"):
-            threshold = 0
-        elif(thresholdSelect == "Medium"):
-            threshold = 1
-        elif(thresholdSelect == "High"):
-            threshold = 2
+    thresholdSelect = request.form["thresholdSelect"]
+    set_threshold(thresholdSelect)
 
-        for testsuite in testsuites:
-            if testsuite.engine_name == "ZAP":
-                testsuite.zap.ascan.update_scan_policy(zap_policy_name, thresholdSelect, strengthSelect)
+    for testsuite in testsuites:
+        if testsuite.engine_name == "ZAP":
+            testsuite.zap.ascan.update_scan_policy(zap_policy_name, thresholdSelect, strengthSelect)
 
-        return render_template('index.html', data=data, diff=difficulty, strength=strength, threshold=threshold)
+    return render_template('index.html', data=data, diff=difficulty, strength=strength, threshold=threshold)
 
+
+def set_strength(strengthSelect):
+    """
+    Set global strength variable
+
+    :param strengthSelect: The strength of the ZAP engine tests Low, Medium, High
+    :type strengthSelect: str
+    """
+    global strength
+    if(strengthSelect == "Low"):
+        strength = 0
+    elif(strengthSelect == "Medium"):
+        strength = 1
+    elif(strengthSelect == "High"):
+        strength = 2
+
+def set_threshold(thresholdSelect):
+    """
+    Set global threshold variable
+
+    :param strengthSelect: The threshold of the ZAP engine tests Low, Medium, High
+    :type threshold: str
+    """
+    global threshold
+    if(thresholdSelect == "Low"):
+        threshold = 0
+    elif(thresholdSelect == "Medium"):
+        threshold = 1
+    elif(thresholdSelect == "High"):
+        threshold = 2
 
 if __name__ == '__main__':
     application.run(host="0.0.0.0", debug=True)
