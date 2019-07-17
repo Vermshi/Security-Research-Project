@@ -32,10 +32,14 @@ Python dependencies: src/requirements.txt
 
 	$ cd src/
 	$ sudo python flaskGUI.py
+	
+### Unit Tests
+	$ cd src/tests
+	$ sudo python -m pytest --target <testingTargetURL> test_flaskGUI.py 
 
 ### Docker
 
-A docker image is available at https://cloud.docker.com/repository/docker/jakobsn/testtool
+A docker image is available at https://cloud.docker.com/repository/docker/jakobsn/testtool2
 
 ### Code Documentation
 
@@ -43,17 +47,8 @@ Pull the project to read the detailed documentation of the code located in src/d
 
 A model for the programflow is available in currentprogramflow.svg
 
-### Tests
+### Security Tests
 
 Review all running tests and corresponding vulnerabilities in the testcoverage.pdf file
 
-### TODO:
-
-1. Support https for all engines x (https needs further testing)
-2. Disable passed tests button x
-3. Login to session 
-4. Installation guide /docker x
-5. Try a java app x
-6. Test mac
-7. Make simple solution for categories x
 
