@@ -42,6 +42,8 @@
             <form method="post" action="/atc">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="http(s)://localhost:63342" name="attackAddress"/>
+                <input type="checkbox" checked="false" name="scanAsUser">Scan with active session</input>
+                <br>
                 <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
                   <span class="glyphicon glyphicon-education "></span> Attack!
                 </button>

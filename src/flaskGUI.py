@@ -94,6 +94,7 @@ def attack():
     Launch all enabled tests against target address
     """
     fullAddress = request.form["attackAddress"]
+    scanAsUser = request.form["scanAsUser"]
 
     if(len(fullAddress) == 0):
         return render_template('index.html', data=displayRightDifficulty(),
@@ -108,7 +109,7 @@ def attack():
                                error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold), 201
 
     try:
-        elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port)
+        elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port, scanAsUser)
         return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities)
     except:
         return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold), 201
@@ -137,7 +138,7 @@ def reset():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-def runTest(scheme, address, port):
+def runTest(scheme, address, port, scanAsUser):
     """
     Run all the tests against the target.
 
@@ -173,6 +174,10 @@ def runTest(scheme, address, port):
                 pass
             else:
                 return render_template('index.html', data=displayRightDifficulty(), error=e, diff=difficulty, strength=strength, threshold=threshold), 201
+
+        if testsuite.engine_name == "ZAP" and scanAsUser:
+            print("Scan as user")
+            testsuite.set_active_session()
 
         # Run tests
         try:

@@ -17,6 +17,8 @@ class ZapTestSuite(TestSuite):
     zap = None
     target_address = ""
     scan_active = False
+    context_id = None
+    user_id = None
 
     def start(self):
         """
@@ -86,6 +88,7 @@ class ZapTestSuite(TestSuite):
         # Install addons
         # print(self.zap.autoupdate.marketplace_addons)
 
+
         try:
         # Install XSRF forgery supporting addon
             xsrf_addon = 'ascanrulesBeta'
@@ -93,7 +96,6 @@ class ZapTestSuite(TestSuite):
         except Exception as e:
             print("could not install xsrf addons")
             pass
-
 
         #self.import_policy("testpolicy.xml", "test_policy4")
 
@@ -108,13 +110,23 @@ class ZapTestSuite(TestSuite):
         self.target_address = scheme + "://" + address + ":" + str(port)
 
         try:
+            # Connect to target
             self.zap.urlopen(self.target_address)
+            # Create context
+            self.context_id = self.zap.context.new_context("context")
+            self.zap.context.include_in_context(self.context_id, self.target_address + ".*")
         except ConnectionError as e:
             print('Could not connect to', self.target_address)
             print(e)
             return False
 
         return True
+
+    def set_active_session(self):
+        # TODO: Generic session id
+        self.zap.httpsessions.set_active_session(self.target_address, "Session 0")
+        self.user_id = self.zap.users.new_user(self.context_id, "testuser")
+        self.zap.users.set_authentication_credentials(self.context_id, self.user_id, "sessionName=Session 0")
 
     def generate_test_list(self, testfile='tests.csv'):
         """
@@ -257,13 +269,16 @@ class ZapTestSuite(TestSuite):
                 print(scan)
                 print("")
 
-        self.zap.urlopen(self.target_address)
+        #self.zap.urlopen(self.target_address)
 
         # Run tests on https port
         if self.scan_active:
             # RUN PASSIVE TESTS
             print("Run Spider on:", self.target_address)
-            https_spider = self.zap.spider.scan(self.target_address)
+            if self.user_id is not None:
+                https_spider = self.zap.spider.scan_as_user(self.target_address, self.context_id, self.user_id)
+            else:
+                https_spider = self.zap.spider.scan(self.target_address)
             while (int(self.zap.spider.status(https_spider)) < 100) and self.scan_active:
                 print('Spider progress %: ' + self.zap.spider.status(https_spider))
                 time.sleep(0.1)
