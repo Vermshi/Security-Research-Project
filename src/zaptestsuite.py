@@ -287,7 +287,10 @@ class ZapTestSuite(TestSuite):
 
             # Run ACTIVE TESTS
             print("Run active scan on port:", self.target_address)
-            https_scan = self.zap.ascan.scan(self.target_address)
+            if self.user_id is not None:
+                https_scan = self.zap.ascan.scan_as_user(self.context_id, self.user_id, self.target_address)
+            else:
+                https_scan = self.zap.ascan.scan(self.target_address)
             while int(self.zap.ascan.status(https_scan)) < 100 and self.scan_active:
                 print('Scan progress %: ' + self.zap.ascan.status(https_scan))
                 time.sleep(3)

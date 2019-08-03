@@ -21,6 +21,9 @@
     The tests are running, this might take a while. In the meantime you could check the python console for progress or watch this video:
     https://youtu.be/SZQz9tkEHIg
   </div>
+  <div class="alert alert-success" id="loadingMsg2">
+    Trying to activate session, please log in to the target application
+  </div>
   {% if error %}
   <div class="alert alert-danger" id="errorMsg">
     {{error}}
@@ -42,9 +45,11 @@
             <form method="post" action="/atc">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="http(s)://localhost:63342" name="attackAddress"/>
-                <input type="checkbox" checked="false" name="scanAsUser">Scan with active session</input>
+                <button type="sumbit" class="btn btn-success" name="submit" value="connect" onclick="displayLoader2()">
+                  <span class="glyphicon glyphicon-education "></span> Connect With Active Session
+                </button>
                 <br>
-                <button type="sumbit" class="btn btn-success" onclick="displayLoader()">
+                <button type="sumbit" class="btn btn-success" name="submit" value="attack" onclick="displayLoader()">
                   <span class="glyphicon glyphicon-education "></span> Attack!
                 </button>
               </div>
@@ -174,6 +179,7 @@
            <p>Elapsed time: {{ elapsed_time }}s</p>
            <p>Tests runned: {{ test_amount }}</p>
            <p>Vulnerabilities found: {{ vulnerabilities }}</p>
+           <p>Session Id: {{ session }}</p>
         </div>
 
           <form id="enabledForm" action="/check-change" method="post">
@@ -240,5 +246,17 @@
       }
     }
 
+    function displayLoader2(){
+      loader = document.getElementById("loaderElement");
+      loadingMsg = document.getElementById("loadingMsg2");
+      loader.style.display = "block";
+      loadingMsg.style.display = "block";
+
+      let errorMsg = document.getElementById("errorMsg");
+      console.log(errorMsg != null)
+      if(errorMsg != null){
+        errorMsg.style.display = "none";
+      }
+    }
   </script>
   </html>

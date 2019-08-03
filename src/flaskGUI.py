@@ -94,25 +94,38 @@ def attack():
     Launch all enabled tests against target address
     """
     fullAddress = request.form["attackAddress"]
-    scanAsUser = request.form["scanAsUser"]
+    
+
 
     if(len(fullAddress) == 0):
         return render_template('index.html', data=displayRightDifficulty(),
                                error="The attack address cannot be empty.", diff=difficulty, strength=strength, threshold=threshold), 201
     try:
-         parse_object = urlparse(fullAddress)
-         scheme = parse_object.scheme
-         address = parse_object.hostname
-         port = parse_object.port
+        parse_object = urlparse(fullAddress)
+        scheme = parse_object.scheme
+        address = parse_object.hostname
+        port = parse_object.port
     except:
         return render_template('index.html', data=displayRightDifficulty(),
-                               error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold), 201
+                           error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold), 201
 
-    try:
-        elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port, scanAsUser)
-        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities)
-    except:
-        return render_template('index.html', data=displayRightDifficulty(), error= "The attack engine could not connect to that address", diff=difficulty, strength=strength, threshold=threshold), 201
+    if request.form["submit"] == "connect":
+        for testsuite in testsuites:
+            if testsuite.engine_name == "ZAP":
+                testsuite.connect(scheme, address, port)
+                
+                while len(testsuite.httpsession.sessions(testsuite.target_address)) == 0:
+                    testsuite.set_active_session()
+                    time.sleep(5)
+                # TODO: Wait untill the session is activated
+
+    else:
+        try:
+            elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port)
+            return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities, session_id = session_id)
+        except Exception as e:
+            print(e)
+            return render_template('index.html', data=displayRightDifficulty(), error="Could not scan the target", diff=difficulty, strength=strength, threshold=threshold), 201
 
 
 @application.route('/stop', methods=['POST'])
@@ -138,7 +151,7 @@ def reset():
     return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold)
 
 
-def runTest(scheme, address, port, scanAsUser):
+def runTest(scheme, address, port):
     """
     Run all the tests against the target.
 
@@ -157,6 +170,7 @@ def runTest(scheme, address, port, scanAsUser):
     test_amount = 0
     vulnerabilities = 0
     start_time = time.time()
+    session_id = None
 
     for testsuite in testsuites:
         engine_tests = []
@@ -175,13 +189,9 @@ def runTest(scheme, address, port, scanAsUser):
             else:
                 return render_template('index.html', data=displayRightDifficulty(), error=e, diff=difficulty, strength=strength, threshold=threshold), 201
 
-        if testsuite.engine_name == "ZAP" and scanAsUser:
-            print("Scan as user")
-            testsuite.set_active_session()
-
         # Run tests
-        try:
-            test_results.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finnished.
+        try:              
+            test_results.extend(testsuite.run_tests(engine_tests)) #Run when attack, show loading bar and update after finished.
         except Exception as e:
             # The SSLyze tool will only run when a HTTPS port is specified
             if testsuite.engine_name == "SSLyze" and scheme == "http":
