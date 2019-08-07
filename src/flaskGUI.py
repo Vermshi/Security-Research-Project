@@ -116,25 +116,28 @@ def attack():
                 active_session = False
                 while not active_session:
                     print("Trying to connect")
+                    print("Authenticate now")
+                    time.sleep(20)
+
                     print('Sessions:', testsuite.zap.httpsessions.sites)
                     if (address + ':' + str(port)) in testsuite.zap.httpsessions.sites:
                         print('Opened site:', testsuite.zap.httpsessions.sessions(address + ':' + str(port)))
-                        if len(testsuite.zap.httpsessions.sessions("localhost:8080", "Session 0")[0]['session'][1]['JSESSIONID']['value']) > 0:
-                            user_id = testsuite.set_active_session()
-                            active_session = True
-                            print("Connected successfully")
-                            print("User:", user_id)
-                            print(testsuite.zap.httpsessions.active_session(address + ':' + str(port)))
-                    time.sleep(5)
-                    # TODO: Wait untill the session is activated
+                        print(testsuite.zap.httpsessions.sessions("0.0.0.0:8080"))
+                        user_id = testsuite.set_active_session()
+                        active_session = True
+                        print("Connected successfully", testsuite.zap.httpsessions.sessions("0.0.0.0:8080"))
+                        print("User:", user_id)
+                        print(testsuite.zap.httpsessions.active_session(address + ':' + str(port)))
+                        session_id = testsuite.zap.httpsessions.sessions("http://0.0.0.0:8080")[0]['session'][1]['JSESSIONID']['value']
+                        # TODO: Wait untill the session is activated
+                    
 
-    else:
-        try:
-            elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port)
-            return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities, session_id = session_id)
-        except Exception as e:
-            print(e)
-            return render_template('index.html', data=displayRightDifficulty(), error="Could not scan the target", diff=difficulty, strength=strength, threshold=threshold), 201
+    try:
+        elapsed_time, test_amount, vulnerabilities = runTest(scheme, address, port)
+        return render_template('index.html', data=displayRightDifficulty(), diff=difficulty, strength=strength, threshold=threshold, elapsed_time=elapsed_time, test_amount=test_amount, vulnerabilities=vulnerabilities, session_id = session_id)
+    except Exception as e:
+        print(e)
+        return render_template('index.html', data=displayRightDifficulty(), error="Could not scan the target", diff=difficulty, strength=strength, threshold=threshold), 201
 
 
 @application.route('/stop', methods=['POST'])
@@ -190,7 +193,11 @@ def runTest(scheme, address, port):
 
         # Connect to keytarget
         try:
-            testsuite.connect(scheme, address, port)
+            if testsuite.engine_name == "ZAP":
+                if (address + ":" + str(port)) not in testsuite.zap.httpsessions.sites:
+                    testsuite.connect(scheme, address, port)
+            else:
+                testsuite.connect(scheme, address, port)
         except Exception as e:
             # The SSLyze tool will only run when a HTTPS port is specified
             if testsuite.engine_name == "SSLyze" and scheme == "http":

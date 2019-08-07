@@ -112,9 +112,6 @@ class ZapTestSuite(TestSuite):
         try:
             # Connect to target
             self.zap.urlopen(self.target_address)
-            # Create context
-            self.context_id = self.zap.context.new_context("context")
-            self.zap.context.include_in_context(self.context_id, self.target_address + ".*")
         except ConnectionError as e:
             print('Could not connect to', self.target_address)
             print(e)
@@ -123,9 +120,14 @@ class ZapTestSuite(TestSuite):
         return True
 
     def set_active_session(self):
+        # Create context
+        self.context_id = self.zap.context.new_context("context")
+        self.zap.context.include_in_context("context", self.target_address)
+        self.zap.context.include_in_context("context", self.target_address + ".*")
         # TODO: Generic session id
         print("Set Active Session")
-        self.zap.httpsessions.set_active_session(self.target_address, "Session 0")
+        session_active = self.zap.httpsessions.set_active_session(self.target_address, "Session 0")
+        print(session_active)
         self.user_id = self.zap.users.new_user(self.context_id, "testuser")
         self.zap.users.set_authentication_credentials(self.context_id, self.user_id, "sessionName=Session 0")
         print(self.user_id)
@@ -151,7 +153,7 @@ class ZapTestSuite(TestSuite):
                 """if test_dictionary[scan['name']][1] == 0:
                     self.zap.pscan.enable_scanners(scan['id'])
                 else:
-                    self.zap.ascan.disable_scanners(scan['id'])
+                    self.zap.ascan.disable_sself.context_idners(scan['id'])
                 """
                 tests.append(Test(
                     name=scan['name'],
@@ -212,7 +214,7 @@ class ZapTestSuite(TestSuite):
         self.zap.ascan.set_option_attack_policy(name)
         self.zap.ascan.set_option_default_policy(name)
 
-        # TODO: Changes in the a scan policy will not be made once they have been set. How to fix that? ZAP does not support deletion of policies
+        # TODO: Changes in the a scan policy wi        return render_template('index.html', data=displayRightDifficulty(), error="Couldll not be made once they have been set. How to fix that? ZAP does not support deletion of policies
 
         # Return the new test list
         return self.generate_test_list()
@@ -280,7 +282,7 @@ class ZapTestSuite(TestSuite):
             # RUN PASSIVE TESTS
             print("Run Spider on:", self.target_address)
             if self.user_id is not None:
-                https_spider = self.zap.spider.scan_as_user(self.target_address, self.context_id, self.user_id)
+                https_spider = self.zap.spider.scan_as_user(self.context_id, self.user_id, self.target_address)
             else:
                 https_spider = self.zap.spider.scan(self.target_address)
             while (int(self.zap.spider.status(https_spider)) < 100) and self.scan_active:
@@ -292,7 +294,7 @@ class ZapTestSuite(TestSuite):
             # Run ACTIVE TESTS
             print("Run active scan on port:", self.target_address)
             if self.user_id is not None:
-                https_scan = self.zap.ascan.scan_as_user(self.context_id, self.user_id, self.target_address)
+                https_scan = self.zap.ascan.scan_as_user(self.target_address, self.context_id, self.user_id)
             else:
                 https_scan = self.zap.ascan.scan(self.target_address)
             while int(self.zap.ascan.status(https_scan)) < 100 and self.scan_active:
