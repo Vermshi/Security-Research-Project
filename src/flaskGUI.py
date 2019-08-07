@@ -114,7 +114,7 @@ def attack():
             if testsuite.engine_name == "ZAP":
                 testsuite.connect(scheme, address, port)
                 
-                while len(testsuite.httpsession.sessions(testsuite.target_address)) == 0:
+                while testsuite.zap.httpsessions.sessions(testsuite.target_address) == None:
                     testsuite.set_active_session()
                     time.sleep(5)
                 # TODO: Wait untill the session is activated

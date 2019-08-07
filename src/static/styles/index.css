@@ -70,7 +70,7 @@
   transform: translate(-50%,-50%);
     }
 
-    #loaderElement, #loadingMsg{
+    #loaderElement, #loadingMsg, #loadingMsg2{
     display: none;
     right: 0px;
     }
