@@ -113,11 +113,20 @@ def attack():
         for testsuite in testsuites:
             if testsuite.engine_name == "ZAP":
                 testsuite.connect(scheme, address, port)
-                
-                while testsuite.zap.httpsessions.sessions(testsuite.target_address) == None:
-                    testsuite.set_active_session()
+                active_session = False
+                while not active_session:
+                    print("Trying to connect")
+                    print('Sessions:', testsuite.zap.httpsessions.sites)
+                    if (address + ':' + str(port)) in testsuite.zap.httpsessions.sites:
+                        print('Opened site:', testsuite.zap.httpsessions.sessions(address + ':' + str(port)))
+                        if len(testsuite.zap.httpsessions.sessions("localhost:8080", "Session 0")[0]['session'][1]['JSESSIONID']['value']) > 0:
+                            user_id = testsuite.set_active_session()
+                            active_session = True
+                            print("Connected successfully")
+                            print("User:", user_id)
+                            print(testsuite.zap.httpsessions.active_session(address + ':' + str(port)))
                     time.sleep(5)
-                # TODO: Wait untill the session is activated
+                    # TODO: Wait untill the session is activated
 
     else:
         try:

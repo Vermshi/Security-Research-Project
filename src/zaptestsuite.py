@@ -124,10 +124,13 @@ class ZapTestSuite(TestSuite):
 
     def set_active_session(self):
         # TODO: Generic session id
+        print("Set Active Session")
         self.zap.httpsessions.set_active_session(self.target_address, "Session 0")
         self.user_id = self.zap.users.new_user(self.context_id, "testuser")
         self.zap.users.set_authentication_credentials(self.context_id, self.user_id, "sessionName=Session 0")
-        
+        print(self.user_id)
+        print(self.zap.httpsessions.sites)
+        return self.user_id
 
     def generate_test_list(self, testfile='tests.csv'):
         """
