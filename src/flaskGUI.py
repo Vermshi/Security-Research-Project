@@ -109,6 +109,7 @@ def attack():
         return render_template('index.html', data=displayRightDifficulty(),
                            error="The given address was not in the right format",  diff=difficulty, strength=strength, threshold=threshold), 201
 
+    session_id = "No Active Session"
     if request.form["submit"] == "connect":
         for testsuite in testsuites:
             if testsuite.engine_name == "ZAP":
