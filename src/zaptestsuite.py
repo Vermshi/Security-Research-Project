@@ -101,6 +101,9 @@ class ZapTestSuite(TestSuite):
 
         return True
 
+    def set_target_address(self, target_address):
+        self.target_address = target_address
+
     def connect(self, scheme, address, port):
         """
         Connect to the targetURL. ZAP can only connect to one target at the time, so this must be performed in the run
