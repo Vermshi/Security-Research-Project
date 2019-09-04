@@ -109,21 +109,44 @@ class ZapTestSuite(TestSuite):
 
         self.target_address = scheme + "://" + address + ":" + str(port)
 
-        try:
-            # Connect to target
-            self.zap.urlopen(self.target_address)
-        except ConnectionError as e:
-            print('Could not connect to', self.target_address)
-            print(e)
-            return False
+        if self.zap.context.context("context") == 'does_not_exist':
+
+            try:
+                # Connect to target
+                self.zap.urlopen(self.target_address)
+            except ConnectionError as e:
+                print('Could not connect to', self.target_address)
+                print(e)
+                return False
+
+        elif self.target_address not in self.zap.context.context("context")['includeRegexs']:
+
+            try:
+                # Connect to target
+                self.zap.urlopen(self.target_address)
+            except ConnectionError as e:
+                print('Could not connect to', self.target_address)
+                print(e)
+                return False
+
+            else:
+                print("Already connected")
 
         return True
 
     def set_active_session(self):
         # Create context
-        self.context_id = self.zap.context.new_context("context")
-        self.zap.context.include_in_context("context", self.target_address)
-        self.zap.context.include_in_context("context", self.target_address + ".*")
+        # TODO: DONT OVERWRITE CONTEXT
+        if self.zap.context.context("context") == 'does_not_exist':
+            self.context_id = self.zap.context.new_context("context")
+            self.zap.context.include_in_context("context", self.target_address)
+            self.zap.context.include_in_context("context", self.target_address + ".*")
+        elif self.target_address not in self.zap.context.context("context")['includeRegexs']:
+            self.context_id = self.zap.context.new_context("context")
+            self.zap.context.include_in_context("context", self.target_address)
+            self.zap.context.include_in_context("context", self.target_address + ".*")
+
+
         # TODO: Generic session id
         print("Set Active Session")
         session_active = self.zap.httpsessions.set_active_session(self.target_address, "Session 0")

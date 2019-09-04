@@ -123,13 +123,13 @@ def attack():
                     print('Sessions:', testsuite.zap.httpsessions.sites)
                     if (address + ':' + str(port)) in testsuite.zap.httpsessions.sites:
                         print('Opened site:', testsuite.zap.httpsessions.sessions(address + ':' + str(port)))
-                        print(testsuite.zap.httpsessions.sessions("0.0.0.0:8080"))
+                        print(testsuite.zap.httpsessions.sessions(address + ':' + str(port)))
                         user_id = testsuite.set_active_session()
                         active_session = True
-                        print("Connected successfully", testsuite.zap.httpsessions.sessions("0.0.0.0:8080"))
+                        print("Connected successfully", testsuite.zap.httpsessions.sessions(address + ':' + str(port)))
                         print("User:", user_id)
-                        print(testsuite.zap.httpsessions.active_session(address + ':' + str(port)))
-                        session_id = testsuite.zap.httpsessions.sessions("http://0.0.0.0:8080")[0]['session'][1]['JSESSIONID']['value']
+                        print("Active session:", testsuite.zap.httpsessions.active_session(address + ':' + str(port)))
+                        session_id = testsuite.zap.httpsessions.sessions(address + ':' + str(port))[0]['session'][1]['JSESSIONID']['value']
                         # TODO: Wait untill the session is activated
                     
 
