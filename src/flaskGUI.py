@@ -197,6 +197,8 @@ def runTest(scheme, address, port):
             if testsuite.engine_name == "ZAP":
                 if (address + ":" + str(port)) not in testsuite.zap.httpsessions.sites:
                     testsuite.connect(scheme, address, port)
+                else:
+                    testsuite.set_target_address(scheme + "://" + address + ":" + str(port))
             else:
                 testsuite.connect(scheme, address, port)
         except Exception as e:
